@@ -6,14 +6,14 @@ import inspect
 import hs_menus
 import os
 
-
-
 banner = """
- ▄ .▄ ▄▄▄·  ▄▄· ▄ •▄ ▄▄▄ ..▄▄ ·       ▄• ▄▌ ▄▄▄·
-██▪▐█▐█ ▀█ ▐█ ▌▪█▌▄▌▪▀▄.▀·▐█ ▀. ▪     █▪██▌▐█ ▄█
-██▀▐█▄█▀▀█ ██ ▄▄▐▀▀▄·▐▀▀▪▄▄▀▀▀█▄ ▄█▀▄ █▌▐█▌ ██▀·
-██▌▐▀▐█ ▪▐▌▐███▌▐█.█▌▐█▄▄▌▐█▄▪▐█▐█▌.▐▌▐█▄█▌▐█▪·•
-▀▀▀ · ▀  ▀ ·▀▀▀ ·▀  ▀ ▀▀▀  ▀▀▀▀  ▀█▄▀▪ ▀▀▀ .▀   """
+
+                                                                            
+    //    / /                                                                        
+   //___ / /  ___      ___     / ___      ___      ___      ___               ___    
+  / ___   / //   ) ) //   ) ) //\ \     //___) ) ((   ) ) //   ) ) //   / / //   ) ) 
+ //    / / //   / / //       //  \ \   //         \ \    //   / / //   / / //___/ /  
+//    / / ((___( ( ((____   //    \ \ ((____   //   ) ) ((___/ / ((___( ( //"""
 
 # define vesion and project info for reference during development.
 # TODO: move to a global variables location in .lib
@@ -34,13 +34,16 @@ def style(text, color):
 # Clear the terminal to make the output prettier
 os.system("clear")
 
-# print out acsii banner in colorfully distracting splendor (it's to cute to be dangerous...)
+# Print out acsii banner in colorfully distracting splendor (it's to cute to be dangerous...)
 colorama.init()
 rainbow_colors = [colorama.Fore.RED, colorama.Fore.YELLOW, colorama.Fore.GREEN, colorama.Fore.CYAN, colorama.Fore.BLUE, colorama.Fore.MAGENTA]
 rainbow_text = ''.join(rainbow_colors[i % len(rainbow_colors)] + banner[i] for i in range(len(banner)))
 print(rainbow_text + colorama.Fore.RESET)
 
-# print out version info and dev warning
+# Print out Banner scoop bar
+print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTGREEN_EX}____________________________________________________________________________________/")
+
+# Print out version info and dev warning
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Hackesoup {_hackesoup_info_['version']}({_hackesoup_info_['codename']})" + colorama.Fore.RESET)
 print(f"{colorama.Style.BRIGHT}Please note that this cli is {style("only", "red")} for testing and {colorama.Fore.BLACK + colorama.Back.RED} is far from fully functional!{colorama.Back.RESET}")
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Current Utils list:")
