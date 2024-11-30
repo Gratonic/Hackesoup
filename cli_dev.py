@@ -2,6 +2,10 @@
 # imports
 import json
 import colorama
+import inspect
+import hs_menus
+
+
 
 banner = """
  ▄ .▄ ▄▄▄·  ▄▄· ▄ •▄ ▄▄▄ ..▄▄ ·       ▄• ▄▌ ▄▄▄·
@@ -33,7 +37,19 @@ print(rainbow_text + colorama.Fore.RESET)
 
 # print out version info and dev warning
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Hackesoup {_hackesoup_info_['version']}({_hackesoup_info_['codename']})\nWelcome!" + colorama.Fore.RESET)
-print(f"{colorama.Style.BRIGHT}Please note that this cli is {style("only", "red")} for testing and {colorama.Fore.BLACK + colorama.Back.RED} is far from fully functional!")
+print(f"{colorama.Style.BRIGHT}Please note that this cli is {style("only", "red")} for testing and {colorama.Fore.BLACK + colorama.Back.RED} is far from fully functional!{colorama.Back.RESET}")
+print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Current Utils list:")
 
+# Get a list of functions present in hs_menus
+functions = inspect.getmembers(hs_menus, inspect.isfunction)
 
-# TODO: everything else still!
+# Build a list if avalible tools from functions in hs_menus (skipping internal functions starting with "_")
+for i, (func_name, _) in enumerate(functions, start=1):
+        if not str(func_name).startswith("_"):
+            print(f"{colorama.Fore.YELLOW}({i}) {colorama.Fore.LIGHTBLACK_EX}{func_name}")
+
+# Handle triggering hs_menus function from user input.
+# TODO: replace index system with something more reliable. Internal "_" functions may skew menu triggers?
+x = input(f"{colorama.Fore.LIGHTBLACK_EX}Enter the {style("number", "yellow")} {colorama.Fore.LIGHTBLACK_EX}for your tool:")
+function_name, function = functions[int(x) - 1]
+function()
