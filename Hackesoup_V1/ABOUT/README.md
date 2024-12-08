@@ -1,2 +1,9 @@
-# Hackesoup
-Ethical Hacking Suite
+## Hackesoup:
+
+Hackesoup (hs) is a collection of pen-testing tools that is currently underdevelopment. the current state of development is unstable and may not work properly as of yet. if you would like to contribute reach out to [Gratonic](https://github.com/Gratonic)
+
+Currently working on designing menus and some pen-testing tools. 
+
+## Screenshots:
+
+
