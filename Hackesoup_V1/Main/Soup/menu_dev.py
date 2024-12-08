@@ -46,7 +46,7 @@ print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTGREEN_EX}____________________
 
 # Print out version info and dev warning
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Hackesoup {_hackesoup_info_['version']}({_hackesoup_info_['codename']})" + colorama.Fore.RESET)
-print(f"{colorama.Style.BRIGHT}Please note that this cli is {style("only", "red")} for testing and {colorama.Fore.BLACK + colorama.Back.RED} is far from fully functional!{colorama.Back.RESET}")
+print(f"{colorama.Style.BRIGHT}Please note that this cli is {style('only', 'red')} for testing and {colorama.Fore.BLACK + colorama.Back.RED} is far from fully functional!{colorama.Back.RESET}")
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Current Utils list:")
 
 # Get a list of functions present in hs_menus
@@ -60,7 +60,7 @@ for i, (func_name, _) in enumerate(functions, start=1):
 
 # Handle triggering hs_menus function from user input.
 # TODO: replace index system with something more reliable. Internal "_" functions may skew menu triggers?
-x = input(f"{colorama.Fore.LIGHTBLACK_EX}Enter the {style("number", "yellow")} {colorama.Fore.LIGHTBLACK_EX}for your tool:")
+x = input(f"{colorama.Fore.LIGHTBLACK_EX}Enter the {style('number', 'yellow')} {colorama.Fore.LIGHTBLACK_EX}for your tool:")
 function_name, function = functions[int(x) - 1]
 
 # Clear the terminal and switch to the new menu (trigger the fuction)
