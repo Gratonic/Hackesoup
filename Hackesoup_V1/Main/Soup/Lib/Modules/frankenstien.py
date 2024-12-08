@@ -23,13 +23,13 @@ gray = colorama.Fore.LIGHTBLACK_EX
 
 # Main class
 class Monster():
-    """Hackesoup core module for generating cli based UX menus: \n
+    """Hackesoup core [Soup] module for generating cli based UX menus: \n
     Args: None
     Public Functions:
 
         <add_limb>:
             Takes type and values as args, generates a UX element and adds it to
-            the page constructor process.
+            the page (Monster) constructor process.
 
             args:
                 <type> (String) Char or symbol used to construct element
@@ -44,15 +44,12 @@ class Monster():
     
     # Init main class
     def __init__(self):
-
         # Define internal globals
         # Compiled page = _live_monster
         self._live_monster = ""
         self._limb_default_accent_color = green
         self._limb_default_text_color = green
-
         # Define element templates
-
         # Type Header
         self._head = "{a}{b}\n{c}{d}\n{a}{b} {reset}"
         # Type Footer
@@ -61,16 +58,13 @@ class Monster():
         self. _guts = "{a}{b} {reset}"
         # Type Body
         self._body = "{a}{b}{c} {d} {reset}"
-        
-
     
+
     # Internal function for appending new elements to the page variable to be drawn.
     # _page_add
     def _attach(self, element):
-
         self._live_monster = self._live_monster + f"{element}\n"
-
-
+    
     # Function responsable for creating UX elements
     # Add element
     def add_limb(self, type, values=None):
@@ -82,7 +76,7 @@ class Monster():
             [menu_item] arg: [text, bullet symbol (or string), accent color (default green), text color (default gray)]\n
             [decoration] arg: [Unfinished]\n
             [text] arg: [text, color(default grey)]\n"""
-
+        
         # Header element
         if type == "head":
             if isinstance(values, str):
@@ -103,7 +97,7 @@ class Monster():
             if len(values) < 5:
                 raise ValueError("Footer requires at least 5 values: [length, symbol, message, accent color, text color]")
             # lenghth, Type, message, color, message_color
-            if int((values[0]/2)-(len(values[2])/2)-1) > -1:
+            if int((values[0]//2)-(len(values[2])/2)-1) > -1:
                 self._attach(self._feet.format(
                     a=values[3], 
                     b=values[1] * values[0], 
@@ -138,26 +132,37 @@ class Monster():
                 values = [values, self._limb_default_text_color]
             if len(values) < 2:
                 raise ValueError("Text requires at least 2 values: [text, color]")
-            self._page_add(self._guts.format(
+            self._attach(self._guts.format(
                 a=values[1], 
-                b=values[0],  
+                b=values[0], 
                 reset=reset))
 
     # Function to draw the current UX to the output console
     def shock(self, suppress_output=False):
         """Draws the current state of the UX build to the output console."""
-        os.system("clear")
+        # "cls" if os == windows and "clear" if os == "mac" or "linux"
+        os.system("cls" if os.name == "nt" else "clear")
         if not suppress_output:
             print(self._live_monster)
         return self._live_monster
 
+"""
+Example Usage:
+
+# Prepares the lab for assembly (creates the monster object)
 monster = Monster()
 
-# Adding elements
+# Adding head (header element)
 monster.add_limb("head", "Welcome to the Monster CLI")
-monster.add_limb("body", "Option 1: Start Game")
-monster.add_limb("body", "Option 2: Load Game")
-monster.add_limb("feet", [30, "=", "Thank you for playing!"])
+# Adding to the body (body element)
+monster.add_limb("body", "0) Exit")
+# Adding to the body (body element)
+monster.add_limb("body", "1): XSS Scanner")
+# Adding to the body (body element)
+monster.add_limb("body", "2): Previous Menu")
+# Adding feet (footer element)
+monster.add_limb("feet", [30, "=", "Thank you for playing!", green, gray])
 
-# Draw the UX to the output console (Shock the monster)
+# Shock the monster, brining it to life (Draw the UX to the output console)
 monster.shock()
+"""
