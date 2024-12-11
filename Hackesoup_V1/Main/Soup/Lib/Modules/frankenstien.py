@@ -47,7 +47,7 @@ Example Usage:
 """
 
 # Class for creating the Monster (page of text)
-def Frank():
+class Frank():
     def __init__(self):
         # Placeholder string for the text
         self._monster = ""
@@ -93,7 +93,7 @@ def Frank():
         if element_type == "head":
             self._attach(self._head.format(
                 border_color=vals[4],
-                border_line=vals[5] * title_length + 4,
+                border_line=vals[5] * (vals[6] + 4),
                 text_color=vals[3],
                 menu_title=vals[0],
                 reset=reset
@@ -121,7 +121,7 @@ def Frank():
                 space=vals[6] // 2,
                 text=vals[0],
                 border_color=vals[4],
-                border_line=vals[5] * vals[6] + 4,
+                border_line=vals[5] * (vals[6] + 4),
                 reset=reset
             ))
     
@@ -136,3 +136,12 @@ def Frank():
         if not suppress_output:
             print(self._monster)
         return self._monster
+
+menu = Frank()
+menu.add_limb("head", text="Toolbox", title_length=10)
+menu.add_limb("body", text="XSS Vuln Scanner", menu_item_num=1)
+menu.add_limb("guts", text="XSS Vuln Scanner Description.", text_color=light_cyan)
+menu.add_limb("body", text="SQLI Vuln Scanner", menu_item_num=2)
+menu.add_limb("guts", text="SQLI Vuln Scanner Description.", text_color=light_cyan)
+menu.add_limb("feet", text="[!] Warning: This is a test UX menu!", title_length=10)
+menu.shock()
