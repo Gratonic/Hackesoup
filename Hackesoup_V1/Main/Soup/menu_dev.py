@@ -10,11 +10,11 @@ from Lib.Modules import hs_menus
 banner = """
 
                                                                             
-    //    / /                                                                        
-   //___ / /  ___      ___     / ___      ___      ___      ___               ___    
-  / ___   / //   ) ) //   ) ) //\ \     //___) ) ((   ) ) //   ) ) //   / / //   ) ) 
- //    / / //   / / //       //  \ \   //         \ \    //   / / //   / / //___/ /  
-//    / / ((___( ( ((____   //    \ \ ((____   //   ) ) ((___/ / ((___( ( //"""
+    //    / /                                                                       
+   //___ / / ____     ____     //___      ____    _____     ______            ______    
+  / ___   / //   ) ) //   ) ) //\ \     //___))  ( (  ) )  //   ) ) //   / / //   ) ) 
+ //    / / //   / / //       //  \ \   //         \ \     //   / / //   / / //___/ /  
+//    / / ((___( ( ((____   //    \ \ ((____   //__) )   ((___/ / ((___( ( //"""
 
 # define vesion and project info for reference during development.
 # TODO: move to a global variables location in .lib
@@ -22,7 +22,7 @@ _hackesoup_info_ = json.loads('''{
     "version": "v1.0.0-dev",
     "codename": "Unknown",
     "release-date": "NA",
-    "author": "<up to you if you want to include me.>"                              
+    "author": "<up to you if you want to include me.>"
 }''')
 
 # tool for sylizing only a few words out of a fstring
@@ -52,10 +52,10 @@ print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Current Utils list:"
 # Get a list of functions present in hs_menus
 functions = inspect.getmembers(hs_menus, inspect.isfunction)
 
-# Build a list if avalible tools from functions in hs_menus (skipping internal functions starting with "_")
-for i, (func_name, _) in enumerate(functions, start=1):
+# Prints a function's name beside a number for every function in a list
+for func_num, (func_name, _) in enumerate(functions, start=1):
         if not str(func_name).startswith("_"):
-            print(f"{colorama.Fore.YELLOW}({i}) {colorama.Fore.LIGHTBLACK_EX}{func_name}")
+            print(f"{colorama.Fore.YELLOW}({func_num}) {colorama.Fore.LIGHTBLACK_EX}{func_name}")
 
 
 # Handle triggering hs_menus function from user input.
