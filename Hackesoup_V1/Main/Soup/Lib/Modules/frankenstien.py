@@ -2,7 +2,7 @@
 import colorama
 import os
 
-# Colour objects, used for nicer output
+# color objects, used for nicer output
 reset = colorama.Fore.RESET
 blue = colorama.Fore.BLUE
 light_blue = colorama.Fore.LIGHTBLUE_EX
@@ -39,9 +39,9 @@ Example Usage:
     menu = Frank()
     menu.add_limb("head", text="Toolbox", title_length=10)
     menu.add_limb("body", text="XSS Vuln Scanner", menu_item_num=1)
-    menu.add_limb("guts", text="XSS Vuln Scanner Description.", text_color=light_cyan)
+    menu.add_limb("guts", text="XSS Vuln Scanner Description.", text_colour=light_cyan)
     menu.add_limb("body", text="SQLI Vuln Scanner", menu_item_num=2)
-    menu.add_limb("guts", text="SQLI Vuln Scanner Description.", text_color=light_cyan)
+    menu.add_limb("guts", text="SQLI Vuln Scanner Description.", text_colour=light_cyan)
     menu.add_limb("feet", text="[!] Warning: This is a test UX menu!", title_length=10)
     menu.shock()
 """
@@ -52,15 +52,15 @@ class Frank():
         # Placeholder string for the text
         self._monster = ""
         # Placeholder for the format strings
-        self._head = "{border_color}{border_line}\n{text_color}{menu_title}\n{border_color}{border_line}{reset}"
-        self._body = "{accent_color}{menu_item_num}) {text_color}{menu_item}{reset}"
-        self._guts = "{text_color}{text}{reset}"
-        self._feet = "{text_color}{space}{text}{space}\n{border_color}{border_line}{reset}"
+        self._head = "{border_colour}{border_line}\n{text_colour}{menu_title}\n{border_colour}{border_line}{reset}"
+        self._body = "{accent_colour}{menu_item_num}) {text_colour}{menu_item}{reset}"
+        self._guts = "{text_colour}{text}{reset}"
+        self._feet = "{text_colour}{space}{text}{space}\n{border_colour}{border_line}{reset}"
     
     def _attach(self, element):
         self._monster = self._monster + f"{element}\n"
     
-    def add_limb(self, element_type, text="Python Rocks!", menu_item_num=0, accent_color=yellow, text_color=blue, border_color=magenta, border_symbol="=", title_length=30):
+    def add_limb(self, element_type, text="Python Rocks!", menu_item_num=0, accent_colour=yellow, text_colour=blue, border_colour=magenta, border_symbol="=", title_length=30):
         # Basic Element Type Validation
         if isinstance(element_type, str):
             pass
@@ -88,39 +88,39 @@ class Frank():
             raise ValueError("'title_length' must be type: int!")
         
         # Creates the values list to use for the formatting
-        vals = [text, menu_item_num, accent_color, text_color, border_color, border_symbol, title_length]
+        vals = [text, menu_item_num, accent_colour, text_colour, border_colour, border_symbol, title_length]
         # Header Element
         if element_type == "head":
             self._attach(self._head.format(
-                border_color=vals[4],
+                border_colour=vals[4],
                 border_line=vals[5] * (vals[6] + 4),
-                text_color=vals[3],
+                text_colour=vals[3],
                 menu_title=vals[0],
                 reset=reset
             ))
         # Body Element
         elif element_type == "body":
             self._attach(self._body.format(
-                accent_color=vals[2],
+                accent_colour=vals[2],
                 menu_item_num=vals[1],
-                text_color=vals[3],
+                text_colour=vals[3],
                 menu_item=vals[0],
                 reset=reset
             ))
         # Basic Text Element
         elif element_type == "guts":
             self._attach(self._guts.format(
-                text_color=vals[3],
+                text_colour=vals[3],
                 text=vals[0],
                 reset=reset
             ))
         # Footer Element
         elif element_type == "feet":
             self._attach(self._feet.format(
-                text_color=vals[3],
-                space=vals[6] // 2,
+                text_colour=vals[3],
+                space=" " * (vals[6] // 2 - len(vals[0])),
                 text=vals[0],
-                border_color=vals[4],
+                border_colour=vals[4],
                 border_line=vals[5] * (vals[6] + 4),
                 reset=reset
             ))
@@ -140,8 +140,8 @@ class Frank():
 menu = Frank()
 menu.add_limb("head", text="Toolbox", title_length=10)
 menu.add_limb("body", text="XSS Vuln Scanner", menu_item_num=1)
-menu.add_limb("guts", text="XSS Vuln Scanner Description.", text_color=light_cyan)
+menu.add_limb("guts", text="XSS Vuln Scanner Description.", text_colour=light_cyan)
 menu.add_limb("body", text="SQLI Vuln Scanner", menu_item_num=2)
-menu.add_limb("guts", text="SQLI Vuln Scanner Description.", text_color=light_cyan)
+menu.add_limb("guts", text="SQLI Vuln Scanner Description.", text_colour=light_cyan)
 menu.add_limb("feet", text="[!] Warning: This is a test UX menu!", title_length=10)
 menu.shock()
