@@ -1,5 +1,10 @@
-# Imports
+import sys
+import os
 import colorama
+
+# Imports Custom Modules
+import hs_menu_titles
+from Lib.Modules import frankenstien
 
 # Colour objects, used for nicer output
 reset = colorama.Fore.RESET
@@ -19,6 +24,19 @@ white = colorama.Fore.WHITE
 gray = colorama.Fore.LIGHTBLACK_EX
 
 # Toolbox Menu
+"""
+def new_toolbox() -> list:
+    # Dictionary of tool names and numbers for the menu
+    tools = {
+            "Port Scanner" : 1, "Subdomain FInder" : 2, "XSS Vulnerability Scanner": 3, 
+            "Directory Traversal Vulnerability Scanner": 4, "SQLI Vulnerability Scanner": 5, "Destroyer": 6
+            }
+    for k, v in tools:
+        print(f"{k}:{v}")
+    # Creates the menu items object
+    m = frankenstien.Frank()
+"""
+
 def toolbox() -> None:
     print(f"""
 {magenta}======================{reset}
@@ -30,7 +48,7 @@ def toolbox() -> None:
 {blue}3) XSS Vulnerability Scanner{reset}
 {light_blue}4) Directory Traversal Vulnerability Scanner{reset}
 {blue}5) SQLI Vulnerability Scanner{reset}
-{light_blue}6) File Destroyer{reset}
+{light_blue}6) Destroyer{reset}
 {gray}7) Previous Menu{reset}
 {magenta}======================{reset}
     """)
