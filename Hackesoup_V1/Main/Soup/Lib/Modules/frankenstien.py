@@ -136,12 +136,3 @@ class Frank():
         if not suppress_output:
             print(self._monster)
         return self._monster
-
-menu = Frank()
-menu.add_limb("head", text="Toolbox", title_length=10)
-menu.add_limb("body", text="XSS Vuln Scanner", menu_item_num=1)
-menu.add_limb("guts", text="XSS Vuln Scanner Description.", text_colour=light_cyan)
-menu.add_limb("body", text="SQLI Vuln Scanner", menu_item_num=2)
-menu.add_limb("guts", text="SQLI Vuln Scanner Description.", text_colour=light_cyan)
-menu.add_limb("feet", text="[!] Warning: This is a test UX menu!", title_length=10)
-menu.shock()
