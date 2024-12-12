@@ -1,6 +1,7 @@
 import colorama
 # Imports Custom Modules
-
+from HS_Modules import hs_menu_titles
+from Hackesoup_V1.Main.Soup.Lib.HS_Modules import frankenstien
 
 # Colour objects, used for nicer output
 reset = colorama.Fore.RESET

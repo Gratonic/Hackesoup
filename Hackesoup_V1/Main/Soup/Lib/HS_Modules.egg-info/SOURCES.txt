@@ -1,0 +1,12 @@
+setup.py
+HS_Modules/__init__.py
+HS_Modules/frankenstien.py
+HS_Modules/hs_menu_titles.py
+HS_Modules/hs_menus.py
+HS_Modules/hs_prompts.py
+HS_Modules/hs_specials.py
+HS_Modules.egg-info/PKG-INFO
+HS_Modules.egg-info/SOURCES.txt
+HS_Modules.egg-info/dependency_links.txt
+HS_Modules.egg-info/requires.txt
+HS_Modules.egg-info/top_level.txt
