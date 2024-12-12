@@ -1,2 +1,2 @@
 from Lib.Modules import hs_menus
-from Lib.Modules import frankenstien
+from Hackesoup_V1.Main.Soup.Lib.Modules.frankenstien_module.frankenstien_mod import frankenstien

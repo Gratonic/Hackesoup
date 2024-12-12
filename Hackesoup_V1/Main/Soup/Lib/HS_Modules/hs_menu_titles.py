@@ -5,7 +5,7 @@ import colorama
 import inspect
 import os
 
-from Lib.Modules import hs_menus
+from Lib.HS_Modules import hs_menus
 
 banner = """
 

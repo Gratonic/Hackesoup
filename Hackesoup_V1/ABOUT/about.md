@@ -194,3 +194,23 @@ Payload Based Scanners:
     * Add a deep scan features that uses a payload file with all known payloads for that type of hack - search the web to see if such a payload file exists
     * Have the basic scan use only the payloads found on gitub for that type of hack
     * For the CLI in version 2, -t = single target and -T = multiple targets
+
+### Copywrite Notices ###
+
+# colorama:
+
+## Hackesoup uses the colorama library, which is licensed under the BSD License.
+## Written and Licensed by Jonathan Hartley, https://github.com/tartley/colorama
+
+## Original copyright notice:
+## Copyright (c) 2013-2025 Jonathan Hartley
+## All rights reserved.
+
+# psutil:
+
+## Hackesoup uses the psutil library, which is licensed under the BSD License.
+## Written and Licensed by Giampaolo Rodola, https://github.com/giampaolo/psutil
+
+## Original copyright notice:
+## Copyright (c) 2011-2025 Giampaolo Rodola
+## All rights reserved.

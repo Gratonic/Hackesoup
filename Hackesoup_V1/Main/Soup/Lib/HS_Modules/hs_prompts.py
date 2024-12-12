@@ -1,6 +1,6 @@
 import colorama
 import socket
-import psutil
+import psutil # Written and Licensed by Giampaolo Rodola, https://github.com/giampaolo/psutil
 import re
 
 # Colour Objects, Used For Nicer Output
