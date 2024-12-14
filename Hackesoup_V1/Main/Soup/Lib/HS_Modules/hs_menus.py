@@ -1,5 +1,7 @@
 import colorama
 # Imports Custom Modules
+import frankenstien
+import hs_menu_titles
 
 
 # Colour objects, used for nicer output

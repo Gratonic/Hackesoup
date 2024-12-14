@@ -4,11 +4,9 @@ import json
 import colorama
 import inspect
 import os
-
-from Lib.HS_Modules import hs_menus
+import hs_menus
 
 banner = """
-
                                                                             
     //    / /                                                                       
    //___ / / ____     ____     //___      ____    _____     ______            ______    
