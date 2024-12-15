@@ -1,8 +1,4 @@
 import colorama
-# Imports Custom Modules
-import frankenstien
-import hs_menu_titles
-
 
 # Colour objects, used for nicer output
 reset = colorama.Fore.RESET
@@ -20,20 +16,6 @@ magenta = colorama.Fore.MAGENTA
 light_magenta = colorama.Fore.LIGHTMAGENTA_EX
 white = colorama.Fore.WHITE
 gray = colorama.Fore.LIGHTBLACK_EX
-
-# Toolbox Menu
-"""
-def new_toolbox() -> list:
-    # Dictionary of tool names and numbers for the menu
-    tools = {
-            "Port Scanner" : 1, "Subdomain FInder" : 2, "XSS Vulnerability Scanner": 3, 
-            "Directory Traversal Vulnerability Scanner": 4, "SQLI Vulnerability Scanner": 5, "Destroyer": 6
-            }
-    for k, v in tools:
-        print(f"{k}:{v}")
-    # Creates the menu items object
-    m = frankenstien.Frank()
-"""
 
 def toolbox() -> None:
     print(f"""
@@ -86,7 +68,7 @@ def port_scanner_settings() -> None:
 {blue}1) Adjust Thread Count{reset}
 {light_blue}2) Adjust Timeout{reset}
 {blue}3) Adjust Thread Count and Timeout{reset}
-{light_blue}4) Adjust Thead Count and Preform A Stealth Scan{reset}
+{light_blue}4) Adjust Thread Count and Preform A Stealth Scan{reset}
 {blue}5) Adjust Timeout and Preform A Stealth Scan{reset}
 {light_blue}6) Adjust Thread Count, Adjust Timeout, and Preform A Stealth Scan{reset}
 {gray}7) Previous Menu{reset}
@@ -260,3 +242,12 @@ def file_destroyer_settings() -> None:
 {gray}Previous Menu{reset}
 {magenta}========================={reset}
     """)
+
+dic = {1: "bob", 2: "charlie", 3: "smith", 4: "ricky", 5: "charles", 6: "estabon", 7: "randy"}
+a = dic.values()
+b = dic.items()
+c = dic.keys()
+
+print(list(a))
+print(b)
+print(list(c))

