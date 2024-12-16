@@ -1,3 +1,4 @@
+# Imports PIP modules
 import colorama
 # Imports Custom Modules
 import frankenstien
@@ -70,9 +71,7 @@ def menu_builder(tool_num: int, smn: str, mops: dict, meds: dict, special_mops={
 
 # Menus - TODO: Fix error preventing the menu titles from being printed (error unknown)
 
-def main_menu(menu_num):
-    # Preforms some quick validation
-    menu_num = check_menu_num(menu_num)
+def main_menu():
     # Used to build the menus
     # NOTE: if a new option needs to be added to the menu, simply add it the right dictionary
     options = {
@@ -84,6 +83,10 @@ def main_menu(menu_num):
         3: "scans a website for XSS vulnerabilities", 4: "scans a website for directory traversal vulnerabilities",
         5: "scans a website for SQLI vulnerabilities", 6: "adds a junk data to a file, encrypts it with aes, then overwrites it and deletes it"
     }
+    # Creates the menu object
+    menu = menu_builder(tool_num=0, mops=options, meds=descriptions, smn="Hackesoup")
+    # Prints the complete menu to the output console
+    menu.shock()
 
 def port_scanner_menus(menu_num):
     # Preforms some quick validation
@@ -146,6 +149,7 @@ def sub_domain_finder_menus(menu_num):
             2: "configure the subdomain finder settings for this search",
             3: "preform a search with stealth/firewall evasion features - NSFW"
         }
+        menu = menu_builder(tool_num=2, mops=menu_1_options, meds=menu_1_descriptions, smn="Subdomain Finder")
     elif menu_num == 2:
         # Menu 2 options and descriptions
         menu_2_options = {
@@ -164,6 +168,9 @@ def sub_domain_finder_menus(menu_num):
             9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
             11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
         }
+        menu = menu_builder(tool_num=2, mops=menu_2_options, meds=menu_2_descriptions, smn="Subdomain Finder")
+    # Prints the complete menu to the output console
+    menu.shock()
 
 def xss_vuln_scanner_menus(menu_num):
     # Preforms some quick validation
@@ -182,6 +189,7 @@ def xss_vuln_scanner_menus(menu_num):
             2: "configure the xss vulnerability scanner settings for this scan",
             3: "preform a scan with stealth/firewall evasion features - NSFW"
         }
+        menu = menu_builder(tool_num=3, mops=menu_1_options, meds=menu_1_descriptions, smn="XSS Vulnerability Scanner")
     elif menu_num == 2:
         # Menu 2 options and descriptions
         menu_2_options = {
@@ -200,6 +208,9 @@ def xss_vuln_scanner_menus(menu_num):
             9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
             11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
         }
+        menu = menu_builder(tool_num=3, mops=menu_2_options, meds=menu_2_descriptions, smn="XSS Vulnerability Scanner")
+    # Prints the complete menu to the output console
+    menu.shock()
 
 def dir_trav_vuln_scanner_menus(menu_num):
     # Preforms some quick validation
@@ -218,6 +229,7 @@ def dir_trav_vuln_scanner_menus(menu_num):
             2: "configure the directory traversal vulnerability scanner settings for this scan",
             3: "preform a scan with stealth/firewall evasion features - NSFW"
         }
+        menu = menu_builder(tool_num=4, mops=menu_1_options, meds=menu_1_descriptions, smn="Directory Traversal Vulnerability Scanner")
     elif menu_num == 2:
         # Menu 2 options and descriptions
         menu_2_options = {
@@ -236,6 +248,9 @@ def dir_trav_vuln_scanner_menus(menu_num):
             9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
             11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
         }
+        menu_builder(tool_num=4, mops=menu_2_options, meds=menu_2_descriptions, smn="Directory Traversal Vulnerability Scanner")
+    # Prints the complete menu to the output console
+    menu.shock()
 
 def sqli_vuln_scanner_menus(menu_num):
     # Preforms some quick validation
@@ -254,6 +269,7 @@ def sqli_vuln_scanner_menus(menu_num):
             2: "configure the sqli vulnerability scanner settings for this scan",
             3: "preform a scan with stealth/firewall evasion features - NSFW"
         }
+        menu = menu_builder(tool_num=5, mops=menu_1_options, meds=menu_1_descriptions, smn="SQLI Vulnerability Scanner")
     elif menu_num == 2:
         # Menu 2 options and descriptions
         menu_2_options = {
@@ -272,6 +288,9 @@ def sqli_vuln_scanner_menus(menu_num):
             9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
             11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
         }
+        menu = menu_builder(tool_num=5, mops=menu_2_options, meds=menu_2_descriptions, smn="SQLI Vulnerability Scanner")
+    # Prints the complete menu to the output console
+    menu.shock()
 
 def destroyer_menus(menu_num):
     # Preforms some quick validation

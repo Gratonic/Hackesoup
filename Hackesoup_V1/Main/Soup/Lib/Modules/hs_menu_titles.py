@@ -16,9 +16,6 @@ def hackesoup():
      //    / / //   / / //       //  \ \   //         \ \     //   / / //   / / //___/ /  
     //    / / ((___( ( ((____   //    \ \ ((____   //__) )   ((___/ / ((___( ( //"""
 
-def hackesoup_snowboard():
-    return "__________________________________________________________________________________/"
-
 # Other Title Stuff
 
 def port_scanner():
@@ -46,7 +43,7 @@ def xss_scanner():
      \ V /\ `--.\ `--.   ___  ___ __ _ _ __  _ __   ___ _ __ 
      /   \ `--. \`--. \ / __|/ __/ _` | '_ \| '_ \ / _ | '__|
     / /^\ /\__/ /\__/ / \__ | (_| (_| | | | | | | |  __| |   
-    \/   \\____/\____/  |___/\___\__,_|_| |_|_| |_|\___|_|"""
+    \/   \\____/\____/  |___/\___\__,|_|_| |_|_| |_|\___|_|"""
 
 def dir_trav_scanner():
     return """
@@ -84,7 +81,7 @@ def destroyter_fragements():
 def grab_menu(tool_num) -> list:
     try:
         tool_num = int(tool_num)
-        if tool_num <= 0:
+        if tool_num < 0:
             raise ValueError("Invalid tool number")
         elif tool_num > 6:
             raise ValueError("Invalid tool number")
@@ -93,22 +90,31 @@ def grab_menu(tool_num) -> list:
     except:
         raise ValueError("Invalid tool number")
     # Determines what menu to return based on the tool number
-    if tool_num == 1:
+    if tool_num == 0:
+        menu_title = hackesoup()
+        menu_title_bar = f"_________________________________________________________________________________________/"
+        return [menu_title, menu_title_bar]
+    elif tool_num == 1:
         menu_title = port_scanner()
         menu_title_bar = f"__________________________________________________________________/"
         return [menu_title, menu_title_bar]
     elif tool_num == 2:
-        menu = sub_domain_finder()
-        return menu
+        menu_title = sub_domain_finder()
+        menu_title_bar = f"______________________________________________________________________________________________/"
+        return [menu_title, menu_title_bar]
     elif tool_num == 3:
-        menu = xss_scanner()
-        return menu
+        menu_title = xss_scanner()
+        menu_title_bar = f"_______________________________________________________________/"
+        return [menu_title, menu_title_bar]
+        return menu_title
     elif tool_num == 4:
-        menu = dir_trav_scanner()
-        return menu
+        menu_title = dir_trav_scanner()
+        menu_title_bar = f"________________________________________________________________________________________________________/"
+        return [menu_title, menu_title_bar]
     elif tool_num == 5:
-        menu = sqli_scanner()
-        return menu
+        menu_title = sqli_scanner()
+        menu_title_bar = f"____________________________________________________________________/"
+        return [menu_title, menu_title_bar]
     elif tool_num == 6:
         message = "Destroyer cannot be displayed because it comes in fragements, remember?"
         return message
