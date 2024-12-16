@@ -63,19 +63,16 @@ def sqli_scanner():
     /\__/ \ \/' | |____| |_  \__ | (_| (_| | | | | | | |  __| |   
     \____/ \_/\_\_____\___/  |___/\___\__,_|_| |_|_| |_|\___|_|"""
 
-# Fragmented because of the y
-def destroyter_fragements():
-    destroyer_frags = [
-                        "______         _                             ", # line 0
-                        "|  _  \       | |                            ", # line 1
-                        "| | | |___ ___| |_ _ __ ___  _   _  ___ _ __ ", # line 2
-                        "| | | / _ / __| __| '__/ _ \| | | |/ _ | '__|", # line 3
-                        "| |/ |  __\__ | |_| | | (_) | |_| |  __| |   ", # line 4
-                        "|___/ \___|___/\__|_|  \___/ \__, |\___|_|   ", # line 5
-                        "                              __/ |          ", # line 6 - Will have a line that is broken by the 'y'
-                        "                             |___/           ", # line 7
-                    ]
-    return destroyer_frags
+
+def destroyer():
+    return """
+    ______         _                             
+    |  _  \       | |                            
+    | | | |___ ___| |_ _ __ ___  _   _  ___ _ __ 
+    | | | / _ / __| __| '__/ _ \| | | |/ _ | '__|
+    | |/ |  __\__ | |_| | | (_) | |_| |  __| |   
+    |___/ \___|___/\__|_|  \___/ \__  |\___|_|   
+                                  |___|          """
 
 # Provides an alternative way to grab a menu
 def grab_menu(tool_num) -> list:
@@ -92,7 +89,7 @@ def grab_menu(tool_num) -> list:
     # Determines what menu to return based on the tool number
     if tool_num == 0:
         menu_title = hackesoup()
-        menu_title_bar = f"_________________________________________________________________________________________/"
+        menu_title_bar = f"__________________________________________________________________________________________/"
         return [menu_title, menu_title_bar]
     elif tool_num == 1:
         menu_title = port_scanner()
@@ -116,8 +113,9 @@ def grab_menu(tool_num) -> list:
         menu_title_bar = f"____________________________________________________________________/"
         return [menu_title, menu_title_bar]
     elif tool_num == 6:
-        message = "Destroyer cannot be displayed because it comes in fragements, remember?"
-        return message
+        menu_title = destroyer()
+        menu_title_bar = f"___________________________________________________/"
+        return [menu_title, menu_title_bar]
 
 # Easter Egg(s)
 

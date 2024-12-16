@@ -65,9 +65,7 @@ def setup() -> int:
 def target() -> int:
     global valid_choice
     while valid_choice == 0:
-        print(f"{magenta}======================{reset}")
         targ = input(f"{magenta}Please Specify a Target{reset} {green}[Ex: 74.203.143.35]{reset}: ")
-        print("Validating Target...")
         try:
             socket.gethostbyaddr(target)
             valid_choice = 1
@@ -79,10 +77,7 @@ def target() -> int:
 def special_target() -> int:
     global valid_choice
     while valid_choice == 0:
-        print(f"{yellow}[*] Warning{reset}: {light_yellow}If Your Target Is A Website Use The Domain Name and Not The IP Address, Otherwise The Proxy Domain Will Be The Target!{reset}")
-        print(f"{magenta}======================{reset}")
         targ = input(f"{magenta}Please Specify a Target{reset} {green}[Ex: 74.203.143.35 or www.example.com]{reset}: ")
-        print("Validating Target...")
         # User provided target is more likely to be a website (domain name) than an IP address
         try:
             socket.gethostbyname(target)

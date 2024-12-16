@@ -306,6 +306,7 @@ def destroyer_menus(menu_num):
             1: "add random data to the file, encrypt it with a modern AES based cipher (256-bit key), overwrite it 10 times, and delete it",
             2: "choose what the destroyer does to the file"
         }
+        menu = menu_builder(tool_num=6, mops=menu_1_options, meds=menu_1_descriptions, smn="Destroyer")
     elif menu_num == 2:
         # Menu 2 options and descriptions
         menu_2_options = {
@@ -322,3 +323,54 @@ def destroyer_menus(menu_num):
             4: "simply delete the file",
             5: "encrypt the file using a 256-bit key with a modern AES cipher, overwrite it X amount of times (default: 10), and delete it"
         }
+        menu = menu_builder(tool_num=6, mops=menu_2_options, meds=menu_2_descriptions, smn="Destroyer")
+    menu.shock()
+
+# Calls the main menu
+def call_main_menu():
+    main_menu()
+
+# Calls the Port Scanner Menus
+def call_port_scanner_setup_1():
+    port_scanner_menus(1)
+
+def call_port_scanner_setup_2():
+    port_scanner_menus(2)
+
+def call_port_scanner_settings():
+    port_scanner_menus(3)
+
+# Calls the Subdomain Finder menus
+def call_subdomain_finder_setup():
+    sub_domain_finder_menus(1)
+
+def call_subdomain_finder_settings():
+    sub_domain_finder_menus(2)
+
+# Calls the XSS Vulnerability Scanner menus
+def call_xss_vuln_scanner_setup():
+    xss_vuln_scanner_menus(1)
+
+def call_xss_vuln_scanner_settings():
+    xss_vuln_scanner_menus(2)
+
+# Calls the Directory Traversal Vulnerability Scanner menus
+def call_dir_trav_vuln_scanner_setup():
+    dir_trav_vuln_scanner_menus(1)
+
+def call_dir_trav_vuln_scanner_settings():
+    dir_trav_vuln_scanner_menus(2)
+
+# Calls the SQLI Vulnerability Scanner menus
+def call_sqli_vuln_scanner_setup():
+    sqli_vuln_scanner_menus(1)
+
+def call_sqli_vuln_scanner_settings():
+    sqli_vuln_scanner_menus(2)
+
+# Calls the Destroyer menus
+def call_destroyer_setup():
+    destroyer_menus(1)
+
+def call_destroyer_settings():
+    destroyer_menus(2)
