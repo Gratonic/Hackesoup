@@ -38,18 +38,18 @@ rainbow_colors = [colorama.Fore.RED, colorama.Fore.YELLOW, colorama.Fore.GREEN, 
 rainbow_text = ''.join(rainbow_colors[i % len(rainbow_colors)] + banner[i] for i in range(len(banner)))
 print(rainbow_text + colorama.Fore.RESET)
 
-# Print out Banner scoop bar
+# Print out Banner scoop bar - will be integrated at a more advanced level
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTGREEN_EX}____________________________________________________________________________________/")
 
-# Print out version info and dev warning
+# Print out version info and dev warning - might be needed but not at the moment
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Hackesoup {_hackesoup_info_['version']}({_hackesoup_info_['codename']})" + colorama.Fore.RESET)
 print(f"{colorama.Style.BRIGHT}Please note that this cli is {style('only', 'red')} for testing and {colorama.Fore.BLACK + colorama.Back.RED} is far from fully functional!{colorama.Back.RESET}")
 print(f"{colorama.Style.BRIGHT}{colorama.Fore.LIGHTBLACK_EX}Current Utils list:")
 
-# Get a list of functions present in hs_menus
+# Get a list of functions present in hs_menus - no longer needed
 functions = inspect.getmembers("menu_options_here", inspect.isfunction)
 
-# Prints a function's name beside a number for every function in a list
+# Prints a function's name beside a number for every function in a list - no longer needed
 for func_num, (func_name, _) in enumerate(functions, start=1):
         if not str(func_name).startswith("_"):
             print(f"{colorama.Fore.YELLOW}({func_num}) {colorama.Fore.LIGHTBLACK_EX}{func_name}")
