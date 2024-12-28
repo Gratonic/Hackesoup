@@ -16,6 +16,3 @@ sys.path.append(modules_dir)
 # Imports the custom modules
 hs_menus = importlib.import_module('hs_menus')
 hs_prompts = importlib.import_module('hs_prompts')
-
-hs_menus.call_main_menu()
-hs_prompts.target()
