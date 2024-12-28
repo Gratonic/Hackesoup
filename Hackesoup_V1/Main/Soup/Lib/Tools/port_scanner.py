@@ -1,5 +1,7 @@
-import socket
+# Imports
 import colorama
+import socket
+import time
 
 # color objects, used for nicer output
 reset = colorama.Fore.RESET
@@ -18,13 +20,13 @@ light_magenta = colorama.Fore.LIGHTMAGENTA_EX
 white = colorama.Fore.WHITE
 gray = colorama.Fore.LIGHTBLACK_EX
 
-# Creates the socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.settimeout(5)
+# Functionality
 
-for port in range(1000):
-    result = s.connect_ex(("127.0.0.1", port))
-    if result == 0:
-        print(f"{green}Port {port} is open{reset}")
-    else:
-        print(f"{red} Port {port} is closed{reset}")
+# These functions handle the UX elements
+
+# Handles the display of the open/filtered/closed ports
+def beautify(open_ports: list, filtered_ports: list, closed_ports: list):
+    pass
+
+def time_remaining_calc(port_amount, primary_timeout, secondary_timeout, thread_count):
+    pass
