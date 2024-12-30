@@ -27,18 +27,18 @@ def find_safe_thread_amount() -> int:
     return thread_amount_allowed_for_program
 
 # Says "Goodbye!" to the user in German and exits the program
-def terminate_program():
+def terminate_program() -> None:
     print(f"{magenta}\n\nTschüss!{reset}")
     exit()
 
-# Toolbox Prompt
+# Toolbox Prompt - Used for Main/Tool Menu only!
 def toolbox() -> int:
     while True:
         tool = input(f"{magenta}Please Choose An Option From The Toolbox{reset} {green}[Ex: 3]{reset}: ")
         try:
             tool = int(tool)
             # 7 because of easter egg, number will be changed to a higher number in future versions
-            if tool <= 7:
+            if tool >= 0 and tool <= 7:
                 return tool
             else:
                 print(f"{red}[!] Error{reset}: {light_red}Invalid Tool.{reset}")
@@ -47,23 +47,61 @@ def toolbox() -> int:
         except:
             print(f"{red}[!] Error{reset}: {light_red}Invalid Tool.{reset}")
 
-# Tool Setup Prompt
-def setup() -> int:
-    while True:
-        setup_opt = input(f"{magenta}Please Choose A Setup Option{reset} {green}[Ex: 2]{reset}: ") 
-        try:
-            setup_opt = int(setup_opt)
-            # 5 is the last setup option for the largest setup menus, may change in future versions
-            if setup_opt <= 13:
-                return setup_opt
-            else:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Setup Option.{reset}")
-        except KeyboardInterrupt:
-            terminate_program()
-        except:
-            print(f"{red}[!] Error{reset}: {light_red}Invalid Setup Option.{reset}")
+# Setup Prompt - Used for tool setting/setup menus
+def setup(tool_number: int) -> int:
+    def option_out_of_scope():
+        print(f"{red}Erorr: {reset}{light_red}Invalid setup option. The number you have chosen is out of scope.{reset}")
+    try:
+        while True:
+            try:
+                setup_option = int(input(f"{magenta}Please Choose A Setup Option{reset} {green}[Ex: 2]{reset}: "))
+                # Returns an integer if one of the conditions below are met -->
+                # otherwise the user will recieve a custom erorr message
+                if tool_number == 1:
+                    if setup_option >= 0 and setup_option <= 7:
+                        return setup_option
+                    else:
+                        option_out_of_scope()
+                elif tool_number == 2:
+                    if setup_option >= 0 and setup_option <= 13:
+                        return setup_option
+                    else:
+                        option_out_of_scope()
+                elif tool_number == 3:
+                    if setup_option >= 0 and setup_option <= 13:
+                        return setup_option
+                    else:
+                        option_out_of_scope()
+                    return setup_option
+                elif tool_number == 4:
+                    if setup_option >= 0 and setup_option <= 13:
+                        return setup_option
+                    else:
+                        option_out_of_scope()
+                elif tool_number == 5:
+                    if setup_option >= 0 and setup_option <= 13:
+                        return setup_option
+                    else:
+                        option_out_of_scope()
+                elif tool_number == 6:
+                    if setup_option >= 0 and setup_option <= 6:
+                        return setup_option
+                    else:
+                        option_out_of_scope()
+                else:
+                    raise ValueError(f"{red}'tool_number [{tool_number}]' is out of scope{reset}")
+            except ValueError:
+                print(f"{red}[!] Error{reset}: {light_red}Invalid setup option. Please enter a number.{reset}")
+            except:
+                print(f"{red}[!] Error{reset}: {light_red}Invalid setup option.{reset}")
+    except KeyboardInterrupt:
+        terminate_program()
+    except ValueError:
+        raise ValueError(f"{red}'tool_number [{tool_number}]' must be an integer")
+    except Exception as error:
+        print(error)
 
-# Target Prompt - IP Address Only
+# Target Prompt - IP Address Only!
 def target() -> str:
     while True:
         try:
@@ -90,24 +128,45 @@ def target() -> str:
         except:
             print(f"{red}[!] Error{reset}: {light_red}Invalid Target.{reset}")
 
-# Special Target Prompt - IP Address or Website
-def special_target() -> int:
+# Special Target Prompt - IP Address and Website Domains Accepted!
+def special_target() -> str:
     while True:
-        targ = input(f"{magenta}Please Specify a Target{reset} {green}[Ex: 74.203.143.35 or www.example.com]{reset}: ")
-        # User provided target is more likely to be a website (domain name) than an IP address
         try:
-            socket.gethostbyname(target)
-            return targ
+            targ = input(f"{magenta}Please Specify a Target{reset} {green}[Ex: 74.203.143.35 or www.example.com]{reset}: ")
+            target_pieces = targ.split(".")
+            if len(target_pieces) == 4:
+                try:
+                    # just to make things more readable
+                    octets = target_pieces
+                    # container for the good octets
+                    good_octets = []
+                    for octet in octets:
+                        octet = int(octet)
+                        if octet >= 1 and octet <= 255:
+                            good_octets.append(octet)
+                        else:
+                            print(f"{red}[!] Error{reset}: One Or More Octets Are Invalid.{reset}")
+                            break
+                    # if everything goes well...
+                    if len(good_octets) == 4:
+                        return targ
+                except socket.gaierror:
+                    print(f"{red}[!] Error{reset}: One Or More Octets Are Invalid.{reset}")
+            elif len(target_pieces) > 4 or len(target_pieces) < 4:
+                try:
+                    # NOTE: The website ip address is not actually used, it just means the website must exist -->
+                    # since it has an ip address
+                    website_ip = socket.gethostbyname(targ)
+                    # if the website ip address was obtained....
+                    return targ
+                except socket.gaierror:
+                    print(f"{red}[!] Erorr:{reset} Invalid Domain Name or IP Address.{light_red}")
+                except Exception as e:
+                    print(f"{red}[!] Erorr:{reset} {light_red}Unknown.{reset}")
         except KeyboardInterrupt:
             terminate_program()
-        except:
-            try:
-                socket.gethostbyaddr(target)
-                return targ
-            except KeyboardInterrupt:
-                terminate_program()
-            except:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Target.{reset}")
+        except Exception as e:
+            print(e)
 
 # Port Prompt
 def port() -> int:
@@ -146,22 +205,6 @@ def port_range() -> str:
             terminate_program()
         except:
             print(f"{red}[!] Error{reset}: {light_red}Invalid Port Range.{reset}")
-
-# Settings Prompt
-def settings() -> int:
-    while True:
-        setting = input(f"Please Choose A Setting: ")
-        try:
-            int(setting)
-            # 13 is the last possible menu option for the largest setting menus, may change in future versions
-            if setting > 13:
-                return setting
-            else:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Setting.{reset}")
-        except KeyboardInterrupt:
-            terminate_program()
-        except:
-            print(f"{red}[!] Error{reset}: {light_red}Invalid Setting.{reset}")
 
 # Custom Payload File Prompt
 def custom_payload_file() -> str:

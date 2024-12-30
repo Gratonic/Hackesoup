@@ -61,8 +61,6 @@ def port_scanner_UX_menus():
         hs_prompts.setup()
     except KeyboardInterrupt:
         terminate_program()
-    
-port_scanner_UX_menus()
 
 port_scanner_UX_menus()
 # Handles the entire UX menu and returns a list of all the user input
