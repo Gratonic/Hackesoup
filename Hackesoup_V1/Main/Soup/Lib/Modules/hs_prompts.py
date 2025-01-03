@@ -305,7 +305,8 @@ def thread_amount() -> int:
             thread_amount = int(thread_amount)
             if thread_amount > safe_thread_amount:
                 print(f"{red}[!] Error{reset}: {light_red}Too Many Threads. You May Use Up To {reset}{green}{safe_thread_amount}{reset}{light_red} Threads For This Computer, Using More Could Overload Your CPU.{reset}")
-            return thread_amount
+            else:
+                return thread_amount
         except KeyboardInterrupt:
             terminate_program()
         except:
