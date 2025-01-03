@@ -18,6 +18,7 @@ magenta = colorama.Fore.MAGENTA
 light_magenta = colorama.Fore.LIGHTMAGENTA_EX
 white = colorama.Fore.WHITE
 gray = colorama.Fore.LIGHTBLACK_EX
+black = colorama.Fore.BLACK
 
 # :: Overview :: #
 """
@@ -95,8 +96,8 @@ class Frank():
                 menu_title_bar_color=green,
                 tool_version=f"{small_menu_name} v1.0",
                 tool_version_color=cyan,
-                os_support_info=f"{magenta}Supported Operating Systems Include: {green}{colorama.Back.WHITE}Linux{colorama.Back.RESET}",
-                special_message=f"{cyan}Current Menu Options:",
+                os_support_info=f"{magenta}Supported Operating System[s]: {black}{colorama.Back.YELLOW}Linux{colorama.Back.RESET}",
+                special_message=f"{cyan}Current Menu Options:\n",
                 reset=reset
             ))
         # Body Element

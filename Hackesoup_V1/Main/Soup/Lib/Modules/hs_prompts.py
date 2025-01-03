@@ -31,21 +31,144 @@ def terminate_program() -> None:
     print(f"{magenta}\n\nTschüss!{reset}")
     exit()
 
-# Toolbox Prompt - Used for Main/Tool Menu only!
+# Checks an IP Address - Used in the target prompt functions - ocs == list of octets
+def check_ip(ocs: list) -> int:
+    # NOTE: 0 == all-good status, 1 == stanard error status (invalid ip), -->
+    # 2 == missing octets status, 3 == too many octets status
+    #
+    # Stores the valid octets
+    good_octets = []
+    # If there are 4 octets keep going, if there are less than 4 return the too many octets status, -->
+    #  if there are less than 4 ocets return the missing octets status, else return the stanard error status
+    if len(ocs) == 4:
+        pass
+    elif len(ocs) < 4:
+        return 2
+    elif len(ocs) > 4:
+        return 3
+    else:
+        return 1
+    # Checks every octet in the octets list
+    for octet in ocs:
+        try:
+            octet = int(octet)
+            # 255 is for the broadcast address only in all cases 254 is last usable
+            if octet > 0 and octet < 254:
+                good_octets.append(octet)
+            else:
+                return 1
+        except:
+            return 1
+    # All ip address contain 4 octets, no less and no more
+    if len(good_octets) == 4:
+        return 0
+    else:
+        return 1
+
+# Main/Tool Menu Prompt
 def toolbox() -> int:
     while True:
-        tool = input(f"{magenta}Please Choose An Option From The Toolbox{reset} {green}[Ex: 3]{reset}: ")
         try:
-            tool = int(tool)
-            # 7 because of easter egg, number will be changed to a higher number in future versions
-            if tool >= 0 and tool <= 7:
-                return tool
+            # Asks the user to choose a tool, integer expected
+            tool_choice = int(input(f"{magenta}Please Choose A Tool Number {green}[EX: 3]{magenta}:{reset} "))
+            # 0 == exit, 7 == previous menu (7 will trigger an easter egg in this case)
+            if tool_choice >= 0 and tool_choice <= 7:
+                return tool_choice
             else:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Tool.{reset}")
+                print(f"{red}[!] Error: {light_red}Tool Choice Out Of Scope{reset}")
+        except ValueError:
+            print(f"{red}[!] Error: {light_red}Please Choose A Number.{reset}")
         except KeyboardInterrupt:
             terminate_program()
         except:
-            print(f"{red}[!] Error{reset}: {light_red}Invalid Tool.{reset}")
+            print(f"{red}[!] Error: {light_red}Invalid Tool Choice.{reset}")
+
+# Target Prompt - IP Address Only!
+def target() -> str:
+    while True:
+        try:
+            # Asks the user to specify their target, ip address expected
+            target = str(input(f"{magenta}Please Specify A Target {green}[EX: 1.1.1.1]{magenta}:{reset} "))
+            # If there are no dots in the string, the user must have not entered an IP Address
+            if "." in target:
+                # Used to store the octets that have not been validated
+                octets = target.split(".")
+                # Checks the ip address, 0 == all-good status, 1 == stanard error status (invalid ip), -->
+                # 2 == missing octets status, 3 == too many octets status
+                ip_check_status = check_ip(octets)
+                # Determines what to do based on the status returned
+                if ip_check_status == 0:
+                    return target
+                elif ip_check_status == 1:
+                    print(f"{red}[!] Error: {light_red}Invalid IP Address.{reset}")
+                elif ip_check_status == 2:
+                    print(f"{red}[!] Error: {light_red}One Or More Octets Are Missing.{reset}")
+                elif ip_check_status == 3:
+                    print(f"{red}[!] Error: {light_red}Too Many Octets.")
+                else:
+                    print(f"{red}[!] Error: {light_red}Unknown, Please Try Again.{reset}")
+            else:
+                print(f"{red}[!] Error: {light_red}You Must Specify An IP Address.{reset}")
+        except KeyboardInterrupt:
+            terminate_program()
+        except Exception as e:
+            # Prints the error because the user will likely never cause this error, -->
+            # since all the input validation is done above in another try-except block
+            print(e)
+
+# Special Target Prompt - Website or IP Address
+def special_target() -> str:
+    # Gets the target type
+    while True:
+        try:
+            target_type = int(input(f"{magenta}Is Your Target Address A Website or IP Address? {green}[Enter 1: For A Website, Enter 2: For An IP Address]: {reset}"))
+            if target_type == 1 or target_type == 2:
+                break
+            else:
+                print(f"{red}[!] Error: {light_red}Invalid Target Type.{reset}")
+        except KeyboardInterrupt:
+            terminate_program()
+        except:
+            print(f"{red}[!] Error: {light_red}Target Type Must Be A Number.{reset}")
+    # Gets the target based on the target_type and preforms the proper validation
+    while True:
+        try:
+            # Asks the user to specify their target, ip address expected
+            target = str(input(f"{magenta}Please Specify A Target {green}[EX: 1.1.1.1]{magenta}:{reset} "))
+            # If target is a web address (website)
+            if target_type == 1:
+                try:
+                    socket.gethostbyname(target)
+                    return target
+                except KeyboardInterrupt:
+                    terminate_program()
+                except:
+                    print(f"{red}[!] Error: {light_red}Invalid Website.{reset}")
+            elif target_type == 2:
+                # If there are no dots in the string, the user must have not entered an IP Address
+                if "." in target:
+                    # Used to store the octets that have not been validated
+                    octets = target.split(".")
+                    # Checks the ip address, 0 == all-good status, 1 == stanard error status (invalid ip), -->
+                    # 2 == missing octets status, 3 == too many octets status
+                    ip_check_status = check_ip(octets)
+                    # Determines what to do based on the status returned
+                    if ip_check_status == 0:
+                        return target
+                    elif ip_check_status == 1:
+                        print(f"{red}[!] Error: {light_red}Invalid IP Address.{reset}")
+                    elif ip_check_status == 2:
+                        print(f"{red}[!] Error: {light_red}One Or More Octets Are Missing.{reset}")
+                    elif ip_check_status == 3:
+                        print(f"{red}[!] Error: {light_red}Too Many Octets.")
+                    else:
+                        print(f"{red}[!] Error: {light_red}Unknown, Please Try Again.{reset}")
+                else:
+                    print(f"{red}[!] Error: {light_red}You Must Specify An IP Address.{reset}")
+        except KeyboardInterrupt:
+            terminate_program()
+        except:
+            print(f"{red}[!] Error: Invalid Target.{reset}")
 
 # Setup Prompt - Used for tool setting/setup menus
 def setup(tool_number: int) -> int:
@@ -101,90 +224,23 @@ def setup(tool_number: int) -> int:
     except Exception as error:
         print(error)
 
-# Target Prompt - IP Address Only!
-def target() -> str:
-    while True:
-        try:
-            targ = input(f"{magenta}Please Specify a Target{reset} {green}[Ex: 74.203.143.35]{reset}: ")
-            octets = targ.split(".")
-            try:
-                good_octets = []
-                for octet in octets:
-                    octet = int(octet)
-                    if octet >= 1 and octet <= 255:
-                        good_octets.append(octet)
-                    else:
-                        print(f"{red}[!] Error{reset}: One Or More Octets Are Invalid.{reset}")
-                        break
-            except:
-                print(f"{red}[!] Error{reset}: One Or More Octets Are Invalid.{reset}")
-            # Returns the target if there are enough good octets
-            if len(good_octets) == 4:
-                return targ
-            else:
-                continue
-        except KeyboardInterrupt:
-            terminate_program()
-        except:
-            print(f"{red}[!] Error{reset}: {light_red}Invalid Target.{reset}")
-
-# Special Target Prompt - IP Address and Website Domains Accepted!
-def special_target() -> str:
-    while True:
-        try:
-            targ = input(f"{magenta}Please Specify a Target{reset} {green}[Ex: 74.203.143.35 or www.example.com]{reset}: ")
-            target_pieces = targ.split(".")
-            if len(target_pieces) == 4:
-                try:
-                    # just to make things more readable
-                    octets = target_pieces
-                    # container for the good octets
-                    good_octets = []
-                    for octet in octets:
-                        octet = int(octet)
-                        if octet >= 1 and octet <= 255:
-                            good_octets.append(octet)
-                        else:
-                            print(f"{red}[!] Error{reset}: One Or More Octets Are Invalid.{reset}")
-                            break
-                    # if everything goes well...
-                    if len(good_octets) == 4:
-                        return targ
-                except socket.gaierror:
-                    print(f"{red}[!] Error{reset}: One Or More Octets Are Invalid.{reset}")
-            elif len(target_pieces) > 4 or len(target_pieces) < 4:
-                try:
-                    # NOTE: The website ip address is not actually used, it just means the website must exist -->
-                    # since it has an ip address
-                    website_ip = socket.gethostbyname(targ)
-                    # if the website ip address was obtained....
-                    return targ
-                except socket.gaierror:
-                    print(f"{red}[!] Erorr:{reset} Invalid Domain Name or IP Address.{light_red}")
-                except Exception as e:
-                    print(f"{red}[!] Erorr:{reset} {light_red}Unknown.{reset}")
-        except KeyboardInterrupt:
-            terminate_program()
-        except Exception as e:
-            print(e)
-
 # Port Prompt
 def port() -> int:
     while True:
-        prt = input(f"{magenta}Please Specify A Port {green}[Ex: 21]{reset}: ")
         try:
-            prt = int(port)
-            # 65535 is the last port number
-            if prt > 65535:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Port.{reset}")
-            elif prt < 1:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Port.{reset}")
+            port = int(input(f"{magenta}Please Specify A Port Number {green}[EX: 53]: {reset}"))
+            if port < 1:
+                print(f"{red}[!] Error: {light_red}Port Number Is Too Low.{reset}")
+            elif port > 65535:
+                print(f"{red}[!] Error: {light_red}Port Number Is Too High.{reset}")
             else:
-                return prt
+                return port
         except KeyboardInterrupt:
             terminate_program()
+        except ValueError:
+            print(f"{red}[!] Error: {light_red}You Must Enter A Number.{reset}")
         except:
-            print(f"{red}[!] Error{reset}: {light_red}Invalid Port.{reset}")
+            print(f"{red}[!] Error: {light_red}Invalid Port.{reset}")
 
 # Port Range Prompt
 def port_range() -> str:
@@ -196,9 +252,9 @@ def port_range() -> str:
             end_prt = int(prts[1])
             # 65535 is the last port number
             if start_prt > 65535 or end_prt > 65535:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Port Range.{reset}")
+                print(f"{red}[!] Error{reset}: {light_red}One Or More Port Number(s) Are/Is Too High.{reset}")
             elif start_prt < 1 or end_prt < 1:
-                print(f"{red}[!] Error{reset}: {light_red}Invalid Port Range.{reset}")
+                print(f"{red}[!] Error{reset}: {light_red}One Or More Port Number(s) Are/Is Too Low.{reset}")
             else:
                 return prt_range
         except KeyboardInterrupt:
@@ -209,7 +265,7 @@ def port_range() -> str:
 # Custom Payload File Prompt
 def custom_payload_file() -> str:
     while True:
-        pay_file_path = input(f"{magenta}Please Specify The Path To Your Payload File{reset} {green}[Ex: ./Payloads/your_payloads.txt]{reset}: ")
+        pay_file_path = input(f"{magenta}Please Specify The Path To Your Payload File{reset} {green}[Ex: ../Payloads/your_payloads.txt]{reset}: ")
         try:
             # Splits the file path up for basic validation
             pay_path_contents = re.split("[\\/]", pay_file_path)
