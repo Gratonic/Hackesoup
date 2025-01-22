@@ -66,7 +66,7 @@ def check_ip(ocs: list) -> int:
         return 1
 
 # Main/Tool Menu Prompt
-def toolbox() -> int:
+def main_menu_prompt() -> int:
     while True:
         try:
             # Asks the user to choose a tool, integer expected
@@ -215,6 +215,8 @@ def setup(tool_number: int) -> int:
                     raise ValueError(f"{red}'tool_number [{tool_number}]' is out of scope{reset}")
             except ValueError:
                 print(f"{red}[!] Error{reset}: {light_red}Invalid setup option. Please enter a number.{reset}")
+            except KeyboardInterrupt:
+                terminate_program()
             except:
                 print(f"{red}[!] Error{reset}: {light_red}Invalid setup option.{reset}")
     except KeyboardInterrupt:

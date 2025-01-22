@@ -82,18 +82,18 @@ def call_previous_UX_menu(parent_menu_num: int, child_menu_num: int) -> int:
     # prompt_func_name = hs_prompts_funcs[1]
     # a = getattr(hs_prompts, prompt_func_name)
     if parent_menu_num == 0:
-        # Creates the menu function, passes ot the child menu num - works
         menu_func = getattr(hs_menus, main_menu_func_names[child_menu_num])
-        # Creates the setup function, grabs the first name from the port scanner function name list - doesn't work
-        # NOTE: Issue seems to be the actual function is being passed one, instead of the setup func being created
-        # TODO: Fix the issue with the following line...
         setup_func = getattr(hs_prompts, prompt_func_names[1])
-        # calls the menu func - works
         menu_func()
-        # calls the setup func
         menu_choice = setup_func(0)
         return menu_choice
     elif parent_menu_num == 1:
+        if child_menu_num == 1:
+            pass
+        elif child_menu_num == 2:
+            pass
+        else:
+            print(f"{red}[!] Error: {light_red}Child Menu Number Is Out Of Scope.{reset}")
         menu_func = getattr(hs_menus, port_scanner_menu_func_names[child_menu_num])
         setup_func = setup_func = getattr(hs_prompts, prompt_func_names[1])
         menu_func()
@@ -112,22 +112,25 @@ def call_previous_UX_menu(parent_menu_num: int, child_menu_num: int) -> int:
         menu_choice = setup_func(3)
         return menu_choice
     elif parent_menu_num == 4:
+        menu_func = getattr(hs_menus, dir_trav_scanner_menu_func_names[1])
         setup_func = setup_func = getattr(hs_prompts, prompt_func_names[1])
         menu_func()
         menu_choice = setup_func(4)
         return menu_choice
     elif parent_menu_num == 5:
+        menu_func = getattr(hs_menus, sqli_vuln_scanner_menu_func_names[1])
         setup_func = setup_func = getattr(hs_prompts, prompt_func_names[1])
         menu_func()
         menu_choice = setup_func(5)
         return menu_choice
     elif parent_menu_num == 6:
+        menu_func = getattr(hs_menus, destroyer_menu_func_names[1])
         setup_func = setup_func = getattr(hs_prompts, prompt_func_names[1])
         menu_func()
         menu_choice = setup_func(6)
         return menu_choice
 
-call_previous_UX_menu(0, 0)
+# call_previous_UX_menu(1, 1)
 
 # Builds the Main UX Menu (used in the Menu Interface function)
 def main_UX_menu():
@@ -165,20 +168,5 @@ def destroyer_UX_menu():
 # TODO: Figure out a way to get the previous menu option to work somewhat like this
 # Maybe use an ENV file if a global var does not retain the previously chosen options still after further testing
 # Otherwise just finish the previous_UX_menu function
-o = []
 def menu_interface(sn=0):
-    global o
-    if sn == 0:
-        print("a")
-        o.insert(1, "a")
-    elif sn == 1:
-        print("b")
-        o.insert(1, "b")
-    elif sn == 2:
-        print("c")
-        o.insert(1, "c")
-    else:
-        pass
-    print(sn)
-menu_interface(sn=2)
-print(o)
+    pass
