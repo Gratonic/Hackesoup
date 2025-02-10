@@ -187,7 +187,7 @@ def validate_highlight_color(high_color: str) -> str:
             exit()
 
 # Menu Builder Class
-class Minotaur():
+class Menataur():
     def __init__(self):
         # Format Strings
         self._placeholder = ""

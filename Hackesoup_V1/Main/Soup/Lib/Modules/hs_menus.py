@@ -17,7 +17,7 @@ This code is imported and used in the hs_UX_menus.py file.
 
 # :: Imports :: #
 
-import minotaur
+import menataur
 import hs_menu_titles
 
 # :: Functions :: #
@@ -37,7 +37,7 @@ def menu_builder(menu_title_func_name: str, mops: dict, meds: dict, tool_version
     # Menu Option Descriptions
     _menu_descriptions = list(meds.values())
     # Initalizes the menu
-    menu = minotaur.Minotaur()
+    menu = menataur.Menataur()
     # Builds the menu header (title, program support info, etc.)
     menu.add_header(
         ascii_art_title=_ascii_title,
