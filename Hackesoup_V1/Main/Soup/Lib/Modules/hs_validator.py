@@ -22,8 +22,9 @@ is imported and used in the hs_prompts.py file.
 
 import colorama
 import requests
-import psutil # Written and Licensed by Giampaolo Rodola, https://github.com/giampaolo/psutil
+import time
 import os
+import re
 
 # :: Global Variables :: #
 
@@ -66,7 +67,7 @@ def check_user_choice(choice: int, first: int, last: int) -> int:
         print(f"{red}[!] Error: Invalid Option{reset}")
         exit()
 
-def check_int(integer: int) -> int:
+def check_int(integer: str) -> int:
     try:
         integer = int(integer)
         return 0
@@ -82,27 +83,35 @@ def check_str(string) -> int:
         print(f"{red}[!] Error: Invalid Input{reset}")
         return 1
 
-def check_IPv4_target(IPv4_addr: str) -> str:
+# Used to check each octet in an IPv4 address
+# NOTE: this was made because there was an issue using a for loop in the check_IPv4_target
+def check_octets(octs: list) -> int:
+    for octet in octs:
+        if int(octet) > 0 and int(octet) < 255:
+            pass
+        else:
+            return 1
+    return 0
+
+def check_IPv4_target(IPv4_addr: str) -> int:
     octets = IPv4_addr.split(".")
+    keep_going = True
     # There should not be more than 4 octets
     if len(octets) == 4:
         pass
     else:
         print(f"{red}[!] Erorr: Invalid IPv4 Address{reset}")
-        return 1
-    # Validates each octet
-    for octet in octets:
-        try:
-            octet = int(octet)
-            # The IPv4 Address should not be a network or broadcast address and all octets should be within the range of 1-254
-            if octet < 255 and octet > 0:
-                return 0
-            else:
-                print(f"{red}[!] Erorr: Invalid IPv4 Address{reset}")
-                return 1
-        except ValueError:
-            print(f"{red}[!] Erorr: Invalid IPv4 Address{reset}")
+        keep_going = False
+    # Validates every octet in the IP Address
+    if keep_going != False:
+        octet_check_status_code = check_octets(octets)
+        if octet_check_status_code == 0:
+            return 0
+        else:
+            print(f"{red}[!] Error: One or More Octets Are Invalid, Please Check Your Ip Address{reset}")
             return 1
+    else:
+        return 1
 
 # NOTE: URL must be in this format: https://example.com or http://example.com
 def check_web_target(url: str) -> int:
@@ -112,13 +121,13 @@ def check_web_target(url: str) -> int:
         if response.status_code >= 200 and response.status_code < 400:
             return 0
         else:
-            print(f"{red}[!] Error: Invalid Website {yellow}[Ex: https://example.com or http://example.com]{reset}")
+            print(f"{red}[!] Error: Invalid Website{reset}")
             return 1
     except:
-        print(f"{red}[!] Error: Invalid Website {yellow}[Ex: https://example.com or http://example.com]{reset}")
+        print(f"{red}[!] Error: Invalid Website{reset}")
         return 1
 
-def combo_target(target: "str"):
+def combo_target(target: "str") -> int:
     # Gets the target type
     while True:
         try:
@@ -141,18 +150,7 @@ def combo_target(target: "str"):
     except:
         print(f"{red}[!] Error: Unknown{reset}")
 
-
-def check_thread_amount(thead_amount: int) -> int:
-    # Determines the safe thread amount and checks it against the provided thread amount
-    thread_count = psutil.cpu_count(logical=True)
-    safe_thread_amount = round(int(thread_count // 2))
-    if thead_amount > safe_thread_amount:
-        print(f"{red}[!] Error: Too many threads, you may only use up to {yellow}{safe_thread_amount}{reset}")
-        return 1
-    else:
-        return 0
-
-def check_port(port: int) -> int:
+def check_port(port: str) -> int:
     try:
         port = int(port)
         if port > 0 and port <= 65535:
@@ -178,23 +176,53 @@ def check_port_range(port_range: str) -> int:
         print(f"{red}[!] Error: Invalid Port Range{reset}")
         return 1
 
-# Returns an amount of seconds to timeout for
-def timeout(timeout_amount: int) -> int:
-    if timeout < 0 and timeout > 1000:
-        return timeout
+# Returns a list, the list will have 2 elements
+# NOTE: The first element is the status code
+def check_timeout(timeout_amount: int) -> list:
+    if timeout < 0 and timeout >= 1000:
+        return [0, timeout]
     else:
-        print(f"{red}[!] Warning: Timeout Amount Is Crazy High, Reducing It To {yellow}1000{reset}")
-        timeout = 1000
-        return timeout
+        try:
+            print(f"{red}[!] Warning: Timeout Amount Is Crazy High, Reducing It To {yellow}1000{reset}")
+            # Without this pause the next menu will be displayed before the user can see the above message because -->
+            # the terminal will be cleared for the next UX menu
+            time.sleep(3)
+            timeout = 1000
+            return [1, timeout]
+        except KeyboardInterrupt:
+            exit_program()
 
-def file_path(file_path: str) -> int:
-    # Check if the file path exists
-    if not os.path.exists(file_path):
-        print(f"{red}[!] Error: The path '{file_path}' does not exist{reset}")
-        return 1
-    # Check if the path is a file
-    if not os.path.isfile(file_path):
-        print(f"{red}[!] Error: The path '{file_path}' is not a file{reset}")
-        return 1
-    # If everything went well
-    return 0
+def check_thread_amount(requested_thread_amount: int) -> list:
+    logical_cores = os.cpu_count()
+    safe_thread_amount = logical_cores // 4
+    if safe_thread_amount > 1 and requested_thread_amount <= safe_thread_amount:
+        return [0, requested_thread_amount]
+    else:
+        try:
+            print(f"{red}[!] Warning: Your Thread Amount Exceeds Your CPU's Safe Thread Amount, Defaulting To {yellow}1{reset}")
+            # Without this pause the next menu will be displayed before the user can see the above message because -->
+            # the terminal will be cleared for the next UX menu
+            time.sleep(3)
+            new_thread_amount = 1
+            return [1, new_thread_amount]
+        except KeyboardInterrupt:
+            exit_program()
+
+# Returns a list, the list will have 2 elements in the case of an error and one in the case of a valid file path
+# NOTE: The first position is the status code
+# NOTE: This function does not work at the moment and the payload file options are currently unavailable
+def check_file_path(file_path) -> list:
+    # Regex pattern for a valid file path on Linux and MacOS
+    pattern = r"^(\/(?:[^\/\0]+(?:\/[^\/\0]+)*)?|(?:[^\/\0]+(?:\/[^\/\0]+)*))?$"
+    # Checks if the path matches the Linux and MacOS file path pattern and also checks if the file has an extension
+    if re.match(pattern, file_path) and re.search(r'\.[^\/\.]+$', file_path):
+        return [0, file_path]
+    else:
+        while True:
+            print(f"{red}[!] Error: Invalid File Path, A Valid File Path Would Be {yellow}'/home/users/username/example_file.txt'{reset}")
+            try:
+                new_file_path = input(f"{magenta}Please Enter A Valid File Path: {reset}")
+                if re.match(pattern, new_file_path) and re.search(r'\.[^\/\.]+$', new_file_path):
+                    return [1, new_file_path]
+            except KeyboardInterrupt:
+                exit_program()

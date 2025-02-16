@@ -1,7 +1,7 @@
 """
 # :: Author Information and Program Details :: #
 
-File Name: hs_menus.py
+File Name: menataur.py
 Author(s): Gratonic (https://github.com/Gratonic), FailurePoint (https://github.com/FailurePoint)
 Written In: Python 3.10.12
 Dependencie(s): colorama
@@ -28,7 +28,7 @@ in just HTML and CSS.
 import minotaur
 
 # Creates an instance of Minotaur (the menu class)
-menu = minotaur.Minotaur()
+menu = menataur.Menataur()
 
 # Define the elements for the menu
 ascii_art_title = r\"""
