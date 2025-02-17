@@ -111,7 +111,7 @@ def port_scanner_setup_1() -> None:
 
 def port_scanner_setup_2() -> None:
     menu_2_options = {
-        1: "Basic Scan", 2: "Advanced Scan", 3: "Stealth Scan"
+        1: "Quick Scan", 2: "Advanced Scan", 3: "Stealth Scan"
     }
     menu_2_descriptions = {
         1: "scan without any stealth and/or firewall evasion features",

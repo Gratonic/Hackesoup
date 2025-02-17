@@ -47,7 +47,7 @@ def menu_prompt(first: int, last: int) -> int:
 def target_IPv4() -> str:
     while True:
         try:
-            ipv4_address = str(input(f"{magenta}Please Enter An IPv4 Address {green}[Ex: 192.168.1.1 or 75.124.90.102]: {reset}"))
+            ipv4_address = str(input(f"{magenta}Please Enter A Target IPv4 Address {green}[Ex: 192.168.1.1 or 75.124.90.102]: {reset}"))
             status_code = hs_validator.check_IPv4_target(ipv4_address)
             if status_code == 0:
                 return ipv4_address
@@ -60,7 +60,7 @@ def target_IPv4() -> str:
 def target_website() -> str:
     while True:
         try:
-            url = str(input(f"{magenta}Please Enter A URL With The Protocal Included{green}[Ex: https://example.com or https://sub.example.com]: {reset}"))
+            url = str(input(f"{magenta}Please Enter A Target URL With The Protocal Included{green}[Ex: https://example.com or https://sub.example.com]: {reset}"))
             status_code = hs_validator.check_web_target(url)
             if status_code == 0:
                 return url
@@ -72,7 +72,7 @@ def target_website() -> str:
 def target_combo() -> str:
     while True:
         try:
-            target_type = int(input(f"{magenta}Is You Target A Website or IPv4 Address {green}[Enter 1 for a Website and Enter 2 for an IPv4 Address]{magenta}? {reset}"))
+            target_type = int(input(f"{magenta}Is Your Target A Website or IPv4 Address {green}[Enter 1 for a Website and Enter 2 for an IPv4 Address]{magenta}? {reset}"))
             status_code = hs_validator.check_user_choice(target_type, first=1, last=2)
             if status_code == 0:
                 if target_type == 1:
@@ -113,7 +113,9 @@ def port_range() -> list:
             status_code = hs_validator.check_port_range(port_range)
             if status_code == 0:
                 ports = port_range.split("-")
-                return ports
+                start_port = int(ports[0])
+                end_port = int(ports[1])
+                return [start_port, end_port]
         except KeyboardInterrupt:
             exit_program()
         except:
