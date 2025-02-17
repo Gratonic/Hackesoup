@@ -40,17 +40,14 @@ light_magenta = colorama.Fore.LIGHTMAGENTA_EX
 white = colorama.Fore.WHITE
 gray = colorama.Fore.LIGHTBLACK_EX
 
-# Used in the menu packs to keep track of the UX menu the user is currently on
-current_tool_menu = 1
-
 # This dictionary will change as the user configures the tool they chose
 # NOTE: Some tools may not change all the settings because either A) the user doesn't change the setting(s) or B) the chosen tool doesn't use all the settings
 hs_config = {
-    "tool": "Undefined",
-    "target": "192.168.1.1", "port": 3389, "port_range": 1-49151,
-    "timeout_amount": 0, "thread_amount": 0,
-    "stealth_features": False, 
-    "payload_file": None
+    "tool": "NA",
+    "target": "NA", "port": "NA", "port_range": "NA",
+    "timeout_amount": "NA", "thread_amount": "NA",
+    "stealth_features": "NA", 
+    "payload_file": "NA"
 }
 
 # :: Functionality :: #
@@ -68,6 +65,28 @@ def exit_check(user_choice: int) -> None:
         exit_program()
     else:
         pass
+
+# Setting Reset Functions
+
+def total_settings_reset():
+    hs_config["tool"] = "NA"
+    hs_config["payload_file"] = "NA"
+    hs_config["port"] = "NA"
+    hs_config["port_range"] = "NA"
+    hs_config["stealth_features"] = "NA"
+    hs_config["target"] = "NA"
+    hs_config["thread_amount"] = "NA"
+    hs_config["timeout_amount"] = "NA"
+
+def port_scanner_UX_menu_1_settings_reset():
+    hs_config["target"] = "NA"
+    hs_config["port"] = "NA"
+    hs_config["port_range"] = "NA"
+
+def port_scanner_UX_menu_2_settings_reset():
+    hs_config["thread_amount"] = "NA"
+    hs_config["timeout_amount"] = "NA"
+    hs_config["stealth_features"] = "NA"
 
 # -- Individual UX Menu Functions-- #
 
@@ -133,15 +152,84 @@ def port_scanner_UX_menu_2():
         thread_amount = 4
         if thread_amount > safe_thread_amount or thread_amount < safe_thread_amount:
             thread_amount = safe_thread_amount
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 3
         hs_config["thread_amount"] = thread_amount
+        hs_config["timeout_amount"] = 3
         hs_config["stealth_features"] = True
     elif config_choice == 4:
         # 500 is code for "return to the previous menu"
         return 500
 
 def port_scanner_UX_menu_3():
-    pass
+    hs_menus.port_scanner_setup_3()
+    config_choice = hs_prompts.menu_prompt(first=0, last=7)
+    exit_check(config_choice)
+    if config_choice == 1:
+        thread_amount = hs_prompts.thread_amount()
+        hs_config["thread_amount"] = thread_amount
+    elif config_choice == 2:
+        timeout_amount = hs_prompts.timeout()
+        hs_config["timeout_amount"] = timeout_amount
+    elif config_choice == 3:
+        thread_amount = hs_prompts.thread_amount()
+        timeout_amount = hs_prompts.timeout()
+        hs_config["thread_amount"] = thread_amount
+        hs_config["timeout_amount"] = timeout_amount
+    elif config_choice == 4:
+        thread_amount = hs_prompts.thread_amount()
+        hs_config["thread_amount"] = thread_amount
+        hs_config["stealth_features"] = True
+    elif config_choice == 5:
+        timeout_amount = hs_prompts.timeout()
+        hs_config["timeout_amount"] = timeout_amount
+        hs_config["stealth_features"] = True
+    elif config_choice == 6:
+        thread_amount = hs_prompts.thread_amount()
+        timeout_amount = hs_prompts.timeout()
+        hs_config["thread_amount"] = thread_amount
+        hs_config["timeout_amount"] = timeout_amount
+        hs_config["stealth_features"] = True
+    elif config_choice == 7:
+        # 500 is code for "return to the previous menu"
+        return 500
 
 # Subdomain Finder UX Menus
+
+# :: UX Menu Pack Functions :: #
+
+# Port Scanner UX Menu Pack
+def port_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    if current_UX_tool_menu == 1:
+        requested_UX_menu = port_scanner_UX_menu_1()
+        if requested_UX_menu == None:
+            port_scanner_UX_menu_pack(2)
+        # 1000 is code for "go back to the main/tool UX menu"
+        elif requested_UX_menu == 1000:
+            # Resets the program configuration
+            total_settings_reset()
+            # Calls the main/tool UX menu
+            main_UX_menu()
+    elif current_UX_tool_menu == 2:
+        requested_UX_menu = port_scanner_UX_menu_2()
+        # 100 == call the advanced settings menu (port_scanner_UX_menu_3)
+        if requested_UX_menu == 100:
+            port_scanner_UX_menu_pack(3)
+        # 500 == call the previous menu
+        elif requested_UX_menu == 500:
+            # Resets any possible settings that may have been conifgured in the last UX menu
+            port_scanner_UX_menu_1_settings_reset()
+            # Calls the previous UX menu
+            port_scanner_UX_menu_pack(1)
+        else:
+            # This code lets the program know the user is happy with the current configuration
+            return 1500
+    elif current_UX_tool_menu == 3:
+        requested_UX_menu = port_scanner_UX_menu_3()
+        # 500 == call the previous menu
+        if requested_UX_menu == 500:
+            # Resets any possible settings that may have been conifgured in the last UX menu
+            port_scanner_UX_menu_2_settings_reset()
+            # Calls the previous UX menu
+            port_scanner_UX_menu_pack(2)
+        else:
+            # This code lets the program know the user is happy with the current configuration
+            return 1500

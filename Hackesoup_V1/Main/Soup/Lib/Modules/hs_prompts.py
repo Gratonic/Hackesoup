@@ -156,27 +156,14 @@ def thread_amount() -> int:
             print(f"{red}[!] Error: Unknown{reset}")
             exit_program()
 
-# NOTE: This function does not work at the moment and the payload file options are currently unavailable
 def payload_file_path() -> str:
     try:
-        print(f"{red}[!] Notice: The {yellow}Payload File Selection {red} Is Currently Unavailable. Sorry For The Inconvenience.{reset}")
-        time.sleep(3)
-        file_path = "NA"
-        return file_path
+        path = str(input(f"{magenta}Please Enter A File Path {green}[Ex: 2]{magenta}: {reset}"))
+        validator = hs_validator.check_file_path(path)
+        return validator[1]
+    # if the user hit [ctrl + c] will exit the program
     except KeyboardInterrupt:
         exit_program()
     except:
         print(f"{red}[!] Error: Unknown{reset}")
         exit_program()
-    # while True:
-    #     try:
-    #         payload_file_path = str(input(f"{magenta}Please Enter Your Payload File Path {green}[Ex: ~/../../etc/passwd]{magenta}: {reset}"))
-    #         # NOTE: Result of this validator function is very simular to the validator function used in the 'timeout' function
-    #         validator_result = hs_validator.check_file_path(payload_file_path)
-    #         payload_file = validator_result[1]
-    #         return payload_file_path
-    #     except KeyboardInterrupt:
-    #         exit_program()
-    #     except:
-    #         print(f"{red}[!] Error: Unknown{reset}")
-    #         exit_program()

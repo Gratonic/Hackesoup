@@ -178,16 +178,16 @@ def check_port_range(port_range: str) -> int:
 
 # Returns a list, the list will have 2 elements
 # NOTE: The first element is the status code
-def check_timeout(timeout_amount: int) -> list:
-    if timeout < 0 and timeout >= 1000:
+def check_timeout(timeout: int) -> list:
+    if timeout >= 1 and timeout <= 5:
         return [0, timeout]
     else:
         try:
-            print(f"{red}[!] Warning: Timeout Amount Is Crazy High, Reducing It To {yellow}1000{reset}")
+            print(f"{red}[!] Warning: Timeout Is To Low or To High, Setting It To {yellow}2{reset}")
             # Without this pause the next menu will be displayed before the user can see the above message because -->
             # the terminal will be cleared for the next UX menu
             time.sleep(3)
-            timeout = 1000
+            timeout = 2
             return [1, timeout]
         except KeyboardInterrupt:
             exit_program()
@@ -211,7 +211,7 @@ def check_thread_amount(requested_thread_amount: int) -> list:
 # Returns a list, the list will have 2 elements in the case of an error and one in the case of a valid file path
 # NOTE: The first position is the status code
 # NOTE: This function does not work at the moment and the payload file options are currently unavailable
-def check_file_path(file_path) -> list:
+def check_file_path(file_path: str) -> list:
     # Regex pattern for a valid file path on Linux and MacOS
     pattern = r"^(\/(?:[^\/\0]+(?:\/[^\/\0]+)*)?|(?:[^\/\0]+(?:\/[^\/\0]+)*))?$"
     # Checks if the path matches the Linux and MacOS file path pattern and also checks if the file has an extension
