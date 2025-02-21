@@ -23,13 +23,13 @@ import hs_menu_titles
 # :: Functions :: #
 
 # Creates and prints the menu portion of the UX menu
-def menu_builder(menu_title_func_name: str, mops: dict, meds: dict, tool_version: str) -> vars:
+def menu_builder(menu_title_func_name: str, mops: dict, meds: dict, tool_version: str, title_colors: list) -> vars:
     # Title Content
     _title_func = getattr(hs_menu_titles, menu_title_func_name)
     _title_contents = _title_func()
     _ascii_title = _title_contents[0]
     _title_bar = _title_contents[1]
-    _title_colors = ["red", "yellow", "green", "cyan", "blue", "magenta"]
+    _title_colors = title_colors
     _small_title = _title_contents[2]
     # Menu Options and Option Numbers
     _menu_opt_nums = list(mops.keys())
@@ -42,7 +42,7 @@ def menu_builder(menu_title_func_name: str, mops: dict, meds: dict, tool_version
     menu.add_header(
         ascii_art_title=_ascii_title,
         title_bar=_title_bar,
-        title_colors = ["red", "yellow", "green", "cyan", "blue", "magenta"],
+        title_colors = _title_colors,
         small_title=_small_title,
         program_version_color = "green",
         program_version_num = tool_version,
@@ -88,8 +88,8 @@ def menu_builder(menu_title_func_name: str, mops: dict, meds: dict, tool_version
 # Main Menu - Toolbox Menu
 def main_menu() -> None:
     options = {
-        1: " Port Scanner (Clam Chowder Soup - American)", 2: " Subdomain Finder (Kartoffelsuppe Soup - German)", 3: " XSS Vulnerability Scanner (Chicken Noodle Soup - Chinese)",
-        4: " Directory Traversal Vulnerability Scanner (Onion Soup - French)", 5: " SQLI Vulnerability Scanners (Tom Yum Soup - Indonesian)", 6: " Destroyer (Mulligatawny Soup - Indian)"
+        1: " Port Scanner (Clam Chowder Soup - American)", 2: " Subdomain Finder (Molokhia - Egyptian/Gazan)", 3: " XSS Vulnerability Scanner (Sopa de Fideo - Mexican)",
+        4: " Directory Traversal Vulnerability Scanner (Kartoffelsuppe Soup - German)", 5: " SQLI Vulnerability Scanners (Zuppa di Cavolo Nero - Italian)", 6: " Destroyer (Mulligatawny Soup - Indian)"
     }
     descriptions = {
         1: "scans port to see if they are open, closed, or filtered", 2: "finds the subdomains of a websites",
@@ -97,7 +97,7 @@ def main_menu() -> None:
         5: "scans a website for SQLI vulnerabilities", 6: "adds a junk data to a file, encrypts it with aes, then overwrites it and deletes it"
     }
     # Builds the menu portion of the main UX menu and prints it
-    menu_builder(menu_title_func_name="hackesoup", mops=options, meds=descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="hackesoup", mops=options, meds=descriptions, tool_version="1.0", title_colors=["red", "yellow", "green", "cyan", "blue", "magenta"])
 
 # Port Scanner Menus
 def port_scanner_setup_1() -> None:
@@ -107,7 +107,7 @@ def port_scanner_setup_1() -> None:
     menu_1_descriptions = {
         1: "scan a single port", 2: "scan a range of ports"
     }
-    menu_builder(menu_title_func_name="port_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="port_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0", title_colors=["red", "white", "blue"])
 
 def port_scanner_setup_2() -> None:
     menu_2_options = {
@@ -118,7 +118,7 @@ def port_scanner_setup_2() -> None:
         2: "configure the scanner settings for this scan",
         3: "use stealth and firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="port_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="port_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0", title_colors=["red", "white", "blue"])
 
 def port_scanner_setup_3():
     menu_3_options = {
@@ -131,7 +131,7 @@ def port_scanner_setup_3():
         3: "adjust both the thread amount and timeout", 4: "adjust the thread amount and use stealth/firewall evasion features - NSFW", 
         5: "adjust the timeout and use stealth/firewall evasion features - NSFW", 6: "adjust both the thread count and timeout and use stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="port_scanner", mops=menu_3_options, meds=menu_3_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="port_scanner", mops=menu_3_options, meds=menu_3_descriptions, tool_version="1.0", title_colors=["red", "white", "blue"])
 
 # Sub Domain Finder Menus
 def sub_domain_finder_setup_1() -> None:
@@ -145,7 +145,7 @@ def sub_domain_finder_setup_1() -> None:
         2: "configure the subdomain finder settings for this search",
         3: "preform a search with stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="sub_domain_finder", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="sub_domain_finder", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0", title_colors=["red", "yellow", "white", "green"])
 
 def sub_domain_finder_setup_2() -> None:
     menu_2_options = {
@@ -164,7 +164,7 @@ def sub_domain_finder_setup_2() -> None:
         9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
         11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="sub_domain_finder", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="sub_domain_finder", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0", title_colors=["red", "yellow", "white", "green"])
 
 # XSS Scanner Menus
 def xss_scanner_setup_1() -> None:
@@ -178,7 +178,7 @@ def xss_scanner_setup_1() -> None:
         2: "configure the subdomain finder settings for this search",
         3: "preform a search with stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="xss_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="xss_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0", title_colors=["green", "red", "yellow", "light_blue"])
 
 def xss_scanner_setup_2() -> None:
     menu_2_options = {
@@ -197,7 +197,7 @@ def xss_scanner_setup_2() -> None:
         9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
         11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="xss_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="xss_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0", title_colors=["green", "red", "yellow", "light_blue"])
 
 # Directory Traversal Scanner Menus
 def dir_traversal_scanner_setup_1() -> None:
@@ -211,7 +211,7 @@ def dir_traversal_scanner_setup_1() -> None:
         2: "configure the subdomain finder settings for this search",
         3: "preform a search with stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="dir_trav_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="dir_trav_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0", title_colors=["red", "grey", "yellow"])
 
 def dir_traversal_scanner_setup_2() -> None:
     menu_2_options = {
@@ -230,7 +230,7 @@ def dir_traversal_scanner_setup_2() -> None:
         9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
         11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="dir_trav_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="dir_trav_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0", title_colors=["red", "grey", "yellow"])
 
 # SQLI Scanner Menus
 def sqli_scanner_setup_1() -> None:
@@ -244,7 +244,7 @@ def sqli_scanner_setup_1() -> None:
         2: "configure the subdomain finder settings for this search",
         3: "preform a search with stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="sqli_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="sqli_scanner", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0", title_colors=["green", "white", "red"])
 
 def sqli_scanner_setup_2() -> None:
     menu_2_options = {
@@ -263,7 +263,7 @@ def sqli_scanner_setup_2() -> None:
         9: "use a custom payload file and stealth/firewall evasion features - NSFW", 10: "use a custom payload file and adjust the thread count",
         11: "use a custom payload file and adjust the timeout", 12: "use a custom payload file, adjust both the thread count and timeout, and use stealth/firewall evasion features - NSFW"
     }
-    menu_builder(menu_title_func_name="sqli_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="sqli_scanner", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0", title_colors=["green", "white", "red"])
 
 # Destroyer Menus
 def destroyer_setup_1() -> None:
@@ -274,7 +274,7 @@ def destroyer_setup_1() -> None:
         1: "add random data to the file, encrypt it with a modern AES based cipher (256-bit key), overwrite it 10 times, and delete it",
         2: "choose what the destroyer does to the file"
     }
-    menu_builder(menu_title_func_name="destroyer", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="destroyer", mops=menu_1_options, meds=menu_1_descriptions, tool_version="1.0", title_colors=["yellow", "white", "green"]) # yellow to replace orange
 
 def destroyer_setup_2() -> None:
     menu_2_options = {
@@ -291,4 +291,4 @@ def destroyer_setup_2() -> None:
         4: "simply delete the file",
         5: "encrypt the file using a 256-bit key with a modern AES cipher, overwrite it X amount of times (default: 10), and delete it"
     }
-    menu_builder(menu_title_func_name="destroyer", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0")
+    menu_builder(menu_title_func_name="destroyer", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0", title_colors=["yellow", "white", "green"]) # yellow to replace orange

@@ -59,10 +59,44 @@ def exit_program() -> None:
     print(f"{magenta}\n\nTschüss!{reset}")
     exit()
 
+# Says "Goodbye!" to the user and exits the program
+def exit_program_port_scanner():
+    print(f"{magenta}\n\nGood luck and goodbye!{reset}")
+    exit()
+
+
+# Says "Goodbye!" to the user in Arabic and exits the program
+def exit_program_subdomain_finder():
+    print(f"{magenta}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{reset}")
+    exit()
+
+# Says "Goodbye!" to the user in Spanish and exits the program
+def exit_program_XSS_scanner():
+    print(f"{magenta}\n\nRecuerda, cada final es un nuevo comienzo. ¡Adios por ahora!{reset}")
+    exit()
+
+# Says "Goodbye!" to the user in German and exits the program
+def exit_program_dir_trav_scanner():
+    print(f"{magenta}\n\nVielen Dank für Ihre Unterstützung und die Zusammenarbeit. Wünschend Ihnen alles Gute für die Zukunft. Auf Wiedersehen!{reset}")
+    exit()
+
+def exit_program_SQLI_scanner():
+    print(f"{magenta}\n\n{reset}")
+    exit()
+
+def exit_program_destroyer():
+    print(f"{magenta}\n\n{reset}")
+    exit()
+
+
+# elif user_choice == 0 and tool_name ==
+
 # Checks the users chosen configuration option to see if they want to exit the program
-def exit_check(user_choice: int) -> None:
-    if user_choice == 0:
-        exit_program()
+def exit_check(user_choice: int, tool_name: str) -> None:
+    if user_choice == 0 and tool_name == "port_scanner":
+        exit_program_port_scanner()
+    elif user_choice == 0 and tool_name == "subdomain_finder":
+        exit_program_subdomain_finder()
     else:
         pass
 
@@ -194,9 +228,27 @@ def port_scanner_UX_menu_3():
 
 # Subdomain Finder UX Menus
 
+def subdomain_finder_UX_menu_1():
+    hs_menus.sub_domain_finder_setup_1()
+    config_choice = hs_prompts.menu_prompt(first=0, last=7)
+    exit_check(config_choice)
+    target = hs_prompts.target_website()
+    if config_choice == 1:
+        pass
+    elif config_choice == 2:
+        pass
+
+subdomain_finder_UX_menu_1()
+def subdomain_finder_UX_menu_2():
+    hs_menus.sub_domain_finder_setup_2()
+    config_choice = hs_prompts.menu_prompt(first=0, last=7)
+
+# Subdomain Finder UX Menus
+
 # :: UX Menu Pack Functions :: #
 
 # Port Scanner UX Menu Pack
+
 def port_scanner_UX_menu_pack(current_UX_tool_menu: int):
     if current_UX_tool_menu == 1:
         requested_UX_menu = port_scanner_UX_menu_1()
