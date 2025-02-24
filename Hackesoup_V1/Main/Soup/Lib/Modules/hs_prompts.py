@@ -100,7 +100,7 @@ def target_IPv4(tool_name: str) -> str:
 def target_website(tool_name: str) -> str:
     while True:
         try:
-            url = str(input(f"{magenta}Please Enter A Target URL With The Protocal Included{green}[Ex: https://example.com or https://sub.example.com]: {reset}"))
+            url = str(input(f"{magenta}Please Enter A Target URL With The Protocal Included {green}[Ex: https://example.com or https://sub.example.com]: {reset}"))
             status_code = hs_validator.check_web_target(url)
             if status_code == 0:
                 return url
@@ -198,7 +198,7 @@ def thread_amount(tool_name: str) -> int:
 
 def payload_file_path(tool_name: str) -> str:
     try:
-        path = str(input(f"{magenta}Please Enter A File Path {green}[Ex: 2]{magenta}: {reset}"))
+        path = str(input(f"{magenta}Please Enter A Payload File Path or File {green}[Ex: ./payload_file_example.txt]{magenta}: {reset}"))
         validator = hs_validator.check_file_path(path)
         return validator[1]
     # if the user hit [ctrl + c] will exit the program
@@ -207,3 +207,36 @@ def payload_file_path(tool_name: str) -> str:
     except:
         print(f"{red}[!] Error: Unknown{reset}")
         exit_program(tool_name=tool_name)
+
+def destroyer_file_prompt(tool_name: str) -> str:
+    try:
+        path = str(input(f"{magenta}Please Enter A File Path or File To Destroy {green}[Ex: ./destroy_me.txt]{magenta}: {reset}"))
+        validator = hs_validator.check_file_path(path)
+        return validator[1]
+    # if the user hit [ctrl + c] will exit the program
+    except KeyboardInterrupt:
+        exit_program(tool_name=tool_name)
+    except:
+        print(f"{red}[!] Error: Unknown{reset}")
+        exit_program(tool_name=tool_name)
+
+def destroyer_file_overwrite_amount():
+    while True:
+        try:
+            overwrite_amount = int(input(f"{magenta}Please Specify The Amount Of Times You Would Like To Overwrite The File {green}[Ex: 15]{magenta}: {reset}"))
+            if overwrite_amount < 0 and overwrite_amount >= 5000:
+                return overwrite_amount
+            else:
+                print(f"{red}[!] Warning: The Requested File Overwrite Amount Is To High, Reducing It To {yellow}5000{reset}")
+                try:
+                    time.sleep(3)
+                    overwrite_amount = 5000
+                    return overwrite_amount
+                except KeyboardInterrupt:
+                    exit_program(tool_name="destroyer")
+        except ValueError:
+            print(f"{red}[!] Error: You Must Enter A Number")
+        except KeyboardInterrupt:
+            exit_program(tool_name="destroyer")
+        except:
+            print(f"{red}[!] Error: Unknown")

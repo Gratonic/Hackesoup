@@ -268,7 +268,7 @@ def sqli_scanner_setup_2() -> None:
 # Destroyer Menus
 def destroyer_setup_1() -> None:
     menu_1_options = {
-        1: "Basic Destruction", 2: "Advanced Destruction"
+        1: "Quick and Easy Destruction", 2: "Advanced Destruction"
     }
     menu_1_descriptions = {
         1: "add random data to the file, encrypt it with a modern AES based cipher (256-bit key), overwrite it 10 times, and delete it",
@@ -278,17 +278,21 @@ def destroyer_setup_1() -> None:
 
 def destroyer_setup_2() -> None:
     menu_2_options = {
-        1: "Permanently Encrypt File with a Modern AES Cipher",
+        1: "Permanently Encrypt The File with a Modern AES Cipher",
         2: "Overwrite The File with Random Data X Amount of Times",
-        3: "Permanently Encrypt File with a Modern AES Cipher and Overwrite The File with Random Data X Amount Of Times",
+        3: "Permanently Encrypt The File with a Modern AES Cipher and Overwrite The File with Random Data X Amount Of Times",
         4: "Delete The File",
-        5: "Permanently Encrypt File with a Modern AES Cipher, Overwrite The File X Amount Of Times, and Delete The File"
+        5: "Permanently Encrypt The File with a Modern AES Cipher and Delete The File",
+        6: "Overwrite The File with Random Data X Amount of Times and Delete The File",
+        7: "Permanently Encrypt The File with a Modern AES Cipher, Overwrite The File X Amount Of Times, and Delete The File"
     }
     menu_2_descriptions = {
         1: "encrypt the file using a 256-bit key with a modern AES cipher",
-        2: "overwrite the file with random data X amount of times (default: 10)",
+        2: "overwrite the file with random data X amount of times",
         3: "encrypt the file using a 256-bit key with a modern AES cipher and overwrite it X amount of times (default: 10)",
         4: "simply delete the file",
-        5: "encrypt the file using a 256-bit key with a modern AES cipher, overwrite it X amount of times (default: 10), and delete it"
+        5: "encrypt the file using a 256-bit key with a modern AES cipher and then delete the file",
+        6: "overwrite the file with random data X amount of times and then delete the file",
+        7: "encrypt the file using a 256-bit key with a modern AES cipher, overwrite it X amount of times (default: 10), and delete it"
     }
     menu_builder(menu_title_func_name="destroyer", mops=menu_2_options, meds=menu_2_descriptions, tool_version="1.0", title_colors=["yellow", "white", "green"]) # yellow to replace orange

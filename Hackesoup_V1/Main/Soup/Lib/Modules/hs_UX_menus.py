@@ -12,6 +12,9 @@ Last Modified: February 8th, 2025
 This python file contains the title information used in the hs_menus.py file to build the portion of the header for the menu
 portion of the UX menus.
 """
+# TODO: Fix the minor bug causing you have to enter the target file twice after going back to the first destroyer UX menu -->
+# in the destroyer_UX_menu_pack() function or one of the individual UX menus, functions are somewhere between line -->
+# 700 and line 807
 
 # :: Imports :: #
 
@@ -47,7 +50,11 @@ hs_config = {
     "target": "NA", "port": "NA", "port_range": "NA",
     "timeout_amount": "NA", "thread_amount": "NA",
     "stealth_features": "NA", 
-    "payload_file": "NA"
+    "payload_file": "NA",
+    "destroy_file": "NA",
+    "encrypt_file": "NA",
+    "file_overwrite_amount": "NA",
+    "delete_file": "NA"
 }
 
 # :: Functionality :: #
@@ -146,6 +153,14 @@ def squad_member_settings_reset():
     hs_config["timeout_amount"] = "NA"
     hs_config["stealth_features"] = "NA"
     hs_config["payload_file"] = "NA"
+
+# Destroyer Reset Function
+
+def destroyer_settings_reset():
+    hs_config["destroy_file"] = "NA"
+    hs_config["file_overwrite_amount"] = "NA"
+    hs_config["encrypt_file"] = "NA"
+    hs_config["delete_file"] = "NA"
 
 # -- Individual UX Menu Functions-- #
 
@@ -615,10 +630,53 @@ def SQLI_scanner_UX_menu_2():
 # Destroyer UX Menus
 
 def destroyer_UX_menu_1():
-    pass
+    hs_menus.destroyer_setup_1()
+    config_choice = hs_prompts.menu_prompt(first=0, last=3, tool_name="SQLI_scanner")
+    exit_check(config_choice, tool_name="destroyer")
+    file_to_destroy = hs_prompts.destroyer_file_prompt(tool_name="destroyer")
+    hs_config["destroy_file"] = file_to_destroy
+    if config_choice == 1:
+        hs_config["file_overwrite_amount"] = 10
+        hs_config["encrypt_file"] = True
+        hs_config["delete_file"] = True
+    elif config_choice == 2:
+        # Tells the program to call the advanced destroyer settings UX menu
+        return 100
+    elif config_choice == 3:
+        # 1000 is code for "return to the main menu"
+        return 1000
 
 def destroyer_UX_menu_2():
-    pass
+    hs_menus.destroyer_setup_2()
+    config_choice = hs_prompts.menu_prompt(first=0, last=8, tool_name="SQLI_scanner")
+    exit_check(config_choice, tool_name="destroyer")
+    file_to_destroy = hs_prompts.destroyer_file_prompt(tool_name="destroyer")
+    if config_choice == 1:
+        hs_config["encrypt_file"] = True
+    elif config_choice == 2:
+        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
+        hs_config["file_overwrite_amount"] = overwrite_amount
+    elif config_choice == 3:
+        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
+        hs_config["file_overwrite_amount"] = overwrite_amount
+        hs_config["encrypt_file"] = True
+    elif config_choice == 4:
+        hs_config["delete_file"] = True
+    elif config_choice == 5:
+        hs_config["encrypt_file"] = True
+        hs_config["delete_file"] = True
+    elif config_choice == 6:
+        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
+        hs_config["file_overwrite_amount"] = overwrite_amount
+        hs_config["delete_file"] = True
+    elif config_choice == 7:
+        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
+        hs_config["file_overwrite_amount"] = overwrite_amount
+        hs_config["encrypt_file"] = True
+        hs_config["delete_file"] = True
+    elif config_choice == 8:
+        # 500 is code for "return to the previous menu"
+        return 500
 
 # :: UX Menu Pack Functions :: #
 
@@ -633,8 +691,7 @@ def port_scanner_UX_menu_pack(current_UX_tool_menu: int):
         elif requested_UX_menu == 1000:
             # Resets the program configuration
             total_settings_reset()
-            # Calls the main/tool UX menu
-            main_UX_menu()
+            menu_interface()
     elif current_UX_tool_menu == 2:
         requested_UX_menu = port_scanner_UX_menu_2()
         # 100 == call the advanced settings menu (port_scanner_UX_menu_3)
@@ -676,7 +733,7 @@ def subdomain_finder_UX_menu_pack(current_UX_menu: int):
                 subdomain_finder_UX_menu_pack(1)
         elif requested_UX_menu == 1000:
             squad_member_settings_reset()
-            main_UX_menu()
+            menu_interface()
 
 # XSS Scanner UX Menu Pack
 
@@ -693,7 +750,7 @@ def XSS_scanner_UX_menu_pack(current_UX_menu: int):
                 XSS_scanner_UX_menu_pack(1)
         elif requested_UX_menu == 1000:
             squad_member_settings_reset()
-            main_UX_menu()
+            menu_interface()
 
 # Directory Traversal Scanner UX Menu Pack
 
@@ -710,7 +767,7 @@ def dir_trav_scanner_UX_menu_pack(current_UX_menu: int):
                 dir_trav_scanner_UX_menu_pack(1)
         elif requested_UX_menu == 1000:
             squad_member_settings_reset()
-            main_UX_menu()
+            menu_interface()
 
 # SQLI Scanner UX Menu Pack
 
@@ -727,6 +784,50 @@ def SQLI_scanner_UX_menu_pack(current_UX_menu: int):
                 SQLI_scanner_UX_menu_pack(1)
         elif requested_UX_menu == 1000:
             squad_member_settings_reset()
-            main_UX_menu()
+            menu_interface()
 
 # Destroyer UX Menu Pack
+
+def destroyer_UX_menu_pack(current_UX_menu: int):
+    if current_UX_menu == 1:
+        requested_UX_menu = destroyer_UX_menu_1()
+        if requested_UX_menu == None:
+            # This code lets the program know the user is happy with the current configuration
+            return 1500
+        elif requested_UX_menu == 100:
+            requested_UX_menu = destroyer_UX_menu_2()
+            if requested_UX_menu == 500:
+                destroyer_settings_reset()
+                destroyer_UX_menu_pack(1)
+        elif requested_UX_menu == 1000:
+            destroyer_settings_reset()
+            menu_interface()
+
+# :: UX Menu Interface Function :: #
+
+# Returns the dict once the user has completely configured all their settings for the program
+def menu_interface() -> dict:
+    # Asks the user to choose a tool and sets the tool in the hs_config dictionary (the program settings)
+    main_UX_menu()
+    # Determines which tool menu to call based on the tool configuration in hs_config dictionary
+    # NOTE: The user will be prompted for input a series of times and the rest of the programs settings will -->
+    # will be configured based on the users input
+    if hs_config["tool"] == "port_scanner":
+        code = port_scanner_UX_menu_pack(1)
+    elif hs_config["tool"] == "subdomain_finder":
+        code = subdomain_finder_UX_menu_pack(1)
+    elif hs_config["tool"] == "XSS_vuln_scanner":
+        code = XSS_scanner_UX_menu_pack(1)
+    elif hs_config["tool"] == "dir_trav_vuln_scanner":
+        code = dir_trav_scanner_UX_menu_pack(1)
+    elif hs_config["tool"] == "SQLI_vuln_scanner":
+        code = SQLI_scanner_UX_menu_pack(1)
+    elif hs_config["tool"] == "destroyer":
+        code = destroyer_UX_menu_pack(1)
+    else:
+        print(f"{red}[!] Error: Unknown{reset}")
+        exit_program()
+    if code == None or code == 1500:
+        return hs_config
+    else:
+        print(f"{red}[!] Error: Unknown{reset}")
