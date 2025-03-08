@@ -4,7 +4,7 @@ import sys
 import os
 import importlib
 
-module_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Lib', 'Modules')
+module_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Lib', 'Python_Modules')
 
 sys.path.append(module_path)
 
