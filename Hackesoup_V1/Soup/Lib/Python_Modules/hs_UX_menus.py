@@ -69,6 +69,13 @@ def determine_safe_thread_amount() -> int:
         safe_thread_amount = 1
     return safe_thread_amount
 
+# Clears the users terminal
+def clear_terminal():
+    if os.name == "posix": # For Linux or MacOS
+        os.system("clear")
+    elif os.name == "nt": # For Windows
+        os.system("cls")
+
 # Says a simple "Goodbye!" to the user in German and exits the program
 def exit_program() -> None:
     print(f"{magenta}\n\nTschüss!{reset}")
@@ -164,9 +171,19 @@ def destroyer_settings_reset():
 
 # -- Individual UX Menu Functions-- #
 
+"""
+Status Codes For The Menu Interface Functions:
+
+100 - Call advanced settings menu for the selected tool
+500 - Return to previous menu
+1000 - Return to main menu
+1500 - Lets the program know the user is happy with the configuration and ready to run the selected tool
+"""
+
 # Main/Tool UX Menu
 
 def main_UX_menu() -> None:
+    clear_terminal()
     hs_menus.main_menu()
     tool_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="NA")
     exit_check(tool_choice, tool_name="NA")
@@ -183,6 +200,7 @@ def main_UX_menu() -> None:
     elif tool_choice == 6:
         hs_config["tool"] = "destroyer"
     elif tool_choice == 7:
+        clear_terminal()
         floppy_party = hs_menu_titles.floppy_drive_heaven_easter_egg()
         colors = [red, white, blue]
         colorful_floppy_party = ''.join(colors[char % len(colors)] + floppy_party[char] for char in range(len(floppy_party)))
@@ -208,6 +226,7 @@ def port_scanner_UX_menu_1():
         port_range = hs_prompts.port_range(tool_name="port_scanner")
         hs_config["port_range"] = port_range
     elif config_choice == 3:
+        clear_terminal()
         # 1000 is code for "return to the main menu"
         return 1000
 
@@ -221,6 +240,7 @@ def port_scanner_UX_menu_2():
         hs_config["timeout_amount"] = 1
         hs_config["stealth_features"] = False
     elif config_choice == 2:
+        clear_terminal()
         # status code for "call the advanced settings UX menu (port_scanner_UX_menu_3)"
         return 100
     elif config_choice == 3:
@@ -231,6 +251,7 @@ def port_scanner_UX_menu_2():
         hs_config["timeout_amount"] = 3
         hs_config["stealth_features"] = True
     elif config_choice == 4:
+        clear_terminal()
         # 500 is code for "return to the previous menu"
         return 500
 
@@ -264,6 +285,7 @@ def port_scanner_UX_menu_3():
         hs_config["timeout_amount"] = timeout_amount
         hs_config["stealth_features"] = True
     elif config_choice == 7:
+        clear_terminal()
         # 500 is code for "return to the previous menu"
         return 500
 
@@ -284,6 +306,7 @@ def subdomain_finder_UX_menu_1():
     elif config_choice == 2:
         target = hs_prompts.target_website(tool_name="subdomain_finder")
         hs_config["target"] = target
+        clear_terminal()
         # Tells the program to call the advanced subdomain finder dsettings UX menu
         return 100
     elif config_choice == 3:
@@ -294,6 +317,7 @@ def subdomain_finder_UX_menu_1():
         hs_config["stealth_features"] = True
         hs_config["payload_file"] = "default"
     elif config_choice == 4:
+        clear_terminal()
         # 1000 is code for "return to the main menu"
         return 1000
 
@@ -354,6 +378,7 @@ def subdomain_finder_UX_menu_2():
         hs_config["payload_file"] = payload_file
         hs_config["stealth_features"] = True
     elif config_choice == 13:
+        clear_terminal()
         # 500 is code for "return to the previous menu"
         return 500
 
@@ -374,6 +399,7 @@ def XSS_scanner_UX_menu_1():
     elif config_choice == 2:
         target = hs_prompts.target_website(tool_name="XSS_scanner")
         hs_config["target"] = target
+        clear_terminal()
         # Tells the program to call the advanced subdomain finder dsettings UX menu
         return 100
     elif config_choice == 3:
@@ -384,6 +410,7 @@ def XSS_scanner_UX_menu_1():
         hs_config["stealth_features"] = True
         hs_config["payload_file"] = "default"
     elif config_choice == 4:
+        clear_terminal()
         # 1000 is code for "return to the main menu"
         return 1000
 
@@ -444,6 +471,7 @@ def XSS_scanner_UX_menu_2():
         hs_config["payload_file"] = payload_file
         hs_config["stealth_features"] = True
     elif config_choice == 13:
+        clear_terminal()
         # 500 is code for "return to the previous menu"
         return 500
 
@@ -464,6 +492,7 @@ def dir_trav_scanner_UX_menu_1():
     elif config_choice == 2:
         target = hs_prompts.target_website(tool_name="dir_trav_scanner")
         hs_config["target"] = target
+        clear_terminal()
         # Tells the program to call the advanced subdomain finder dsettings UX menu
         return 100
     elif config_choice == 3:
@@ -474,6 +503,7 @@ def dir_trav_scanner_UX_menu_1():
         hs_config["stealth_features"] = True
         hs_config["payload_file"] = "default"
     elif config_choice == 4:
+        clear_terminal()
         # 1000 is code for "return to the main menu"
         return 1000
 
@@ -534,6 +564,7 @@ def dir_trav_scanner_UX_menu_2():
         hs_config["payload_file"] = payload_file
         hs_config["stealth_features"] = True
     elif config_choice == 13:
+        clear_terminal()
         # 500 is code for "return to the previous menu"
         return 500
 
@@ -554,6 +585,7 @@ def SQLI_scanner_UX_menu_1():
     elif config_choice == 2:
         target = hs_prompts.target_website(tool_name="SQLI_scanner")
         hs_config["target"] = target
+        clear_terminal()
         # Tells the program to call the advanced subdomain finder dsettings UX menu
         return 100
     elif config_choice == 3:
@@ -564,6 +596,7 @@ def SQLI_scanner_UX_menu_1():
         hs_config["stealth_features"] = True
         hs_config["payload_file"] = "default"
     elif config_choice == 4:
+        clear_terminal()
         # 1000 is code for "return to the main menu"
         return 1000
 
@@ -624,6 +657,7 @@ def SQLI_scanner_UX_menu_2():
         hs_config["payload_file"] = payload_file
         hs_config["stealth_features"] = True
     elif config_choice == 13:
+        clear_terminal()
         # 500 is code for "return to the previous menu"
         return 500
 
@@ -640,9 +674,11 @@ def destroyer_UX_menu_1():
         hs_config["encrypt_file"] = True
         hs_config["delete_file"] = True
     elif config_choice == 2:
+        clear_terminal()
         # Tells the program to call the advanced destroyer settings UX menu
         return 100
     elif config_choice == 3:
+        clear_terminal()
         # 1000 is code for "return to the main menu"
         return 1000
 
@@ -675,6 +711,7 @@ def destroyer_UX_menu_2():
         hs_config["encrypt_file"] = True
         hs_config["delete_file"] = True
     elif config_choice == 8:
+        clear_terminal()
         # 500 is code for "return to the previous menu"
         return 500
 
@@ -683,6 +720,7 @@ def destroyer_UX_menu_2():
 # Port Scanner UX Menu Pack
 
 def port_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    clear_terminal()
     if current_UX_tool_menu == 1:
         requested_UX_menu = port_scanner_UX_menu_1()
         if requested_UX_menu == None:
@@ -721,6 +759,7 @@ def port_scanner_UX_menu_pack(current_UX_tool_menu: int):
 # Subdomain Finder UX Menu Pack
 
 def subdomain_finder_UX_menu_pack(current_UX_menu: int):
+    clear_terminal()
     if current_UX_menu == 1:
         requested_UX_menu = subdomain_finder_UX_menu_1()
         if requested_UX_menu == None:
@@ -738,6 +777,7 @@ def subdomain_finder_UX_menu_pack(current_UX_menu: int):
 # XSS Scanner UX Menu Pack
 
 def XSS_scanner_UX_menu_pack(current_UX_menu: int):
+    clear_terminal()
     if current_UX_menu == 1:
         requested_UX_menu = XSS_scanner_UX_menu_1()
         if requested_UX_menu == None:
@@ -755,6 +795,7 @@ def XSS_scanner_UX_menu_pack(current_UX_menu: int):
 # Directory Traversal Scanner UX Menu Pack
 
 def dir_trav_scanner_UX_menu_pack(current_UX_menu: int):
+    clear_terminal()
     if current_UX_menu == 1:
         requested_UX_menu = dir_trav_scanner_UX_menu_1()
         if requested_UX_menu == None:
@@ -772,6 +813,7 @@ def dir_trav_scanner_UX_menu_pack(current_UX_menu: int):
 # SQLI Scanner UX Menu Pack
 
 def SQLI_scanner_UX_menu_pack(current_UX_menu: int):
+    clear_terminal()
     if current_UX_menu == 1:
         requested_UX_menu = SQLI_scanner_UX_menu_1()
         if requested_UX_menu == None:
@@ -789,6 +831,7 @@ def SQLI_scanner_UX_menu_pack(current_UX_menu: int):
 # Destroyer UX Menu Pack
 
 def destroyer_UX_menu_pack(current_UX_menu: int):
+    clear_terminal()
     if current_UX_menu == 1:
         requested_UX_menu = destroyer_UX_menu_1()
         if requested_UX_menu == None:
