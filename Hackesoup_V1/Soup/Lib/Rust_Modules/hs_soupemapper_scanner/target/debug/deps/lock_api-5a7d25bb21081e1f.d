@@ -1,0 +1,10 @@
+/home/cryptex/Desktop/Programming/Hackesoup/Hackesoup_V1/Soup/Lib/Rust_Modules/hs_soupemapper_scanner/target/debug/deps/liblock_api-5a7d25bb21081e1f.rmeta: /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/lib.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/mutex.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/remutex.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/rwlock.rs
+
+/home/cryptex/Desktop/Programming/Hackesoup/Hackesoup_V1/Soup/Lib/Rust_Modules/hs_soupemapper_scanner/target/debug/deps/liblock_api-5a7d25bb21081e1f.rlib: /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/lib.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/mutex.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/remutex.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/rwlock.rs
+
+/home/cryptex/Desktop/Programming/Hackesoup/Hackesoup_V1/Soup/Lib/Rust_Modules/hs_soupemapper_scanner/target/debug/deps/lock_api-5a7d25bb21081e1f.d: /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/lib.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/mutex.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/remutex.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/rwlock.rs
+
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/lib.rs:
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/mutex.rs:
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/remutex.rs:
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/lock_api-0.4.12/src/rwlock.rs:

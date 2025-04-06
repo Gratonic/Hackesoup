@@ -1,0 +1,10 @@
+[package]
+name = "hs_soupemapper_scanner"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.18", features = ["extension-module"] }

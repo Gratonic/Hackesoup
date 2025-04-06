@@ -1,0 +1,10 @@
+/home/cryptex/Desktop/Programming/Hackesoup/Hackesoup_V1/Soup/Lib/Rust_Modules/hs_soupemapper_scanner/target/debug/deps/libmemoffset-2c53abcc28fec9fc.rmeta: /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/lib.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/raw_field.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/offset_of.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/span_of.rs
+
+/home/cryptex/Desktop/Programming/Hackesoup/Hackesoup_V1/Soup/Lib/Rust_Modules/hs_soupemapper_scanner/target/debug/deps/libmemoffset-2c53abcc28fec9fc.rlib: /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/lib.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/raw_field.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/offset_of.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/span_of.rs
+
+/home/cryptex/Desktop/Programming/Hackesoup/Hackesoup_V1/Soup/Lib/Rust_Modules/hs_soupemapper_scanner/target/debug/deps/memoffset-2c53abcc28fec9fc.d: /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/lib.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/raw_field.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/offset_of.rs /home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/span_of.rs
+
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/lib.rs:
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/raw_field.rs:
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/offset_of.rs:
+/home/cryptex/.cargo/registry/src/index.crates.io-6f17d22bba15001f/memoffset-0.8.0/src/span_of.rs:
