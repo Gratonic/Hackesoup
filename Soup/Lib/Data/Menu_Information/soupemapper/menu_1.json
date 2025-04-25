@@ -1,0 +1,13 @@
+{
+    "header_info": {
+        "menu_title_func_name": "soupemapper",
+        "tool_version": "1.0",
+        "title_colors": ["red", "white", "blue"]
+    },
+    "options": {
+        "1": "Single Port", "2": "Port Range"
+    },
+    "descriptions": {
+        "1": "scans a single port", "2": "scans a range of ports"
+    }
+}

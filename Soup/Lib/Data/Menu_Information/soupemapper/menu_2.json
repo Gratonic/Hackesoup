@@ -1,0 +1,13 @@
+{
+    "header_info": {
+        "menu_title_func_name": "soupemapper",
+        "tool_version": "1.0",
+        "title_colors": ["red", "white", "blue"]
+    },
+    "options": {
+        "1": "Quick Scan", "2": "Stealth Scan", "3": "Agressive Scan"
+    },
+    "descriptions": {
+        "1": "scans port at a balanced speed while maintaining some stealth", "2": "utilizes advanced features to avoid detection", "3": "probes the target to identify open ports and running services at the cost of stealth"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "header_info": {
+        "menu_title_func_name": "patch_pirate",
+        "tool_version": "1.0",
+        "title_colors": ["red", "white", "blue", "yellow"]
+    },
+    "options": {
+        "1": "Use a API Token", "2": "Don't use a API Token"
+    },
+    "descriptions": {
+        "1": "scan with a GitHub API token", "2": "scan without a GitHub API token"
+    }
+}

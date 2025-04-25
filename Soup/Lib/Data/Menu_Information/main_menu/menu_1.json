@@ -1,0 +1,13 @@
+{
+    "header_info": {
+        "menu_title_func_name": "hackesoup",
+        "tool_version": "1.0",
+        "title_colors": ["red", "yellow", "green", "cyan", "blue", "magenta"]
+    },
+    "options" : {
+        "1": "OSINT and Recon Tools", "2": "Web Tools", "3": "LAN Tools"
+    },
+    "descriptions": {
+        "1": "tools for open-source intelligence and general reconnaissance", "2": "tools for scanning websites and web applications", "3": "tools for local area network mapping and hacking"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "header_info": {
+        "menu_title_func_name": "hackesoup",
+        "tool_version": "1.0",
+        "title_colors": ["red", "yellow", "green", "cyan", "blue", "magenta"]
+    },
+    "options": {
+        "1": "Patch Pirate (Juha sa štruklima Soup - Croation)"
+    },
+    "descriptions": {
+        "1": "scans github for PII and other information on a targeted github user"
+    }
+}
