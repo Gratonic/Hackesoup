@@ -190,11 +190,11 @@ def main_UX_menu()  -> int:
     exit_check(user_choice=tool_class_choice, tool_name="main_menu")
     # configures the settings based on the users tool choice
     if tool_class_choice == 1:
-        hs_config["tool_class"] = "OSINT_and_Recon"
+        hs_config["tool_class"] = "OSINT"
         # menu code for move to the next menu code
         return 100
     elif tool_class_choice == 2:
-        hs_config["tool_class"] = "Web"
+        hs_config["tool_class"] = "WEB"
         # menu code for move to the next menu code
         return 100
     elif tool_class_choice == 3:
@@ -597,27 +597,91 @@ def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
 
 # LAN Tool UX Menu Packs
 
-def soupemapper_UX_menu_pack(current_UX_tool_menu: int):
-    if current_UX_tool_menu == 1:
+def soupemapper_UX_menu_pack() -> int:
+    while True:
+        # Step 1: Run soupemapper menu 1
         code = soupemapper_UX_menu_1()
-        if code == 100:
-            soupemapper_UX_menu_pack(1)
-        elif code == 500:
+
+        if code == 500:
+            # User chose to go back to LAN tool menu
             soupemapper_UX_menu_1_settings_reset()
-    elif current_UX_tool_menu == 2:
-        code = soupemapper_UX_menu_2()
+            return 500
 
+        elif code == 100:
+            # Step 2: Run soupemapper menu 2
+            while True:
+                code2 = soupemapper_UX_menu_2()
 
-patch_pirate_UX_menu()
+                if code2 == 500:
+                    # User chose to go back to menu 1
+                    soupemapper_UX_menu_2_settings_reset()
+                    # Break to go back to outer loop (menu 1)
+                    break
+
+                else:
+                    # User is happy with configuration, ready to run tool
+                    return 1500
 
 # :: UX Menu Interface Functions :: #
 
-def menu_interface():
-    code = main_UX_menu()
-    if code == 100:
-        tool_class_menu_pack()
-    else:
-        print(f"{red}[!] Error: Unknown{reset}")
+def menu_interface(start_point: int, code: int):
+    if start_point == 1:
+        main_menu_code = main_UX_menu()
+        menu_interface(start_point=2, code=main_menu_code)
+    elif start_point == 2:
+        if code == 100:
+            code = tool_class_menu_pack()
+            if code == 1000:
+                menu_interface(start_point=1)
+            elif code == 100:
+                if hs_config["tool_class"] == "OSINT":
+                    if hs_config["tool"] == "patch_pirate":
+                        code = patch_pirate_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=code)
+                        elif code == 1500:
+                            print("reached the happy 1500")
+                elif hs_config["tool_class"] == "WEB":
+                    if hs_config["tool"] == "subdomain_finder":
+                        code = subdomain_finder_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=code)
+                        elif code == 1500:
+                            print("reached the happy 1500")
+                    elif hs_config["tool"] == "SQLI_scanner":
+                        code = SQLI_vuln_scanner_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=code)
+                        elif code == 1500:
+                            print("reached the happy 1500")
+                    elif hs_config["tool"] == "XSS_scanner":
+                        code = XSS_vuln_scanner_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=code)
+                        elif code == 1500:
+                            print("reached the happy 1500")
+                    elif hs_config["tool"] == "dir_trav_scanner":
+                        code = dir_trav_vuln_scanner_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=code)
+                        elif code == 1500:
+                            print("reached the happy 1500")
+                elif hs_config["tool_class"] == "LAN":
+                    if hs_config["tool"] == "soupemapper":
+                        code = soupemapper_UX_menu_pack()
+                        if code == 500:
+                            menu_interface(start_point=2, code=code)
+                        elif code == 1500:
+                            print("reached the happy 1500")
+                else:
+                    print(f"{red}[!] Error: Tool Class Does Not Exist{reset}")
+        else:
+            print("Error")
+            print(code)
+            print(hs_config["tool_class"])
+            print(hs_config["tool"])
+
+menu_interface(start_point=1, code=0)
 
 """
 def menu_interface():
