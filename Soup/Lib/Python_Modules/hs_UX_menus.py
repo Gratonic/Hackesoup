@@ -1,17 +1,19 @@
 """
 # :: Author Information and Program Details :: #
 
-File Name: hs_validator.py
-Author(s): Gratonic (https://github.com/Gratonic)
+File Name: hs_UX_menus.py
+Author(s): Gratonic (https://github.com/Gratonic) and ibrahim-sisar (https://github.com/ibrahim-sisar)
 Written In: Python 3.10.12
-Dependencie(s): colorama
-Last Modified: February 8th, 2025
+Dependencie(s): hs_menu_titles, hs_menus, hs_prompts, colorama, json, os
+Last Modified: April 25th, 2025
 
 # :: Description :: #
 
 This python file contains the title information used in the hs_menus.py file to build the portion of the header for the menu
 portion of the UX menus.
+
 """
+
 # TODO: Fix the minor bug causing you have to enter the target file twice after going back to the first destroyer UX menu -->
 # in the destroyer_UX_menu_pack() function or one of the individual UX menus, functions are somewhere between line -->
 # 700 and line 807
@@ -22,6 +24,7 @@ import hs_menu_titles # for the main menu easter egg
 import hs_menus
 import hs_prompts
 import colorama # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
+import json
 import os
 
 # :: Global Variables :: #
@@ -46,28 +49,22 @@ gray = colorama.Fore.LIGHTBLACK_EX
 # This dictionary will change as the user configures the tool they chose
 # NOTE: Some tools may not change all the settings because either A) the user doesn't change the setting(s) or B) the chosen tool doesn't use all the settings
 hs_config = {
-    "tool": "NA",
-    "target": "NA", "port": "NA", "port_range": "NA",
-    "timeout_amount": "NA", "thread_amount": "NA",
-    "stealth_features": "NA", 
-    "payload_file": "NA",
-    "destroy_file": "NA",
-    "encrypt_file": "NA",
-    "file_overwrite_amount": "NA",
-    "delete_file": "NA"
+    "target": None,
+    "tool": None,
+    "tool_class": None,
+    "target": None,
+    "API_token": None,
+    "port": None, "port_range": None,
+    "timeout_amount": None,
+    "request_per_minute": None,
+    "scan_type": None,
+    "payload_file": None,
+    "save_file": None
 }
 
 # :: Functionality :: #
 
 # -- Special Functions -- #
-
-def determine_safe_thread_amount() -> int:
-    # The safe thread amount will be set if the users configuration choice is 1 or 3
-    logical_cores = os.cpu_count()
-    safe_thread_amount = logical_cores // 4
-    if safe_thread_amount < 1:
-        safe_thread_amount = 1
-    return safe_thread_amount
 
 # Clears the users terminal
 def clear_terminal():
@@ -76,13 +73,15 @@ def clear_terminal():
     elif os.name == "nt": # For Windows
         os.system("cls")
 
+# -- Exit Functions -- #
+
 # Says a simple "Goodbye!" to the user in German and exits the program
 def exit_program() -> None:
     print(f"{magenta}\n\nTschüss!{reset}")
     exit()
 
 # Says "Goodbye!" to the user and exits the program
-def exit_program_port_scanner() -> None:
+def exit_program_soupemapper() -> None:
     print(f"{magenta}\n\nGood luck and goodbye!{reset}")
     exit()
 
@@ -105,772 +104,617 @@ def exit_program_SQLI_scanner() -> None:
     print(f"{magenta}\n\nFino alla prossima volta! Arrivederci!{reset}")
     exit()
 
-def exit_program_destroyer() -> None:
-    print(f"{magenta}\n\nज्ञान को अपने जीवन का हिस्सा बनाइए क्योंकि यह आपकी सबसे बड़ी शक्ति है, लेकिन इसका इस्तेमाल दुनिया को बेहतर बनाने के लिए करें, न कि उसे नष्ट करने के लिए। अभी के लिए अलविदा!{reset}")
+# Says "Goodbye!" and best of luck in Croation
+def exit_program_patch_pirate() -> None:
+    print(f"{magenta}\n\nSvako dobro i doviđenja!{reset}")
     exit()
 
 # Checks the users chosen configuration option to see if they want to exit the program
 def exit_check(user_choice: int, tool_name: str) -> None:
-    if user_choice == 0 and tool_name == "port_scanner":
-        exit_program_port_scanner()
+    if user_choice == 0 and tool_name == "main_menu":
+        exit_program()
+    elif user_choice == 0 and tool_name == "patch_pirate":
+        exit_program_patch_pirate()
     elif user_choice == 0 and tool_name == "subdomain_finder":
         exit_program_subdomain_finder()
+    elif user_choice == 0 and tool_name == "SQLI_scanner":
+        exit_program_SQLI_scanner()
     elif user_choice == 0 and tool_name == "XSS_scanner":
         exit_program_XSS_scanner()
     elif user_choice == 0 and tool_name == "dir_trav_scanner":
         exit_program_dir_trav_scanner()
-    elif user_choice == 0 and tool_name == "SQLI_scanner":
-        exit_program_SQLI_scanner()
-    elif user_choice == 0 and tool_name == "destroyer":
-        exit_program_destroyer()
+    elif user_choice == 0 and tool_name == "soupemapper":
+        exit_program_soupemapper()
     else:
         pass
 
-# Setting Reset Functions
+# -- Settings Reset Functions -- #
 
 def total_settings_reset():
-    hs_config["tool"] = "NA"
-    hs_config["payload_file"] = "NA"
-    hs_config["port"] = "NA"
-    hs_config["port_range"] = "NA"
-    hs_config["stealth_features"] = "NA"
-    hs_config["target"] = "NA"
-    hs_config["thread_amount"] = "NA"
-    hs_config["timeout_amount"] = "NA"
+    hs_config["target"] = None
+    hs_config["tool"] = None
+    hs_config["tool_class"] = None
+    hs_config["target"] = None
+    hs_config["API_token"] = None
+    hs_config["port"] = None
+    hs_config["port_range"] = None
+    hs_config["timeout_amount"] = None
+    hs_config["request_per_minute"] = None
+    hs_config["general_scan_type"] = None
+    hs_config["special_scan_type"] = None # Aggressive or Stealth
+    hs_config["save_file"] = None
 
-# Port Scanner Setting Reset Functions
+# OSINT Tool Settings Reset Functions #
 
-def port_scanner_UX_menu_1_settings_reset():
-    hs_config["target"] = "NA"
-    hs_config["port"] = "NA"
-    hs_config["port_range"] = "NA"
+def patch_pirate_menu_settings_reset():
+    hs_config["target"] = None
+    hs_config["API_token"] = None
+    hs_config["save_file"] = None
 
-def port_scanner_UX_menu_2_settings_reset():
-    hs_config["thread_amount"] = "NA"
-    hs_config["timeout_amount"] = "NA"
-    hs_config["stealth_features"] = "NA"
+# Web Tool Settings Reset Functions #
 
-# Sub Domain Finder, XSS Scanner, Directory Traversal Scanner, and SQLI Scanner Reset Functions
-# NOTE: These 4 tools have the same menu options and settings, just to make things simple...they're reffered to as squad members
-# NOTE: If the previous menu is requested with this menu, all settings must be reset because there is only 2 UX menus
+# *Since all of the web tools have the same exact settings*
+def web_tool_menu_settings_reset():
+    hs_config["target"] = None
+    hs_config["timeout_amount"] = None
+    hs_config["payload_file"] = None
+    hs_config["request_per_minute"] = None
+    hs_config["save_file"] = None
 
-def squad_member_settings_reset():
-    hs_config["target"] = "NA"
-    hs_config["thread_amount"] = "NA"
-    hs_config["timeout_amount"] = "NA"
-    hs_config["stealth_features"] = "NA"
-    hs_config["payload_file"] = "NA"
+# Network Tools Settings Reset Functions #
 
-# Destroyer Reset Function
+def soupemapper_UX_menu_1_settings_reset():
+    hs_config["target"] = None
+    hs_config["target"] = None
+    hs_config["port"] = None
+    hs_config["port_range"] = None
 
-def destroyer_settings_reset():
-    hs_config["destroy_file"] = "NA"
-    hs_config["file_overwrite_amount"] = "NA"
-    hs_config["encrypt_file"] = "NA"
-    hs_config["delete_file"] = "NA"
+def soupemapper_UX_menu_2_settings_reset():
+    hs_config["target"] = None
+    hs_config["scan_type"] = None
+    hs_config["save_file"] = None
 
 # -- Individual UX Menu Functions-- #
 
 """
 Status Codes For The Menu Interface Functions:
 
-100 - Call advanced settings menu for the selected tool
+100 - Call next menu for the selected tool
 500 - Return to previous menu
 1000 - Return to main menu
 1500 - Lets the program know the user is happy with the configuration and ready to run the selected tool
 """
 
-# Main/Tool UX Menu
+# Main and Tool UX Menus
 
-def main_UX_menu() -> None:
+def main_UX_menu()  -> int:
+    # Clears the terminal and calls the main menu from hs_menus
     clear_terminal()
     hs_menus.main_menu()
-    tool_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="NA")
-    exit_check(tool_choice, tool_name="NA")
-    if tool_choice == 1:
-        hs_config["tool"] = "port_scanner"
-    elif tool_choice == 2:
-        hs_config["tool"] = "subdomain_finder"
-    elif tool_choice == 3:
-        hs_config["tool"] = "XSS_vuln_scanner"
-    elif tool_choice == 4:
-        hs_config["tool"] = "dir_trav_vuln_scanner"
-    elif tool_choice == 5:
-        hs_config["tool"] = "SQLI_vuln_scanner"
-    elif tool_choice == 6:
-        hs_config["tool"] = "destroyer"
-    elif tool_choice == 7:
+    # Prompts the user for input - last=4 because of easter egg
+    tool_class_choice = hs_prompts.menu_prompt(first=0, last=4, tool_name="NA")
+    # Preforms an exit check
+    exit_check(user_choice=tool_class_choice, tool_name="main_menu")
+    # configures the settings based on the users tool choice
+    if tool_class_choice == 1:
+        hs_config["tool_class"] = "OSINT"
+        # menu code for move to the next menu code
+        return 100
+    elif tool_class_choice == 2:
+        hs_config["tool_class"] = "WEB"
+        # menu code for move to the next menu code
+        return 100
+    elif tool_class_choice == 3:
+        hs_config["tool_class"] = "LAN"
+        # menu code for move to the next menu code
+        return 100
+    elif tool_class_choice == 4:
+        # Clears the terminal
         clear_terminal()
+        # Prints the easter egg and exits the program
         floppy_party = hs_menu_titles.floppy_drive_heaven_easter_egg()
         colors = [red, white, blue]
         colorful_floppy_party = ''.join(colors[char % len(colors)] + floppy_party[char] for char in range(len(floppy_party)))
         print(colorful_floppy_party)
         exit_program()
 
-# Port Scanner UX Menus
+def OSINT_tools_UX_menu() -> int:
+    # Clears the terminal and calls the OSINT tool menu from hs_menus
+    clear_terminal()
+    hs_menus.OSINT_tool_menu()
+    # Prompts the user for input
+    tool_choice = hs_prompts.menu_prompt(first=0, last=2, tool_name="NA")
+    # Preforms an exit check
+    exit_check(user_choice=tool_choice, tool_name="main_menu")
+    # configures the settings based on the users tool choice
+    if tool_choice == 1:
+        hs_config["tool"] = "patch_pirate"
+    elif tool_choice == 2:
+        # returns to the main menu
+        return 1000
+    
+    # only way the menu code: 100 is returned for some unknown reason
+    if hs_config["tool"] != None:
+        # lets the program know the next menu can be called, will be returned if 1000 is not returned
+        return 100
 
-def port_scanner_UX_menu_1():
-    hs_menus.port_scanner_setup_1()
-    config_choice = hs_prompts.menu_prompt(first=0, last=3, tool_name="port_scanner")
-    exit_check(config_choice, tool_name="port_scanner")
-    if config_choice == 1:
-        # Will be changed to combo target in future versions
-        target = hs_prompts.target_IPv4(tool_name="port_scanner")
-        hs_config["target"] = target
-        port = hs_prompts.port(tool_name="port_scanner")
-        hs_config["port"] = port
-    elif config_choice == 2:
-        # Will be changed to combo target in future versions
-        target = hs_prompts.target_IPv4(tool_name="port_scanner")
-        hs_config["target"] = target
-        port_range = hs_prompts.port_range(tool_name="port_scanner")
-        hs_config["port_range"] = port_range
-    elif config_choice == 3:
-        clear_terminal()
-        # 1000 is code for "return to the main menu"
+def web_tool_UX_menu() -> int:
+    # Clears the terminal and calls the web tool menu from hs_menus
+    clear_terminal()
+    hs_menus.web_tool_menu()
+    # Prompts the user for input
+    tool_choice = hs_prompts.menu_prompt(first=0, last=5, tool_name="NA")
+    # Preforms an exit check
+    exit_check(user_choice=tool_choice, tool_name="main_menu")
+    # configures the settings based on the users tool choice
+    if tool_choice == 1:
+        hs_config["tool"] = "subdomain_finder"
+    elif tool_choice == 2:
+        hs_config["tool"] = "SQLI_scanner"
+    elif tool_choice == 3:
+        hs_config["tool"] = "XSS_scanner"
+    elif tool_choice == 4:
+        hs_config["tool"] = "dir_trav_scanner"
+    elif tool_choice == 5:
+        # returns to the main menu
+        return 1000
+    
+    # only way the menu code: 100 is returned for some unknown reason
+    if hs_config["tool"] != None:
+        # lets the program know the next menu can be called, will be returned if 1000 is not returned
+        return 100
+
+def LAN_tool_UX_menu() -> int:
+    # Clears the terminal and calls the LAN tool menu from hs_menus
+    clear_terminal()
+    hs_menus.LAN_tool_menu()
+    # Prompts the user for input
+    tool_choice = hs_prompts.menu_prompt(first=0, last=2, tool_name="NA")
+    # Preforms an exit check
+    exit_check(user_choice=tool_choice, tool_name="main_menu")
+    # configures the settings based on the users tool choice
+    if tool_choice == 1:
+        hs_config["tool"] = "soupemapper"
+    elif tool_choice == 2:
+        # returns to the main menu
         return 1000
 
-def port_scanner_UX_menu_2():
-    safe_thread_amount = determine_safe_thread_amount()
-    hs_menus.port_scanner_setup_2()
-    config_choice = hs_prompts.menu_prompt(first=0, last=4, tool_name="port_scanner")
-    exit_check(config_choice, tool_name="port_scanner")
-    if config_choice == 1:
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 1
-        hs_config["stealth_features"] = False
-    elif config_choice == 2:
-        clear_terminal()
-        # status code for "call the advanced settings UX menu (port_scanner_UX_menu_3)"
+    # only way the menu code: 100 is returned for some unknown reason
+    if hs_config["tool"] != None:
+        # lets the program know the next menu can be called, will be returned if 1000 is not returned
         return 100
-    elif config_choice == 3:
-        thread_amount = 4
-        if thread_amount > safe_thread_amount or thread_amount < safe_thread_amount:
-            thread_amount = safe_thread_amount
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = 3
-        hs_config["stealth_features"] = True
-    elif config_choice == 4:
-        clear_terminal()
-        # 500 is code for "return to the previous menu"
-        return 500
 
-def port_scanner_UX_menu_3():
-    hs_menus.port_scanner_setup_3()
-    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="port_scanner")
-    exit_check(config_choice, tool_name="port_scanner")
+# OSINT Tool UX Menus
+
+def patch_pirate_UX_menu() -> int:
+    # clears the terminal and calls the patch_pirate menu
+    clear_terminal()
+    hs_menus.patch_pirate_menu()
+    # prompts the user to choose an option from the menu
+    config_choice = hs_prompts.menu_prompt(first=0, last=3, tool_name="patch_pirate")
+    # preforms an exit check
+    exit_check(user_choice=config_choice, tool_name="patch_pirate")
+    # configures the tool settings based on the users choice
     if config_choice == 1:
-        thread_amount = hs_prompts.thread_amount()
-        hs_config["thread_amount"] = thread_amount
+        api_token = hs_prompts.api_token(tool_name="patch_pirate")
+        hs_config["API_token"] = api_token
     elif config_choice == 2:
-        timeout_amount = hs_prompts.timeout()
-        hs_config["timeout_amount"] = timeout_amount
+        hs_config["API_token"] = None
     elif config_choice == 3:
-        thread_amount = hs_prompts.thread_amount()
-        timeout_amount = hs_prompts.timeout()
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-    elif config_choice == 4:
-        thread_amount = hs_prompts.thread_amount()
-        hs_config["thread_amount"] = thread_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 5:
-        timeout_amount = hs_prompts.timeout()
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 6:
-        thread_amount = hs_prompts.thread_amount()
-        timeout_amount = hs_prompts.timeout()
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 7:
-        clear_terminal()
-        # 500 is code for "return to the previous menu"
+        # returns to the previous menu
         return 500
 
-# Subdomain Finder UX Menus
+# Web Tool UX Menus
 
-def subdomain_finder_UX_menu_1():
-    hs_menus.sub_domain_finder_setup_1()
+def subdomain_finder_UX_menu() -> int:
+    # clears the terminal and calls the subdomain finder menu
+    clear_terminal()
+    hs_menus.subdomain_finder_menu()
+    # prompts the user to choose an option from the menu
     config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="subdomain_finder")
-    exit_check(config_choice, tool_name="subdomain_finder")
+    # preforms an exit check
+    exit_check(user_choice=config_choice, tool_name="subdomain_finder")
+    # configures the tool settings based on the users choice
     if config_choice == 1:
-        target = hs_prompts.target_website(tool_name="subdomain_finder")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["target"] = target
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 1
-        hs_config["stealth_features"] = False
-        hs_config["payload_file"] = "default"
+        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
+        hs_config["request_per_minute"] = rpm
     elif config_choice == 2:
-        target = hs_prompts.target_website(tool_name="subdomain_finder")
-        hs_config["target"] = target
-        clear_terminal()
-        # Tells the program to call the advanced subdomain finder dsettings UX menu
-        return 100
+        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
+        hs_config["payload_file"] = payload_file
     elif config_choice == 3:
-        target = hs_prompts.target_website(tool_name="subdomain_finder")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 3
-        hs_config["stealth_features"] = True
-        hs_config["payload_file"] = "default"
+        timeout = hs_prompts.timeout(tool_name="subdomain_finder")
+        hs_config["timeout_amount"] = timeout
     elif config_choice == 4:
-        clear_terminal()
-        # 1000 is code for "return to the main menu"
-        return 1000
-
-def subdomain_finder_UX_menu_2():
-    hs_menus.sub_domain_finder_setup_2()
-    config_choice = hs_prompts.menu_prompt(first=0, last=13, tool_name="subdomain_finder")
-    exit_check(config_choice, tool_name="subdomain_finder")
-    if config_choice == 1:
-        thread_amount = hs_prompts.thread_amount(tool_name="subdomain_finder")
-        hs_config["thread_amount"] = thread_amount
-    elif config_choice == 2:
-        timeout_amount = hs_prompts.timeout(tool_name="subdomain_finder")
-        hs_config["timeout_amount"] = timeout_amount
-    elif config_choice == 3:
-        hs_config["stealth_features"] = True
-    elif config_choice == 4:
-        thread_amount = hs_prompts.thread_amount(tool_name="subdomain_finder")
-        timeout_amount = hs_prompts.timeout(tool_name="subdomain_finder")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
+        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
+        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
     elif config_choice == 5:
-        thread_amount = hs_prompts.thread_amount(tool_name="subdomain_finder")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["stealth_features"] = True
+        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
+        timeout = hs_prompts.timeout(tool_name="subdomain_finder")
+        hs_config["request_per_minute"] = rpm
+        hs_config["timeout_amount"] = timeout
     elif config_choice == 6:
-        timeout_amount = hs_prompts.timeout(tool_name="subdomain_finder")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
+        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
+        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
+        timeout = hs_prompts.timeout(tool_name="subdomain_finder")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
+        hs_config["timeout_amount"] = timeout
     elif config_choice == 7:
-        thread_amount = hs_prompts.thread_amount(tool_name="subdomain_finder")
-        timeout_amount = hs_prompts.timeout(tool_name="subdomain_finder")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 8:
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 9:
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 10:
-        thread_amount = hs_prompts.thread_amount(tool_name="subdomain_finder")
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 11:
-        timeout_amount = hs_prompts.timeout(tool_name="subdomain_finder")
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 12:
-        thread_amount = hs_prompts.thread_amount(tool_name="subdomain_finder")
-        timeout_amount = hs_prompts.timeout(tool_name="subdomain_finder")
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 13:
-        clear_terminal()
-        # 500 is code for "return to the previous menu"
+        # returns to the previous menu
         return 500
 
-# XSS Scanner UX Menus
-
-def XSS_scanner_UX_menu_1():
-    hs_menus.xss_scanner_setup_1()
-    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="XSS_scanner")
-    exit_check(config_choice, tool_name="XSS_scanner")
-    if config_choice == 1:
-        target = hs_prompts.target_website(tool_name="XSS_scanner")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["target"] = target
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 1
-        hs_config["stealth_features"] = False
-        hs_config["payload_file"] = "default"
-    elif config_choice == 2:
-        target = hs_prompts.target_website(tool_name="XSS_scanner")
-        hs_config["target"] = target
-        clear_terminal()
-        # Tells the program to call the advanced subdomain finder dsettings UX menu
-        return 100
-    elif config_choice == 3:
-        target = hs_prompts.target_website(tool_name="XSS_scanner")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 3
-        hs_config["stealth_features"] = True
-        hs_config["payload_file"] = "default"
-    elif config_choice == 4:
-        clear_terminal()
-        # 1000 is code for "return to the main menu"
-        return 1000
-
-def XSS_scanner_UX_menu_2():
-    hs_menus.xss_scanner_setup_2()
-    config_choice = hs_prompts.menu_prompt(first=0, last=13, tool_name="XSS_scanner")
-    exit_check(config_choice, tool_name="XSS_scanner")
-    if config_choice == 1:
-        thread_amount = hs_prompts.thread_amount(tool_name="XSS_scanner")
-        hs_config["thread_amount"] = thread_amount
-    elif config_choice == 2:
-        timeout_amount = hs_prompts.timeout(tool_name="XSS_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-    elif config_choice == 3:
-        hs_config["stealth_features"] = True
-    elif config_choice == 4:
-        thread_amount = hs_prompts.thread_amount(tool_name="XSS_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="XSS_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-    elif config_choice == 5:
-        thread_amount = hs_prompts.thread_amount(tool_name="XSS_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 6:
-        timeout_amount = hs_prompts.timeout(tool_name="XSS_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 7:
-        thread_amount = hs_prompts.thread_amount(tool_name="XSS_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="XSS_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 8:
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 9:
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 10:
-        thread_amount = hs_prompts.thread_amount(tool_name="XSS_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 11:
-        timeout_amount = hs_prompts.timeout(tool_name="XSS_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 12:
-        thread_amount = hs_prompts.thread_amount(tool_name="XSS_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="XSS_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 13:
-        clear_terminal()
-        # 500 is code for "return to the previous menu"
-        return 500
-
-# Directory Traversal Scanner UX Menus
-
-def dir_trav_scanner_UX_menu_1():
-    hs_menus.sub_domain_finder_setup_1()
-    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="dir_trav_scanner")
-    exit_check(config_choice, tool_name="dir_trav_scanner")
-    if config_choice == 1:
-        target = hs_prompts.target_website(tool_name="dir_trav_scanner")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["target"] = target
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 1
-        hs_config["stealth_features"] = False
-        hs_config["payload_file"] = "default"
-    elif config_choice == 2:
-        target = hs_prompts.target_website(tool_name="dir_trav_scanner")
-        hs_config["target"] = target
-        clear_terminal()
-        # Tells the program to call the advanced subdomain finder dsettings UX menu
-        return 100
-    elif config_choice == 3:
-        target = hs_prompts.target_website(tool_name="dir_trav_scanner")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 3
-        hs_config["stealth_features"] = True
-        hs_config["payload_file"] = "default"
-    elif config_choice == 4:
-        clear_terminal()
-        # 1000 is code for "return to the main menu"
-        return 1000
-
-def dir_trav_scanner_UX_menu_2():
-    hs_menus.sub_domain_finder_setup_2()
-    config_choice = hs_prompts.menu_prompt(first=0, last=13, tool_name="dir_trav_scanner")
-    exit_check(config_choice, tool_name="dir_trav_scanner")
-    if config_choice == 1:
-        thread_amount = hs_prompts.thread_amount(tool_name="dir_trav_scanner")
-        hs_config["thread_amount"] = thread_amount
-    elif config_choice == 2:
-        timeout_amount = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-    elif config_choice == 3:
-        hs_config["stealth_features"] = True
-    elif config_choice == 4:
-        thread_amount = hs_prompts.thread_amount(tool_name="dir_trav_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-    elif config_choice == 5:
-        thread_amount = hs_prompts.thread_amount(tool_name="dir_trav_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 6:
-        timeout_amount = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 7:
-        thread_amount = hs_prompts.thread_amount(tool_name="dir_trav_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 8:
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 9:
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 10:
-        thread_amount = hs_prompts.thread_amount(tool_name="dir_trav_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 11:
-        timeout_amount = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 12:
-        thread_amount = hs_prompts.thread_amount(tool_name="dir_trav_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 13:
-        clear_terminal()
-        # 500 is code for "return to the previous menu"
-        return 500
-
-# SQLI Scanner UX Menus
-
-def SQLI_scanner_UX_menu_1():
-    hs_menus.sub_domain_finder_setup_1()
+def SQLI_vuln_scanner_UX_menu() -> int:
+    # clears the terminal and calls the SQLI vuln scanner menu
+    clear_terminal()
+    hs_menus.SQLI_vuln_scanner_menu()
+    # prompts the user to choose an option from the menu
     config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="SQLI_scanner")
-    exit_check(config_choice, tool_name="SQLI_scanner")
+    # preforms an exit check
+    exit_check(user_choice=config_choice, tool_name="SQLI_scanner")
+    # configures the tool settings based on the users choice
     if config_choice == 1:
-        target = hs_prompts.target_website(tool_name="SQLI_scanner")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["target"] = target
-        hs_config["thread_amount"] = safe_thread_amount
-        hs_config["timeout_amount"] = 1
-        hs_config["stealth_features"] = False
-        hs_config["payload_file"] = "default"
+        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
+        hs_config["request_per_minute"] = rpm
     elif config_choice == 2:
-        target = hs_prompts.target_website(tool_name="SQLI_scanner")
-        hs_config["target"] = target
-        clear_terminal()
-        # Tells the program to call the advanced subdomain finder dsettings UX menu
+        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
+        hs_config["payload_file"] = payload_file
+    elif config_choice == 3:
+        timeout = hs_prompts.timeout(tool_name="SQLI_scanner")
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 4:
+        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
+        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
+    elif config_choice == 5:
+        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
+        timeout = hs_prompts.timeout(tool_name="SQLI_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 6:
+        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
+        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
+        timeout = hs_prompts.timeout(tool_name="SQLI_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 7:
+        # returns to the previous menu
+        return 500
+
+def XSS_vuln_scanner_UX_menu() -> int:
+    # clears the terminal and calls the XSS vuln scanner menu
+    clear_terminal()
+    hs_menus.SQLI_vuln_scanner_menu()
+    # prompts the user to choose an option from the menu
+    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="XSS_scanner")
+    # preforms an exit check
+    exit_check(user_choice=config_choice, tool_name="XSS_scanner")
+    # configures the tool settings based on the users choice
+    if config_choice == 1:
+        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
+        hs_config["request_per_minute"] = rpm
+    elif config_choice == 2:
+        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
+        hs_config["payload_file"] = payload_file
+    elif config_choice == 3:
+        timeout = hs_prompts.timeout(tool_name="XSS_scanner")
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 4:
+        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
+        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
+    elif config_choice == 5:
+        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
+        timeout = hs_prompts.timeout(tool_name="XSS_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 6:
+        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
+        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
+        timeout = hs_prompts.timeout(tool_name="XSS_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 7:
+        # returns to the previous menu
+        return 500
+
+def dir_trav_vuln_scanner_UX_menu() -> int:
+    # clears the terminal and calls the dir trav vuln scanner menu
+    clear_terminal()
+    hs_menus.SQLI_vuln_scanner_menu()
+    # prompts the user to choose an option from the menu
+    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="dir_trav_scanner")
+    # preforms an exit check
+    exit_check(user_choice=config_choice, tool_name="dir_trav_scanner")
+    # configures the tool settings based on the users choice
+    if config_choice == 1:
+        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
+        hs_config["request_per_minute"] = rpm
+    elif config_choice == 2:
+        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
+        hs_config["payload_file"] = payload_file
+    elif config_choice == 3:
+        timeout = hs_prompts.timeout(tool_name="dir_trav_scanner")
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 4:
+        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
+        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
+    elif config_choice == 5:
+        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
+        timeout = hs_prompts.timeout(tool_name="dir_trav_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 6:
+        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
+        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
+        timeout = hs_prompts.timeout(tool_name="dir_trav_scanner")
+        hs_config["request_per_minute"] = rpm
+        hs_config["payload_file"] = payload_file
+        hs_config["timeout_amount"] = timeout
+    elif config_choice == 7:
+        # returns to the previous menu
+        return 500
+
+# LAN Tool UX Menus
+
+def soupemapper_UX_menu_1() -> int:
+    # clears the terminal and calls the 1st soupemapper menu
+    clear_terminal()
+    hs_menus.soupemapper_menu_1()
+    # prompts the user to choose an option from the menu
+    config_choice = hs_prompts.menu_prompt(first=0, last=3, tool_name="soupemapper")
+    # preforms an exit check
+    exit_check(user_choice=config_choice, tool_name="soupemapper")
+    # configures the tool settings based on the users choice
+    if config_choice == 1:
+        port = hs_prompts.port(tool_name="soupemapper")
+        hs_config["port"] = port
+        # moves to the next soupemapper menu (required menu)
+        return 100
+    elif config_choice == 2:
+        port_range = hs_prompts.port_range(tool_name="soupemapper")
+        hs_config["port_range"] = port_range
+        # moves to the next soupemapper menu (required menu)
         return 100
     elif config_choice == 3:
-        target = hs_prompts.target_website(tool_name="SQLI_scanner")
-        safe_thread_amount = determine_safe_thread_amount()
-        hs_config["thread_amount"] = safe_thread_amount
+        # returns to the previous menu
+        return 500
+
+def soupemapper_UX_menu_2() -> int:
+    # clears the terminal and calls the 2nd soupemapper menu
+    clear_terminal()
+    hs_menus.soupemapper_menu_2()
+    # prompts the user to choose an option from the menu
+    config_choice = hs_prompts.menu_prompt(first=0, last=4, tool_name="soupemapper")
+    # preforms an exit check
+    exit_check(user_choice=config_choice, tool_name="soupemapper")
+    # configures the tool settings based on the users choice
+    if config_choice == 1:
+        # Quick Scan
+        hs_config["request_per_minute"] = 100
+        hs_config["timeout_amount"] = 2
+        hs_config["scan_type"] = "quick"
+    elif config_choice == 2:
+        # Stealth Scan
+        hs_config["request_per_minute"] = 50
         hs_config["timeout_amount"] = 3
-        hs_config["stealth_features"] = True
-        hs_config["payload_file"] = "default"
-    elif config_choice == 4:
-        clear_terminal()
-        # 1000 is code for "return to the main menu"
-        return 1000
-
-def SQLI_scanner_UX_menu_2():
-    hs_menus.sub_domain_finder_setup_2()
-    config_choice = hs_prompts.menu_prompt(first=0, last=13, tool_name="SQLI_scanner")
-    exit_check(config_choice, tool_name="SQLI_scanner")
-    if config_choice == 1:
-        thread_amount = hs_prompts.thread_amount(tool_name="SQLI_scanner")
-        hs_config["thread_amount"] = thread_amount
-    elif config_choice == 2:
-        timeout_amount = hs_prompts.timeout(tool_name="SQLI_scanner")
-        hs_config["timeout_amount"] = timeout_amount
+        hs_config["scan_type"] = "stealth"
     elif config_choice == 3:
-        hs_config["stealth_features"] = True
+        # Aggressive Scan
+        hs_config["request_per_minute"] = 300
+        hs_config["timeout_amount"] = 1
+        hs_config["scan_type"] = "aggressive"
     elif config_choice == 4:
-        thread_amount = hs_prompts.thread_amount(tool_name="SQLI_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="SQLI_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-    elif config_choice == 5:
-        thread_amount = hs_prompts.thread_amount(tool_name="SQLI_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 6:
-        timeout_amount = hs_prompts.timeout(tool_name="SQLI_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 7:
-        thread_amount = hs_prompts.thread_amount(tool_name="SQLI_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="SQLI_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["stealth_features"] = True
-    elif config_choice == 8:
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 9:
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 10:
-        thread_amount = hs_prompts.thread_amount(tool_name="SQLI_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 11:
-        timeout_amount = hs_prompts.timeout(tool_name="SQLI_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 12:
-        thread_amount = hs_prompts.thread_amount(tool_name="SQLI_scanner")
-        timeout_amount = hs_prompts.timeout(tool_name="SQLI_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        hs_config["thread_amount"] = thread_amount
-        hs_config["timeout_amount"] = timeout_amount
-        hs_config["payload_file"] = payload_file
-        hs_config["stealth_features"] = True
-    elif config_choice == 13:
-        clear_terminal()
-        # 500 is code for "return to the previous menu"
+        # returns to the previous menu
         return 500
 
-# Destroyer UX Menus
+# -- UX Menu Packs -- #
 
-def destroyer_UX_menu_1():
-    hs_menus.destroyer_setup_1()
-    config_choice = hs_prompts.menu_prompt(first=0, last=3, tool_name="SQLI_scanner")
-    exit_check(config_choice, tool_name="destroyer")
-    file_to_destroy = hs_prompts.destroyer_file_prompt(tool_name="destroyer")
-    hs_config["destroy_file"] = file_to_destroy
-    if config_choice == 1:
-        hs_config["file_overwrite_amount"] = 10
-        hs_config["encrypt_file"] = True
-        hs_config["delete_file"] = True
-    elif config_choice == 2:
-        clear_terminal()
-        # Tells the program to call the advanced destroyer settings UX menu
-        return 100
-    elif config_choice == 3:
-        clear_terminal()
-        # 1000 is code for "return to the main menu"
-        return 1000
+# Tool Class UX Menu Pack
 
-def destroyer_UX_menu_2():
-    hs_menus.destroyer_setup_2()
-    config_choice = hs_prompts.menu_prompt(first=0, last=8, tool_name="SQLI_scanner")
-    exit_check(config_choice, tool_name="destroyer")
-    file_to_destroy = hs_prompts.destroyer_file_prompt(tool_name="destroyer")
-    if config_choice == 1:
-        hs_config["encrypt_file"] = True
-    elif config_choice == 2:
-        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
-        hs_config["file_overwrite_amount"] = overwrite_amount
-    elif config_choice == 3:
-        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
-        hs_config["file_overwrite_amount"] = overwrite_amount
-        hs_config["encrypt_file"] = True
-    elif config_choice == 4:
-        hs_config["delete_file"] = True
-    elif config_choice == 5:
-        hs_config["encrypt_file"] = True
-        hs_config["delete_file"] = True
-    elif config_choice == 6:
-        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
-        hs_config["file_overwrite_amount"] = overwrite_amount
-        hs_config["delete_file"] = True
-    elif config_choice == 7:
-        overwrite_amount = hs_prompts.destroyer_file_overwrite_amount()
-        hs_config["file_overwrite_amount"] = overwrite_amount
-        hs_config["encrypt_file"] = True
-        hs_config["delete_file"] = True
-    elif config_choice == 8:
-        clear_terminal()
-        # 500 is code for "return to the previous menu"
-        return 500
+def tool_class_menu_pack():
+    tool_class = hs_config["tool_class"]
+    if tool_class == "OSINT":
+        code = OSINT_tools_UX_menu()
+        return code
+    elif tool_class == "WEB":
+        code = web_tool_UX_menu()
+        return code
+    elif tool_class == "LAN":
+        code = LAN_tool_UX_menu()
+        return code
+    else:
+        print(f"{red}[!] Error: The Follwing Error(s) Has/Have Occured{reset}")
 
-# :: UX Menu Pack Functions :: #
+# OSINT Tool UX Menu Packs
 
-# Port Scanner UX Menu Pack
-
-def port_scanner_UX_menu_pack(current_UX_tool_menu: int):
-    clear_terminal()
+def patch_pirate_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_username(tool_name="patch_pirate")
     if current_UX_tool_menu == 1:
-        requested_UX_menu = port_scanner_UX_menu_1()
-        if requested_UX_menu == None:
-            port_scanner_UX_menu_pack(2)
-        # 1000 is code for "go back to the main/tool UX menu"
-        elif requested_UX_menu == 1000:
-            # Resets the program configuration
-            total_settings_reset()
-            menu_interface()
-    elif current_UX_tool_menu == 2:
-        requested_UX_menu = port_scanner_UX_menu_2()
-        # 100 == call the advanced settings menu (port_scanner_UX_menu_3)
-        if requested_UX_menu == 100:
-            port_scanner_UX_menu_pack(3)
-        # 500 == call the previous menu
-        elif requested_UX_menu == 500:
-            # Resets any possible settings that may have been conifgured in the last UX menu
-            port_scanner_UX_menu_1_settings_reset()
-            # Calls the previous UX menu
-            port_scanner_UX_menu_pack(1)
+        code = patch_pirate_UX_menu()
+        if code == 500:
+            patch_pirate_menu_settings_reset()
+            return code
         else:
-            # This code lets the program know the user is happy with the current configuration
+            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="patch_pirate")
+            # the user must be happy with the current tool config, so menu code 1500 is returned
             return 1500
-    elif current_UX_tool_menu == 3:
-        requested_UX_menu = port_scanner_UX_menu_3()
-        # 500 == call the previous menu
-        if requested_UX_menu == 500:
-            # Resets any possible settings that may have been conifgured in the last UX menu
-            port_scanner_UX_menu_2_settings_reset()
-            # Calls the previous UX menu
-            port_scanner_UX_menu_pack(2)
-        else:
-            # This code lets the program know the user is happy with the current configuration
-            return 1500
-
-# Subdomain Finder UX Menu Pack
-
-def subdomain_finder_UX_menu_pack(current_UX_menu: int):
-    clear_terminal()
-    if current_UX_menu == 1:
-        requested_UX_menu = subdomain_finder_UX_menu_1()
-        if requested_UX_menu == None:
-            # This code lets the program know the user is happy with the current configuration
-            return 1500
-        elif requested_UX_menu == 100:
-            requested_UX_menu = subdomain_finder_UX_menu_2()
-            if requested_UX_menu == 500:
-                squad_member_settings_reset()
-                subdomain_finder_UX_menu_pack(1)
-        elif requested_UX_menu == 1000:
-            squad_member_settings_reset()
-            menu_interface()
-
-# XSS Scanner UX Menu Pack
-
-def XSS_scanner_UX_menu_pack(current_UX_menu: int):
-    clear_terminal()
-    if current_UX_menu == 1:
-        requested_UX_menu = XSS_scanner_UX_menu_1()
-        if requested_UX_menu == None:
-            # This code lets the program know the user is happy with the current configuration
-            return 1500
-        elif requested_UX_menu == 100:
-            requested_UX_menu = XSS_scanner_UX_menu_2()
-            if requested_UX_menu == 500:
-                squad_member_settings_reset()
-                XSS_scanner_UX_menu_pack(1)
-        elif requested_UX_menu == 1000:
-            squad_member_settings_reset()
-            menu_interface()
-
-# Directory Traversal Scanner UX Menu Pack
-
-def dir_trav_scanner_UX_menu_pack(current_UX_menu: int):
-    clear_terminal()
-    if current_UX_menu == 1:
-        requested_UX_menu = dir_trav_scanner_UX_menu_1()
-        if requested_UX_menu == None:
-            # This code lets the program know the user is happy with the current configuration
-            return 1500
-        elif requested_UX_menu == 100:
-            requested_UX_menu = dir_trav_scanner_UX_menu_2()
-            if requested_UX_menu == 500:
-                squad_member_settings_reset()
-                dir_trav_scanner_UX_menu_pack(1)
-        elif requested_UX_menu == 1000:
-            squad_member_settings_reset()
-            menu_interface()
-
-# SQLI Scanner UX Menu Pack
-
-def SQLI_scanner_UX_menu_pack(current_UX_menu: int):
-    clear_terminal()
-    if current_UX_menu == 1:
-        requested_UX_menu = SQLI_scanner_UX_menu_1()
-        if requested_UX_menu == None:
-            # This code lets the program know the user is happy with the current configuration
-            return 1500
-        elif requested_UX_menu == 100:
-            requested_UX_menu = SQLI_scanner_UX_menu_2()
-            if requested_UX_menu == 500:
-                squad_member_settings_reset()
-                SQLI_scanner_UX_menu_pack(1)
-        elif requested_UX_menu == 1000:
-            squad_member_settings_reset()
-            menu_interface()
-
-# Destroyer UX Menu Pack
-
-def destroyer_UX_menu_pack(current_UX_menu: int):
-    clear_terminal()
-    if current_UX_menu == 1:
-        requested_UX_menu = destroyer_UX_menu_1()
-        if requested_UX_menu == None:
-            # This code lets the program know the user is happy with the current configuration
-            return 1500
-        elif requested_UX_menu == 100:
-            requested_UX_menu = destroyer_UX_menu_2()
-            if requested_UX_menu == 500:
-                destroyer_settings_reset()
-                destroyer_UX_menu_pack(1)
-        elif requested_UX_menu == 1000:
-            destroyer_settings_reset()
-            menu_interface()
-
-# :: UX Menu Interface Function :: #
-
-# Returns the dict once the user has completely configured all their settings for the program
-def menu_interface() -> dict:
-    # Asks the user to choose a tool and sets the tool in the hs_config dictionary (the program settings)
-    main_UX_menu()
-    # Determines which tool menu to call based on the tool configuration in hs_config dictionary
-    # NOTE: The user will be prompted for input a series of times and the rest of the programs settings will -->
-    # will be configured based on the users input
-    if hs_config["tool"] == "port_scanner":
-        code = port_scanner_UX_menu_pack(1)
-    elif hs_config["tool"] == "subdomain_finder":
-        code = subdomain_finder_UX_menu_pack(1)
-    elif hs_config["tool"] == "XSS_vuln_scanner":
-        code = XSS_scanner_UX_menu_pack(1)
-    elif hs_config["tool"] == "dir_trav_vuln_scanner":
-        code = dir_trav_scanner_UX_menu_pack(1)
-    elif hs_config["tool"] == "SQLI_vuln_scanner":
-        code = SQLI_scanner_UX_menu_pack(1)
-    elif hs_config["tool"] == "destroyer":
-        code = destroyer_UX_menu_pack(1)
     else:
-        print(f"{red}[!] Error: Unknown{reset}")
+        print(f"{red}[!] Error: Invalid UX Menu Number For Patch Pirate{reset}")
         exit_program()
-    if code == None or code == 1500:
-        return hs_config
+
+# Web Tool UX Menu Packs
+
+def subdomain_finder_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="subdomain_finder")
+    if current_UX_tool_menu == 1:
+        code = subdomain_finder_UX_menu()
+        if code == 500:
+            web_tool_menu_settings_reset()
+            return code
+        else:
+            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="subdomain_finder")
+            # the user must be happy with the current tool config, so menu code 1500 is returned
+            return 1500
     else:
-        print(f"{red}[!] Error: Unknown{reset}")
+        print(f"{red}[!] Error: Invalid UX Menu Number For Subdomain Finder{reset}")
+        exit()
+
+def SQLI_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="SQLI_scanner")
+    if current_UX_tool_menu == 1:
+        code = SQLI_vuln_scanner_UX_menu()
+        if code == 500:
+            web_tool_menu_settings_reset()
+            return code
+        else:
+            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="SQLI_scanner")
+            # the user must be happy with the current tool config, so menu code 1500 is returned
+            return 1500
+    else:
+        print(f"{red}[!] Error: Invalid UX Menu Number For SQLI Vuln Scanner{reset}")
+        exit()
+
+def XSS_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="XSS_scanner")
+    if current_UX_tool_menu == 1:
+        code = XSS_vuln_scanner_UX_menu()
+        if code == 500:
+            web_tool_menu_settings_reset()
+            return code
+        else:
+            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="XSS_scanner")
+            # the user must be happy with the current tool config, so menu code 1500 is returned
+            return 1500
+    else:
+        print(f"{red}[!] Error: Invalid UX Menu Number For XSS Vuln Scanner{reset}")
+        exit()
+
+def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="dir_trav_scanner")
+    if current_UX_tool_menu == 1:
+        code = dir_trav_vuln_scanner_UX_menu()
+        if code == 500:
+            web_tool_menu_settings_reset()
+            return code
+        else:
+            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="dir_trav_scanner")
+            # the user must be happy with the current tool config, so menu code 1500 is returned
+            return 1500
+    else:
+        print(f"{red}[!] Error: Invalid UX Menu Number For Dir Trav Vuln Scanner{reset}")
+        exit()
+
+# LAN Tool UX Menu Packs
+
+def soupemapper_UX_menu_pack() -> int:
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_IPv4(tool_name="soupemapper")
+
+    while True:
+        # Step 1: Run soupemapper menu 1
+        code = soupemapper_UX_menu_1()
+        if code == 500:
+            # User chose to go back to LAN tool menu
+            soupemapper_UX_menu_1_settings_reset()
+            return 500
+        elif code == 100:
+            # Step 2: Run soupemapper menu 2
+            while True:
+                code2 = soupemapper_UX_menu_2()
+                if code2 == 500:
+                    # User chose to go back to menu 1
+                    soupemapper_UX_menu_2_settings_reset()
+                    # Break to go back to outer loop (menu 1)
+                    break
+                else:
+                    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="soupemapper")
+                    # User is happy with configuration, ready to run tool
+                    return 1500
+
+# :: UX Menu Interface Functions :: #
+
+def write_settings_JSON_to_file(settings: dict):
+    with open("../Soup/Lib/Data/Input_Data/input.json", "w") as input_file:
+        json.dump(settings, input_file, indent=4)
+
+
+def menu_interface(start_point: int, code: int):
+    if start_point == 1:
+        main_menu_code = main_UX_menu()
+        menu_interface(start_point=2, code=main_menu_code)
+    elif start_point == 2:
+        if code == 100:
+            code = tool_class_menu_pack()
+            if code == 1000:
+                # Return to main menu
+                menu_interface(start_point=1, code=0)
+            elif code == 100:
+                if hs_config["tool_class"] == "OSINT":
+                    if hs_config["tool"] == "patch_pirate":
+                        code = patch_pirate_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=100)  # Go back to OSINT tool menu
+                        elif code == 1500:
+                            # ready to run the tool
+                            write_settings_JSON_to_file(settings=hs_config)
+                            pass
+                elif hs_config["tool_class"] == "WEB":
+                    if hs_config["tool"] == "subdomain_finder":
+                        code = subdomain_finder_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=100)
+                        elif code == 1500:
+                            # ready to run the tool
+                            write_settings_JSON_to_file(settings=hs_config)
+                            pass
+                    elif hs_config["tool"] == "SQLI_scanner":
+                        code = SQLI_vuln_scanner_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=100)
+                        elif code == 1500:
+                            # ready to run the tool
+                            write_settings_JSON_to_file(settings=hs_config)
+                            pass
+                    elif hs_config["tool"] == "XSS_scanner":
+                        code = XSS_vuln_scanner_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=100)
+                        elif code == 1500:
+                            # ready to run the tool
+                            write_settings_JSON_to_file(settings=hs_config)
+                            pass
+                    elif hs_config["tool"] == "dir_trav_scanner":
+                        code = dir_trav_vuln_scanner_UX_menu_pack(1)
+                        if code == 500:
+                            menu_interface(start_point=2, code=100)
+                        elif code == 1500:
+                            # ready to run the tool
+                            write_settings_JSON_to_file(settings=hs_config)
+                            pass
+                elif hs_config["tool_class"] == "LAN":
+                    if hs_config["tool"] == "soupemapper":
+                        code = soupemapper_UX_menu_pack()
+                        if code == 500:
+                            menu_interface(start_point=2, code=100)  # Go back to LAN tool menu
+                        elif code == 1500:
+                            # ready to run the tool
+                            write_settings_JSON_to_file(settings=hs_config)
+                            pass
+                else:
+                    print(f"{red}[!] Error: Tool Class Does Not Exist{reset}")
+        else:
+            print(f"{red}Error: Unknown.{reset}")
+            exit_program()

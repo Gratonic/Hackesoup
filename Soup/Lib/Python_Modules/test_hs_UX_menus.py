@@ -2,16 +2,17 @@
 # :: Author Information and Program Details :: #
 
 File Name: hs_validator.py
-Author(s): Gratonic (https://github.com/Gratonic)
+Author(s): Gratonic (https://github.com/Gratonic) and ibrahim-sisar (https://github.com/ibrahim-sisar)
 Written In: Python 3.10.12
 Dependencie(s): colorama
-Last Modified: February 8th, 2025
+Last Modified: April 25th, 2025
 
 # :: Description :: #
 
 This python file contains the title information used in the hs_menus.py file to build the portion of the header for the menu
 portion of the UX menus.
 """
+
 # TODO: Fix the minor bug causing you have to enter the target file twice after going back to the first destroyer UX menu -->
 # in the destroyer_UX_menu_pack() function or one of the individual UX menus, functions are somewhere between line -->
 # 700 and line 807
@@ -46,6 +47,7 @@ gray = colorama.Fore.LIGHTBLACK_EX
 # This dictionary will change as the user configures the tool they chose
 # NOTE: Some tools may not change all the settings because either A) the user doesn't change the setting(s) or B) the chosen tool doesn't use all the settings
 hs_config = {
+    "target": None,
     "tool": None,
     "tool_class": None,
     "target": None,
@@ -127,6 +129,7 @@ def exit_check(user_choice: int, tool_name: str) -> None:
 # -- Settings Reset Functions -- #
 
 def total_settings_reset():
+    hs_config["target"] = None
     hs_config["tool"] = None
     hs_config["tool_class"] = None
     hs_config["target"] = None
@@ -160,10 +163,12 @@ def web_tool_menu_settings_reset():
 
 def soupemapper_UX_menu_1_settings_reset():
     hs_config["target"] = None
+    hs_config["target"] = None
     hs_config["port"] = None
     hs_config["port_range"] = None
 
 def soupemapper_UX_menu_2_settings_reset():
+    hs_config["target"] = None
     hs_config["scan_type"] = None
     hs_config["save_file"] = None
 
@@ -529,6 +534,8 @@ def tool_class_menu_pack():
 # OSINT Tool UX Menu Packs
 
 def patch_pirate_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_username(tool_name="patch_pirate")
     if current_UX_tool_menu == 1:
         code = patch_pirate_UX_menu()
         if code == 500:
@@ -544,6 +551,8 @@ def patch_pirate_UX_menu_pack(current_UX_tool_menu: int):
 # Web Tool UX Menu Packs
 
 def subdomain_finder_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="subdomain_finder")
     if current_UX_tool_menu == 1:
         code = subdomain_finder_UX_menu()
         if code == 500:
@@ -557,6 +566,8 @@ def subdomain_finder_UX_menu_pack(current_UX_tool_menu: int):
         exit()
 
 def SQLI_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="SQLI_scanner")
     if current_UX_tool_menu == 1:
         code = SQLI_vuln_scanner_UX_menu()
         if code == 500:
@@ -570,6 +581,8 @@ def SQLI_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
         exit()
 
 def XSS_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="XSS_scanner")
     if current_UX_tool_menu == 1:
         code = XSS_vuln_scanner_UX_menu()
         if code == 500:
@@ -583,6 +596,8 @@ def XSS_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
         exit()
 
 def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_website(tool_name="dir_trav_scanner")
     if current_UX_tool_menu == 1:
         code = dir_trav_vuln_scanner_UX_menu()
         if code == 500:
@@ -598,26 +613,25 @@ def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
 # LAN Tool UX Menu Packs
 
 def soupemapper_UX_menu_pack() -> int:
+    # asks the user for the target and sets it
+    hs_config["target"] = hs_prompts.target_IPv4(tool_name="soupemapper")
+
     while True:
         # Step 1: Run soupemapper menu 1
         code = soupemapper_UX_menu_1()
-
         if code == 500:
             # User chose to go back to LAN tool menu
             soupemapper_UX_menu_1_settings_reset()
             return 500
-
         elif code == 100:
             # Step 2: Run soupemapper menu 2
             while True:
                 code2 = soupemapper_UX_menu_2()
-
                 if code2 == 500:
                     # User chose to go back to menu 1
                     soupemapper_UX_menu_2_settings_reset()
                     # Break to go back to outer loop (menu 1)
                     break
-
                 else:
                     # User is happy with configuration, ready to run tool
                     return 1500
@@ -632,99 +646,59 @@ def menu_interface(start_point: int, code: int):
         if code == 100:
             code = tool_class_menu_pack()
             if code == 1000:
-                menu_interface(start_point=1)
+                # Return to main menu
+                menu_interface(start_point=1, code=0)
             elif code == 100:
                 if hs_config["tool_class"] == "OSINT":
                     if hs_config["tool"] == "patch_pirate":
                         code = patch_pirate_UX_menu_pack(1)
                         if code == 500:
-                            menu_interface(start_point=2, code=code)
+                            menu_interface(start_point=2, code=100)  # Go back to OSINT tool menu
                         elif code == 1500:
-                            print("reached the happy 1500")
+                            # ready to run the tool
+                            pass
                 elif hs_config["tool_class"] == "WEB":
                     if hs_config["tool"] == "subdomain_finder":
                         code = subdomain_finder_UX_menu_pack(1)
                         if code == 500:
-                            menu_interface(start_point=2, code=code)
+                            menu_interface(start_point=2, code=100)
                         elif code == 1500:
-                            print("reached the happy 1500")
+                            # ready to run the tool
+                            pass
                     elif hs_config["tool"] == "SQLI_scanner":
                         code = SQLI_vuln_scanner_UX_menu_pack(1)
                         if code == 500:
-                            menu_interface(start_point=2, code=code)
+                            menu_interface(start_point=2, code=100)
                         elif code == 1500:
-                            print("reached the happy 1500")
+                            # ready to run the tool
+                            pass
                     elif hs_config["tool"] == "XSS_scanner":
                         code = XSS_vuln_scanner_UX_menu_pack(1)
                         if code == 500:
-                            menu_interface(start_point=2, code=code)
+                            menu_interface(start_point=2, code=100)
                         elif code == 1500:
-                            print("reached the happy 1500")
+                            # ready to run the tool
+                            pass
                     elif hs_config["tool"] == "dir_trav_scanner":
                         code = dir_trav_vuln_scanner_UX_menu_pack(1)
                         if code == 500:
-                            menu_interface(start_point=2, code=code)
+                            menu_interface(start_point=2, code=100)
                         elif code == 1500:
-                            print("reached the happy 1500")
+                            # ready to run the tool
+                            pass
                 elif hs_config["tool_class"] == "LAN":
                     if hs_config["tool"] == "soupemapper":
                         code = soupemapper_UX_menu_pack()
                         if code == 500:
-                            menu_interface(start_point=2, code=code)
+                            menu_interface(start_point=2, code=100)  # Go back to LAN tool menu
                         elif code == 1500:
-                            print("reached the happy 1500")
+                            # ready to run the tool
+                            pass
                 else:
                     print(f"{red}[!] Error: Tool Class Does Not Exist{reset}")
         else:
-            print("Error")
-            print(code)
-            print(hs_config["tool_class"])
-            print(hs_config["tool"])
+            print(f"{red}Error: Unknown{reset}")
+            exit_program()
 
+# Start the interface
 menu_interface(start_point=1, code=0)
-
-"""
-def menu_interface():
-    # calls the respective UX menu for the chosen tool
-    if hs_config["tool"] == "patch_pirate":
-        code = patch_pirate_UX_menu_pack(1)
-    elif hs_config["tool"] == "subdomain_finder":
-        code = subdomain_finder_UX_menu_pack(1)
-    elif hs_config["tool"] == "SQLI_scanner":
-        code = SQLI_vuln_scanner_UX_menu_pack(1)
-    elif hs_config["tool"] == "XSS_scanner":
-        code = XSS_vuln_scanner_UX_menu_pack(1)
-    elif hs_config["tool"] == "dir_trav_scanner":
-        dir_trav_vuln_scanner_UX_menu_pack(1)
-    elif hs_config["tool"] == "soupemapper":
-        code = soupemapper_UX_menu_pack(1)
-"""
-
-"""
-Status Codes For The Menu Interface Functions:
-
-100 - Call next menu for the selected tool
-500 - Return to previous menu
-1000 - Return to main menu
-1500 - Lets the program know the user is happy with the configuration and ready to run the selected tool
-"""
-
-"""
-def menu_interface_step_2():
-    # calls the right UX menu pack based on the tool that has been chosen (goes by calss to speed things up)
-    if hs_config["tool_class"] == "OSINT":
-        if hs_config["tool"] == "patch_pirate":
-            patch_pirate_UX_menu_pack(1)
-    elif hs_config["tool_class"] == "WEB":
-        if hs_config["tool"] == "subdomain_finder":
-            subdomain_finder_UX_menu_pack(1)
-        elif hs_config["tool"] == "SQLI_scanner":
-            SQLI_vuln_scanner_UX_menu_pack(1)
-        elif hs_config["tool"] == "XSS_scanner":
-            XSS_vuln_scanner_UX_menu_pack(1)
-        elif hs_config["tool"] == "dir_trav_scanner":
-            dir_trav_vuln_scanner_UX_menu_pack(1)
-    elif hs_config["tool_class"] == "LAN":
-        if hs_config["tool"] == "soupemapper":
-            soupemapper_UX_menu_pack(1)
-"""

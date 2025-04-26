@@ -96,7 +96,7 @@ def construct_menu(menu_title_func_name: str, mops: dict, meds: dict, tool_versi
 # Grabs the menu information and builds the menu using the construct_menu() function
 def menu_builder(menu_directory_name: str, menu_number: int) -> None:
     # Grabs the respective JSON data
-    file_path = f"../Data/Menu_Information/{menu_directory_name}/menu_{menu_number}.json"
+    file_path = f"../Soup/Lib/Data/Menu_Information/{menu_directory_name}/menu_{menu_number}.json"
     with open(file_path, "r") as menu_JSON_file:
         menu_info = json.load(menu_JSON_file)
     # Extracts the menu header information

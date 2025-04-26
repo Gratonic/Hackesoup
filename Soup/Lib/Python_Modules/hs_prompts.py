@@ -2,6 +2,7 @@
 import colorama
 import hs_validator
 import time
+import os
 
 # :: Global Variables :: #
 
@@ -23,6 +24,21 @@ white = colorama.Fore.WHITE
 gray = colorama.Fore.LIGHTBLACK_EX
 
 # :: Functionality :: #
+
+# -- Terminal Clear -- #
+
+def clear_terminal():
+    # Check the operating system and clear the terminal
+    if os.name == 'posix':
+        # For Unix-like systems (Linux, macOS)
+        os.system('clear')
+    else:
+        # For Windows
+        os.system('cls')
+
+# Example usage
+clear_terminal()
+
 
 # -- Exit Functions -- #
 
@@ -125,6 +141,16 @@ def target_website(tool_name: str) -> str:
         except:
             print(f"{red}[!] Error: Invalid URL{reset}")
 
+def target_username(tool_name: str):
+    while True:
+        try:
+            target = str(input(f"{magenta}Please Enter A Username To Target {green}[Ex: CrashOverride or AcidBurn]: {reset}"))
+            return target
+        except KeyboardInterrupt:
+            exit_program(tool_name=tool_name)
+        except Exception as e:
+            print(f"{red}[!] Error: Invalid Username{reset}")
+
 # API Token Prompt
 
 def api_token(tool_name: str):
@@ -209,9 +235,20 @@ def requests_per_minute(tool_name: str):
 def save_to_file(tool_name: str):
     while True:
         try:
-            save = str(input(f"{magenta}Would You Like To Save The Tools Output? {green}[y/n]{magenta}: {reset}"))
+            save = str(input(f"{magenta}Would You Like To Save The Tools Output To A JSON File? {green}[y/n]{magenta}: {reset}"))
             if save == "y" or save == "Y" or save == "yes" or save == "YES":
-                return True
+                # lets the user know where the file will be saved
+                print(f"{yellow}[*] The Tool Output Will Be Saved Here{magenta}:{blue} ./Hackesoup/Saves/{reset}")
+                try:
+                    # waits a few seconds
+                    time.sleep(3)
+                    # clear terminal
+                    clear_terminal()
+                    # lets the program know the user wants to save the output to a file
+                    return True
+                except:
+                    # a message is still printed saying goodbye but doing it here will cause the message to be printed twice
+                    exit()
             elif save == "n" or save == "N" or save == "no" or save == "NO":
                 return False
             else:
@@ -219,8 +256,9 @@ def save_to_file(tool_name: str):
         except KeyboardInterrupt:
             exit_program(tool_name=tool_name)
         except:
-            print(f"{red}[!] Error: Unknown{reset}")
-            exit_program(tool_name=tool_name)
+            if save != "y" or save != "Y" or save != "yes" or save != "YES":
+                print(f"{red}[!] Error: Unknown{reset}")
+                exit_program(tool_name=tool_name)
 
 def payload_file_path(tool_name: str) -> str:
     try:
