@@ -58,6 +58,7 @@ if __name__ == "__main__":
     # calls the menu interface, first step
     hs_UX_menus.menu_interface(start_point=1, code=0)
     # clears the input file and output file in case their is any sensitive information, last step
-    clear_input_file()
-    clear_output_file()
+    # NOTE: Will be uncommented when all tools have been added to the menu
+    # clear_input_file()
+    # clear_output_file()
 
