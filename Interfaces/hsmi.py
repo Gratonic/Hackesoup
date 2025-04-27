@@ -4,7 +4,7 @@
 File Name: hsmi.py
 Author(s): Gratonic (https://github.com/Gratonic) and ibrahim-sisar (https://github.com/ibrahim-sisar) and Br0k3nPix3l (https://github.com/FailurePoint)
 Written In: Python 3.10.12
-Dependencie(s): sys, os, importlib, colorama, hs_UX_menus, patch_pirate, json
+Dependencie(s): sys, os, importlib, colorama, hs_UX_menus, patch_pirate, json, datetime
 Last Modified: April 26th, 2025
 
 # :: Description :: #
@@ -20,6 +20,7 @@ import os
 import importlib
 import colorama # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 import json
+from datetime import datetime
 
 # -- Python Module Imports -- #
 
@@ -60,6 +61,9 @@ gray = colorama.Fore.LIGHTBLACK_EX
 # placeholder for the tool settings, just need to get the tool chosen
 settings = None
 
+# placeholder for the tool output, used when the user wants to save the tool output
+output = None
+
 # clears the input JSON file
 def clear_input_file():
     # recreates the file
@@ -77,8 +81,29 @@ def read_input_file():
     with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
         settings = json.load(settings_file)
 
+# read the output JSON
+def read_output_file():
+    global output
+    with open("../Soup/Lib/Data/Output_Data/output.json", "r") as output_file:
+        output = json.load(output_file)
+
+# saves the output file
+def save_output_to_file():
+    # grabs the output data
+    read_output_file()
+    # forms the file path to write the output data to for the save
+    now = datetime.now()
+    formatted_time = now.strftime('%Y-%m-%d_%H-%M-%S')
+    save_file_path = f"../Saves/save_{formatted_time}.json"
+    with open(save_file_path, "w") as save_file:
+        json.dump(output, save_file, indent=4)
 
 if __name__ == "__main__":
+    # clears the input file and output file in case their is any sensitive information, first step
+    # NOTE: Will be uncommented when all tools have been added to the menu
+    clear_input_file()
+    clear_output_file()
+    
     # calls the menu interface, first step
     hs_UX_menus.menu_interface(start_point=1, code=0)
     # grabs the settings
@@ -89,7 +114,11 @@ if __name__ == "__main__":
         patch_pirate.run()
     else:
         pass
-    # clears the input file and output file in case their is any sensitive information, last step
+
+    if settings["save_file"] == True:
+        save_output_to_file()
+
+    # clears the input file and output file again in case their is any sensitive information, last step
     # NOTE: Will be uncommented when all tools have been added to the menu
     clear_input_file()
     clear_output_file()
