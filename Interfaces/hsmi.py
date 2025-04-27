@@ -4,7 +4,7 @@
 File Name: hsmi.py
 Author(s): Gratonic (https://github.com/Gratonic) and ibrahim-sisar (https://github.com/ibrahim-sisar) and Br0k3nPix3l (https://github.com/FailurePoint)
 Written In: Python 3.10.12
-Dependencie(s): sys, os, importlib, colorama
+Dependencie(s): sys, os, importlib, colorama, hs_UX_menus, patch_pirate, json
 Last Modified: April 26th, 2025
 
 # :: Description :: #
@@ -19,7 +19,7 @@ import sys
 import os
 import importlib
 import colorama # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
-
+import json
 
 # -- Python Module Imports -- #
 
@@ -55,6 +55,10 @@ light_magenta = colorama.Fore.LIGHTMAGENTA_EX
 white = colorama.Fore.WHITE
 gray = colorama.Fore.LIGHTBLACK_EX
 
+# :: Global Variables :: #
+
+# placeholder for the tool settings, just need to get the tool chosen
+settings = None
 
 # clears the input JSON file
 def clear_input_file():
@@ -67,15 +71,25 @@ def clear_output_file():
     with open("../Soup/Lib/Data/Output_Data/output.json", "w"):
         pass
 
+# reads the input JSON
+def read_input_file():
+    global settings
+    with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
+        settings = json.load(settings_file)
 
 
 if __name__ == "__main__":
     # calls the menu interface, first step
     hs_UX_menus.menu_interface(start_point=1, code=0)
-    # runs patch pirate
-    patch_pirate.run()
+    # grabs the settings
+    read_input_file()
+    # checks the tool and determines which one to call
+    if settings["tool"] == "patch_pirate":
+        # runs patch pirate
+        patch_pirate.run()
+    else:
+        pass
     # clears the input file and output file in case their is any sensitive information, last step
     # NOTE: Will be uncommented when all tools have been added to the menu
-    # clear_input_file()
-    # clear_output_file()
-
+    clear_input_file()
+    clear_output_file()
