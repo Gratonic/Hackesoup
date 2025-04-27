@@ -1,0 +1,1 @@
+/home/cryptex/Desktop/Programming/Hackesoup/Soup/Lib/Rust_Modules/hspatchpiratescanner/target/debug/libhspatchpiratescanner.so: /home/cryptex/Desktop/Programming/Hackesoup/Soup/Lib/Rust_Modules/hspatchpiratescanner/src/hspatchpiratescanner.rs

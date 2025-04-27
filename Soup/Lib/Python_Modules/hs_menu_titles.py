@@ -101,20 +101,6 @@ def sqli_scanner():
     menu_title_bar = f"____________________________________________________________________/"
     return [ascii_tool_title_art, menu_title_bar, tool_title]
 
-
-def destroyer():
-    ascii_tool_title_art = """
-    ______         _                             
-    |  _  \       | |                            
-    | | | |___ ___| |_ _ __ ___  _   _  ___ _ __ 
-    | | | / _ / __| __| '__/ _ \| | | |/ _ | '__|
-    | |/ |  __\__ | |_| | | (_) | |_| |  __| |   
-    |___/ \___|___/\__|_|  \___/ \__  |\___|_|   
-                                  |___|          """
-    tool_title = f"Destroyer"
-    menu_title_bar = f"___________________________________________________/"
-    return [ascii_tool_title_art,  menu_title_bar, tool_title]
-
 def patch_pirate():
     ascii_tool_title_art = """
     ______     _       _      ______ _           _       

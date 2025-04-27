@@ -1,0 +1,13 @@
+{
+    "target": "Gratonic",
+    "tool": "patch_pirate",
+    "tool_class": "OSINT",
+    "API_token": null,
+    "port": null,
+    "port_range": null,
+    "timeout_amount": null,
+    "request_per_minute": null,
+    "scan_type": null,
+    "payload_file": null,
+    "save_file": false
+}

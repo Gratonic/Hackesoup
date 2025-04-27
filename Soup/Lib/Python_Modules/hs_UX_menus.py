@@ -70,8 +70,8 @@ hs_config = {
 def clear_terminal():
     if os.name == "posix": # For Linux or MacOS
         os.system("clear")
-    elif os.name == "nt": # For Windows
-        os.system("cls")
+    else:
+        os.system("cls") # For Windows
 
 # -- Exit Functions -- #
 
