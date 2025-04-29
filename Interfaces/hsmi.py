@@ -37,7 +37,7 @@ tools_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools')
 sys.path.append(tools_path)
 
 # patch_pirate_module
-patch_pirate = importlib.import_module('patch_pirate')
+# patch_pirate = importlib.import_module('patch_pirate')
 
 # Colors
 reset = colorama.Fore.RESET
@@ -109,9 +109,10 @@ if __name__ == "__main__":
     # grabs the settings
     read_input_file()
     # checks the tool and determines which one to call
-    if settings["tool"] == "patch_pirate":
+    if settings["tool"]:
         # runs patch pirate
-        patch_pirate.run()
+        # patch_pirate.run()
+        print(f"{red}Tool not implemented yet{reset}")
     else:
         pass
 
