@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "scan_date": "2025-04-30T20:54:57.961286",
+    "total_subdomains": 0,
+    "vulnerabilities_found": 0
+  },
+  "results": {
+    "target": "https://huangxuan.me/",
+    "subdomains": [],
+    "vulnerabilities": {}
+  }
+}
