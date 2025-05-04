@@ -109,12 +109,10 @@ if __name__ == "__main__":
     # grabs the settings
     read_input_file()
     # checks the tool and determines which one to call
-    if settings["tool"]:
-        # runs patch pirate
-        # patch_pirate.run()
-        print(f"{red}Tool not implemented yet{reset}")
+    if settings["tool"] == 'subdomain_finder':
+        importlib.import_module('subdomain').main()
     else:
-        pass
+        print(f"{red}Tool not implemented yet{reset}")
 
     if settings["save_file"] == True:
         save_output_to_file()

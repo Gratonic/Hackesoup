@@ -2,7 +2,8 @@ import requests, json, re, os, sys, dns.resolver, logging, random, time
 from collections import defaultdict
 from datetime import datetime
 
-
+with open("../Soup/Lib/Data/Input_Data/input.json") as file:
+    print(file)
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     level=logging.INFO,
