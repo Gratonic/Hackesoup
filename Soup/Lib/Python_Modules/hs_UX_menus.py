@@ -311,7 +311,7 @@ def subdomain_finder_UX_menu() -> int:
     clear_terminal()
     hs_menus.subdomain_finder_menu()
     # prompts the user to choose an option from the menu
-    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="subdomain_finder")
+    config_choice = hs_prompts.menu_prompt(first=0, last=8, tool_name="subdomain_finder")
     # preforms an exit check
     exit_check(user_choice=config_choice, tool_name="subdomain_finder")
     # configures the tool settings based on the users choice
@@ -342,6 +342,11 @@ def subdomain_finder_UX_menu() -> int:
         hs_config["payload_file"] = payload_file
         hs_config["timeout_amount"] = timeout
     elif config_choice == 7:
+        hs_config["request_per_minute"] = 180
+        hs_config["payload_file"] = None
+        hs_config["timeout_amount"] = 1
+
+    elif config_choice == 8:
         # returns to the previous menu
         return 500
 
