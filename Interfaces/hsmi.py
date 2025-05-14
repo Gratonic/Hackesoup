@@ -35,9 +35,12 @@ hs_UX_menus = importlib.import_module('hs_UX_menus')
 
 tools_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools')
 sys.path.append(tools_path)
+# saifandor module
+Saifandor_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools', 'Saifandor')
+sys.path.append(Saifandor_path)
 
 # patch_pirate_module
-# patch_pirate = importlib.import_module('patch_pirate')
+patch_pirate = importlib.import_module('patch_pirate')
 
 # Colors
 reset = colorama.Fore.RESET
@@ -110,12 +113,14 @@ if __name__ == "__main__":
     read_input_file()
     # checks the tool and determines which one to call
     if settings["tool"] == 'subdomain_finder':
-        importlib.import_module('subdomain').main()
+        importlib.import_module('Saifandor').cli_entry_point()
+    elif settings["tool"] == "patch_pirate":
+        # runs patch pirate
+        patch_pirate.run()
     else:
         print(f"{red}Tool not implemented yet{reset}")
 
-    if settings["save_file"] == True:
-        save_output_to_file()
+
 
     # clears the input file and output file again in case their is any sensitive information, last step
     # NOTE: Will be uncommented when all tools have been added to the menu
