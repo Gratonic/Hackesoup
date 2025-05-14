@@ -2,14 +2,29 @@
     "header_info": {
         "menu_title_func_name": "sub_domain_finder",
         "tool_version": "1.0",
-        "title_colors": ["red", "yellow", "white", "green"]
+        "title_colors": [
+            "red",
+            "yellow",
+            "white",
+            "green"
+        ]
     },
     "options": {
-        "1": "Configure A Set Amount Of RPM", "2": "Use Custom Payload File", "3": "Set Timeout", 
-        "4": "Configure A Set Amount Of RPM and Use Custom Payload File", "5": "Configure A Set Amount Of RPM and Set Timeout", "6": "Configure A Set Amount Of RPM, Use Custom Payload File, and Set Timeout"
+        "1": "Configure A Set Amount Of RPM",
+        "2": "Use Custom Payload File",
+        "3": "Set Timeout",
+        "4": "Configure A Set Amount Of RPM and Use Custom Payload File",
+        "5": "Configure A Set Amount Of RPM and Set Timeout",
+        "6": "Configure A Set Amount Of RPM, Use Custom Payload File, and Set Timeout",
+        "7": "Start scanning"
     },
     "descriptions": {
-        "1": "set the requests per minute to a desired amount (default: 180)", "2": "configure the tool to use a custom payload File", "3": "configure the tool timeout amount (default: 1 second)", 
-        "4": "set the requests per minute to a desired amount and use a custom payload File", "5": "set the request per minute to a desired amount and set timeout", "6": "set the requests per minute to a desired amount, use a custom payload File, and set timeout"
+        "1": "set the requests per minute to a desired amount (default: 180)",
+        "2": "configure the tool to use a custom payload File",
+        "3": "configure the tool timeout amount (default: 5 second)",
+        "4": "set the requests per minute to a desired amount and use a custom payload File",
+        "5": "set the request per minute to a desired amount and set timeout",
+        "6": "set the requests per minute to a desired amount, use a custom payload File, and set timeout",
+        "7": "The default settings will be selected and the tool will be run."
     }
 }
