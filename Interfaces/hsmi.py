@@ -39,8 +39,8 @@ sys.path.append(tools_path)
 Saifandor_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools', 'Saifandor')
 sys.path.append(Saifandor_path)
 
-# patch_pirate_module
-patch_pirate = importlib.import_module('patch_pirate')
+# patch_pirate_module - hspatchpirate scanner only works on Linux Mint 21.x (not even 22)
+# patch_pirate = importlib.import_module('patch_pirate')
 
 # Colors
 reset = colorama.Fore.RESET
@@ -115,8 +115,9 @@ if __name__ == "__main__":
     if settings["tool"] == 'subdomain_finder':
         importlib.import_module('Saifandor').cli_entry_point()
     elif settings["tool"] == "patch_pirate":
+        print(f"{yellow} [*] Notice: Patch Pirate is currently unavailable, sorry {blue}:({reset}")
         # runs patch pirate
-        patch_pirate.run()
+        # patch_pirate.run()
     else:
         print(f"{red}Tool not implemented yet{reset}")
 

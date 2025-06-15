@@ -24,7 +24,7 @@ import json
 # :: Functions :: #
 
 # Creates and prints the menu portion of the UX menu
-def construct_menu(menu_title_func_name: str, mops: dict, meds: dict, tool_version: str, title_colors: list) -> vars:
+def construct_menu(menu_title_func_name: str, mops: dict | None, meds: dict | None, tool_version: str, title_colors: list) -> vars:
     # Title Content
     _title_func = getattr(hs_menu_titles, menu_title_func_name)
     _title_contents = _title_func()
@@ -33,62 +33,77 @@ def construct_menu(menu_title_func_name: str, mops: dict, meds: dict, tool_versi
     _title_colors = title_colors
     _small_title = _title_contents[2]
 
-    # Menu Options, Menu Option Numbers, and Menu Option Descriptions
-    _menu_opt_nums = list(mops.keys())
-    _menu_opts = list(mops.values())
-    _menu_descriptions = list(meds.values())
-
     # Initalizes the menu
     menu = menataur.Menataur()
 
-    # Constructs the menu header (title, program support info, etc.)
-    menu.add_header(
-        ascii_art_title=_ascii_title,
-        title_bar=_title_bar,
-        title_colors = _title_colors,
-        small_title=_small_title,
-        program_version_color = "green",
-        program_version_num = tool_version,
-        os_support_message_color = "black",
-        os_support_highlight_color = "yellow",
-        os_support_color = "magenta",
-        os_support_info = ["Linux"]
-    )
+    if mops["1"] != None and meds["1"] != None:
+        # Menu Options, Menu Option Numbers, and Menu Option Descriptions
+        _menu_opt_nums = list(mops.keys())
+        _menu_opts = list(mops.values())
+        _menu_descriptions = list(meds.values())
 
-    # Adds the Exit Option to the menu
-    menu.add_body(
-    accent_color="grey", 
-    menu_option_number=0, 
-    menu_option_color="grey", 
-    menu_option="Exit"
-    )
-    _pos = 0
-    _opt_num = 1
-    _last_option = 1
-
-    # Constructs the main portion of the menu (options with their descriptions)
-    for element in range(len(_menu_opts)):
-        menu.add_paragraph(
-            text_color="blue", 
-            text=_menu_descriptions[_pos]
+        # Constructs the menu header (title, program support info, etc.)
+        menu.add_header(
+            ascii_art_title=_ascii_title,
+            title_bar=_title_bar,
+            title_colors = _title_colors,
+            small_title=_small_title,
+            program_version_color = "green",
+            program_version_num = tool_version,
+            os_support_message_color = "black",
+            os_support_highlight_color = "yellow",
+            os_support_color = "magenta",
+            os_support_info = ["Linux"]
         )
+
+        # Adds the Exit Option to the menu
         menu.add_body(
-            accent_color="yellow", 
-            menu_option_number=_opt_num, 
-            menu_option_color="magenta", 
-            menu_option=_menu_opts[_pos]
+        accent_color="grey", 
+        menu_option_number=0, 
+        menu_option_color="grey", 
+        menu_option="Exit"
         )
-        _pos += 1
-        _opt_num += 1
-        _last_option += 1
+        _pos = 0
+        _opt_num = 1
+        _last_option = 1
 
-    # Adds the Previous Menu Option to the menu
-    menu.add_body(
-    accent_color="grey", 
-    menu_option_number=_last_option, 
-    menu_option_color="grey", 
-    menu_option="Previous Menu"
-    )
+        # Constructs the main portion of the menu (options with their descriptions)
+        for element in range(len(_menu_opts)):
+            menu.add_paragraph(
+                text_color="blue", 
+                text=_menu_descriptions[_pos]
+            )
+            menu.add_body(
+                accent_color="yellow", 
+                menu_option_number=_opt_num, 
+                menu_option_color="magenta", 
+                menu_option=_menu_opts[_pos]
+            )
+            _pos += 1
+            _opt_num += 1
+            _last_option += 1
+
+        # Adds the Previous Menu Option to the menu
+        menu.add_body(
+        accent_color="grey", 
+        menu_option_number=_last_option, 
+        menu_option_color="grey", 
+        menu_option="Previous Menu"
+        )
+    else:
+        # Constructs the menu header (title, program support info, etc.)
+        menu.add_header(
+            ascii_art_title=_ascii_title,
+            title_bar=_title_bar,
+            title_colors = _title_colors,
+            small_title=_small_title,
+            program_version_color = "green",
+            program_version_num = tool_version,
+            os_support_message_color = "black",
+            os_support_highlight_color = "yellow",
+            os_support_color = "magenta",
+            os_support_info = ["Linux"]
+        )
 
     # Prints the menu portion of the UX menu
     menu.execute()

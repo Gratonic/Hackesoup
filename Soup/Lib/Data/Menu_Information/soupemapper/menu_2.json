@@ -5,9 +5,27 @@
         "title_colors": ["red", "white", "blue"]
     },
     "options": {
-        "1": "Quick Scan", "2": "Stealth Scan", "3": "Agressive Scan"
+        "1": "TCP Connect Scan",
+        "2": "SYN Scan",
+        "3": "FIN Scan",
+        "4": "Xmas Tree Scan",
+        "5": "Null Scan",
+        "6": "UDP Scan",
+        "7": "Service Version Detection Scan",
+        "8": "Idle Scan",
+        "9": "TCP ACK Scan",
+        "10": "ARP Scan"
     },
     "descriptions": {
-        "1": "scans port at a balanced speed while maintaining some stealth", "2": "utilizes advanced features to avoid detection", "3": "probes the target to identify open ports and running services at the cost of stealth"
+        "1": "Establishes a full TCP connection to identify open ports.",
+        "2": "Sends SYN packets to find open ports without completing the handshake.",
+        "3": "Sends FIN packets; open ports ignore, closed respond with RST.",
+        "4": "Sends packets with FIN, URG, and PSH flags to elicit responses.",
+        "5": "Sends packets with no flags to identify open ports by lack of response.",
+        "6": "Sends UDP packets to check for open UDP ports.",
+        "7": "Identifies open ports and determines the service/version running.",
+        "8": "Uses a third-party host to infer port states without revealing IP.",
+        "9": "Sends ACK packets to determine if ports are filtered or unfiltered.",
+        "10": "Uses ARP requests to discover devices and open ports on a local network."
     }
 }

@@ -141,7 +141,7 @@ def target_website(tool_name: str) -> str:
         except:
             print(f"{red}[!] Error: Invalid URL{reset}")
 
-def target_username(tool_name: str):
+def target_username(tool_name: str) -> str:
     while True:
         try:
             target = str(input(f"{magenta}Please Enter A Username To Target {green}[Ex: CrashOverride or AcidBurn]: {reset}"))
@@ -153,7 +153,7 @@ def target_username(tool_name: str):
 
 # API Token Prompt
 
-def api_token(tool_name: str):
+def api_token(tool_name: str) -> str:
     while True:
         try:
             api_token = str(input(f"{magenta}Please Enter An API Token {green}[Ex: AbCDEfGHi...]{magenta}: {reset}"))
@@ -213,7 +213,7 @@ def timeout(tool_name: str) -> int:
             print(f"{red}[!] Error: Unknown{reset}")
             exit_program(tool_name=tool_name)
 
-def requests_per_minute(tool_name: str):
+def requests_per_minute(tool_name: str) -> int:
     while True:
         try:
             rpm = int(input(f"{magenta}Please Enter A Number For The Request Per Minute Amount {green}[Ex: 300]{magenta}: {reset}"))
@@ -232,7 +232,7 @@ def requests_per_minute(tool_name: str):
 
 # Save To File and Payload File Prompts
 
-def save_to_file(tool_name: str):
+def save_to_file(tool_name: str) -> bool:
     while True:
         try:
             save = str(input(f"{magenta}Would You Like To Save The Tools Output To A JSON File? {green}[y/n]{magenta}: {reset}"))
@@ -260,7 +260,7 @@ def save_to_file(tool_name: str):
                 print(f"{red}[!] Error: Unknown{reset}")
                 exit_program(tool_name=tool_name)
 
-def payload_file_path(tool_name: str) -> str:
+def payload_file_path(tool_name: str) -> str | None:
     try:
         path = str(input(f"{magenta}Please Enter A Payload File Path or File {green}[Ex: ./payload_file_example.txt]{magenta}: {reset}"))
         validator = hs_validator.check_file_path(path)

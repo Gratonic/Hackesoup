@@ -3,9 +3,9 @@
 
 File Name: hs_UX_menus.py
 Author(s): Gratonic (https://github.com/Gratonic) and ibrahim-sisar (https://github.com/ibrahim-sisar)
-Written In: Python 3.10.12
+Written In: Python 3.12.3
 Dependencie(s): hs_menu_titles, hs_menus, hs_prompts, colorama, json, os
-Last Modified: April 25th, 2025
+Last Modified: June 15th, 2025
 
 # :: Description :: #
 
@@ -52,13 +52,9 @@ hs_config = {
     "target": None,
     "tool": None,
     "tool_class": None,
-    "target": None,
     "API_token": None,
     "port": None, "port_range": None,
-    "timeout_amount": None,
-    "request_per_minute": None,
     "scan_type": None,
-    "payload_file": None,
     "save_file": None
 }
 
@@ -86,7 +82,7 @@ def exit_program_soupemapper() -> None:
     exit()
 
 # Says "Goodbye!" to the user in Arabic and exits the program
-def exit_program_subdomain_finder() -> None:
+def exit_program_saifandor() -> None:
     print(f"{magenta}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{reset}")
     exit()
 
@@ -116,7 +112,7 @@ def exit_check(user_choice: int, tool_name: str) -> None:
     elif user_choice == 0 and tool_name == "patch_pirate":
         exit_program_patch_pirate()
     elif user_choice == 0 and tool_name == "subdomain_finder":
-        exit_program_subdomain_finder()
+        exit_program_saifandor()
     elif user_choice == 0 and tool_name == "SQLI_scanner":
         exit_program_SQLI_scanner()
     elif user_choice == 0 and tool_name == "XSS_scanner":
@@ -134,14 +130,10 @@ def total_settings_reset():
     hs_config["target"] = None
     hs_config["tool"] = None
     hs_config["tool_class"] = None
-    hs_config["target"] = None
     hs_config["API_token"] = None
     hs_config["port"] = None
     hs_config["port_range"] = None
-    hs_config["timeout_amount"] = None
-    hs_config["request_per_minute"] = None
-    hs_config["general_scan_type"] = None
-    hs_config["special_scan_type"] = None # Aggressive or Stealth
+    hs_config["scan_type"] = None
     hs_config["save_file"] = None
 
 # OSINT Tool Settings Reset Functions #
@@ -156,21 +148,16 @@ def patch_pirate_menu_settings_reset():
 # *Since all of the web tools have the same exact settings*
 def web_tool_menu_settings_reset():
     hs_config["target"] = None
-    hs_config["timeout_amount"] = None
-    hs_config["payload_file"] = None
-    hs_config["request_per_minute"] = None
     hs_config["save_file"] = None
 
 # Network Tools Settings Reset Functions #
 
 def soupemapper_UX_menu_1_settings_reset():
     hs_config["target"] = None
-    hs_config["target"] = None
     hs_config["port"] = None
     hs_config["port_range"] = None
 
 def soupemapper_UX_menu_2_settings_reset():
-    hs_config["target"] = None
     hs_config["scan_type"] = None
     hs_config["save_file"] = None
 
@@ -286,8 +273,12 @@ def LAN_tool_UX_menu() -> int:
 
 # OSINT Tool UX Menus
 
-def patch_pirate_UX_menu() -> int:
-    # clears the terminal and calls the patch_pirate menu
+def patch_pirate_UX_menu() -> int | None:
+    # promtps the user for their target
+    hs_config["target"] = hs_prompts.target_username(tool_name="patch_pirate")
+    # asks the user if they would like to save the tools output to a file
+    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="patch_pirate")
+    # clears the terminal and calls the patch_pirate menu again
     clear_terminal()
     hs_menus.patch_pirate_menu()
     # prompts the user to choose an option from the menu
@@ -303,169 +294,39 @@ def patch_pirate_UX_menu() -> int:
     elif config_choice == 3:
         # returns to the previous menu
         return 500
-
+    
 # Web Tool UX Menus
 
-def subdomain_finder_UX_menu() -> int:
-    # clears the terminal and calls the subdomain finder menu
+def saifandor_UX_menu() -> int:
+     # prompts the user for their target
+    hs_config["target"] = hs_prompts.target_website(tool_name="subdomain_finder")
+    # asks the user if they would like to save the tools output to a file
     clear_terminal()
-    hs_menus.subdomain_finder_menu()
-    # prompts the user to choose an option from the menu
-    config_choice = hs_prompts.menu_prompt(first=0, last=8, tool_name="subdomain_finder")
-    # preforms an exit check
-    exit_check(user_choice=config_choice, tool_name="subdomain_finder")
-    # configures the tool settings based on the users choice
-    if config_choice == 1:
-        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
-        hs_config["request_per_minute"] = rpm
-    elif config_choice == 2:
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 3:
-        timeout = hs_prompts.timeout(tool_name="subdomain_finder")
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 4:
-        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 5:
-        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
-        timeout = hs_prompts.timeout(tool_name="subdomain_finder")
-        hs_config["request_per_minute"] = rpm
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 6:
-        rpm = hs_prompts.requests_per_minute(tool_name="subdomain_finder")
-        payload_file = hs_prompts.payload_file_path(tool_name="subdomain_finder")
-        timeout = hs_prompts.timeout(tool_name="subdomain_finder")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 7:
-        hs_config["request_per_minute"] = 180
-        hs_config["payload_file"] = None
-        hs_config["timeout_amount"] = 1
-
-    elif config_choice == 8:
-        # returns to the previous menu
-        return 500
+    return 1500
 
 def SQLI_vuln_scanner_UX_menu() -> int:
-    # clears the terminal and calls the SQLI vuln scanner menu
+    # prompts the user for their target
+    hs_config["target"] = hs_prompts.target_website(tool_name="SQLI_scanner")
+    # asks the user if they would like to save the tools output to a file
+    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="SQLI_scanner")
     clear_terminal()
-    hs_menus.SQLI_vuln_scanner_menu()
-    # prompts the user to choose an option from the menu
-    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="SQLI_scanner")
-    # preforms an exit check
-    exit_check(user_choice=config_choice, tool_name="SQLI_scanner")
-    # configures the tool settings based on the users choice
-    if config_choice == 1:
-        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
-        hs_config["request_per_minute"] = rpm
-    elif config_choice == 2:
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 3:
-        timeout = hs_prompts.timeout(tool_name="SQLI_scanner")
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 4:
-        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 5:
-        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
-        timeout = hs_prompts.timeout(tool_name="SQLI_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 6:
-        rpm = hs_prompts.requests_per_minute(tool_name="SQLI_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="SQLI_scanner")
-        timeout = hs_prompts.timeout(tool_name="SQLI_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 7:
-        # returns to the previous menu
-        return 500
+    return 1500
 
 def XSS_vuln_scanner_UX_menu() -> int:
-    # clears the terminal and calls the XSS vuln scanner menu
+    # prompts the user for their target
+    hs_config["target"] = hs_prompts.target_website(tool_name="XSS_scanner")
+    # asks the user if they would like to save the tools output to a file
+    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="XSS_scanner")
     clear_terminal()
-    hs_menus.SQLI_vuln_scanner_menu()
-    # prompts the user to choose an option from the menu
-    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="XSS_scanner")
-    # preforms an exit check
-    exit_check(user_choice=config_choice, tool_name="XSS_scanner")
-    # configures the tool settings based on the users choice
-    if config_choice == 1:
-        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
-        hs_config["request_per_minute"] = rpm
-    elif config_choice == 2:
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 3:
-        timeout = hs_prompts.timeout(tool_name="XSS_scanner")
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 4:
-        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 5:
-        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
-        timeout = hs_prompts.timeout(tool_name="XSS_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 6:
-        rpm = hs_prompts.requests_per_minute(tool_name="XSS_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="XSS_scanner")
-        timeout = hs_prompts.timeout(tool_name="XSS_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 7:
-        # returns to the previous menu
-        return 500
+    return 1500
 
 def dir_trav_vuln_scanner_UX_menu() -> int:
-    # clears the terminal and calls the dir trav vuln scanner menu
+    # prompts the user for their target
+    hs_config["target"] = hs_prompts.target_website(tool_name="dir_trav_scanner")
+    # asks the user if they would like to save the tools output to a file
+    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="dir_trav_scanner")
     clear_terminal()
-    hs_menus.SQLI_vuln_scanner_menu()
-    # prompts the user to choose an option from the menu
-    config_choice = hs_prompts.menu_prompt(first=0, last=7, tool_name="dir_trav_scanner")
-    # preforms an exit check
-    exit_check(user_choice=config_choice, tool_name="dir_trav_scanner")
-    # configures the tool settings based on the users choice
-    if config_choice == 1:
-        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
-        hs_config["request_per_minute"] = rpm
-    elif config_choice == 2:
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 3:
-        timeout = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 4:
-        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-    elif config_choice == 5:
-        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
-        timeout = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 6:
-        rpm = hs_prompts.requests_per_minute(tool_name="dir_trav_scanner")
-        payload_file = hs_prompts.payload_file_path(tool_name="dir_trav_scanner")
-        timeout = hs_prompts.timeout(tool_name="dir_trav_scanner")
-        hs_config["request_per_minute"] = rpm
-        hs_config["payload_file"] = payload_file
-        hs_config["timeout_amount"] = timeout
-    elif config_choice == 7:
-        # returns to the previous menu
-        return 500
+    return 1500
 
 # LAN Tool UX Menus
 
@@ -497,26 +358,31 @@ def soupemapper_UX_menu_2() -> int:
     clear_terminal()
     hs_menus.soupemapper_menu_2()
     # prompts the user to choose an option from the menu
-    config_choice = hs_prompts.menu_prompt(first=0, last=4, tool_name="soupemapper")
-    # preforms an exit check
+    config_choice = hs_prompts.menu_prompt(first=0, last=11, tool_name="soupemapper")
+    # performs an exit check
     exit_check(user_choice=config_choice, tool_name="soupemapper")
-    # configures the tool settings based on the users choice
+    # configures the tool settings based on the user's choice
     if config_choice == 1:
-        # Quick Scan
-        hs_config["request_per_minute"] = 100
-        hs_config["timeout_amount"] = 2
-        hs_config["scan_type"] = "quick"
+        hs_config["scan_type"] = "TCP_Connect"
     elif config_choice == 2:
-        # Stealth Scan
-        hs_config["request_per_minute"] = 50
-        hs_config["timeout_amount"] = 3
-        hs_config["scan_type"] = "stealth"
+        hs_config["scan_type"] = "SYN"
     elif config_choice == 3:
-        # Aggressive Scan
-        hs_config["request_per_minute"] = 300
-        hs_config["timeout_amount"] = 1
-        hs_config["scan_type"] = "aggressive"
+        hs_config["scan_type"] = "FIN"
     elif config_choice == 4:
+        hs_config["scan_type"] = "Xmas_Tree"
+    elif config_choice == 5:
+        hs_config["scan_type"] = "Null"
+    elif config_choice == 6:
+        hs_config["scan_type"] = "UDP"
+    elif config_choice == 7:
+        hs_config["scan_type"] = "Service_Version_Detection"
+    elif config_choice == 8:
+        hs_config["scan_type"] = "Idle"
+    elif config_choice == 9:
+        hs_config["scan_type"] = "TCP_ACK"
+    elif config_choice == 10:
+        hs_config["scan_type"] = "ARP"
+    elif config_choice == 11:
         # returns to the previous menu
         return 500
 
@@ -540,16 +406,13 @@ def tool_class_menu_pack():
 
 # OSINT Tool UX Menu Packs
 
-def patch_pirate_UX_menu_pack(current_UX_tool_menu: int):
-    # asks the user for the target and sets it
-    hs_config["target"] = hs_prompts.target_username(tool_name="patch_pirate")
+def patch_pirate_UX_menu_pack(current_UX_tool_menu: int) -> int:
     if current_UX_tool_menu == 1:
         code = patch_pirate_UX_menu()
         if code == 500:
             patch_pirate_menu_settings_reset()
             return code
         else:
-            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="patch_pirate")
             # the user must be happy with the current tool config, so menu code 1500 is returned
             return 1500
     else:
@@ -558,16 +421,13 @@ def patch_pirate_UX_menu_pack(current_UX_tool_menu: int):
 
 # Web Tool UX Menu Packs
 
-def subdomain_finder_UX_menu_pack(current_UX_tool_menu: int):
-    # asks the user for the target and sets it
-    hs_config["target"] = hs_prompts.target_website(tool_name="subdomain_finder")
+def saifandor_UX_menu_pack(current_UX_tool_menu: int):
     if current_UX_tool_menu == 1:
-        code = subdomain_finder_UX_menu()
+        code = saifandor_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
         else:
-            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="subdomain_finder")
             # the user must be happy with the current tool config, so menu code 1500 is returned
             return 1500
     else:
@@ -575,15 +435,12 @@ def subdomain_finder_UX_menu_pack(current_UX_tool_menu: int):
         exit()
 
 def SQLI_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
-    # asks the user for the target and sets it
-    hs_config["target"] = hs_prompts.target_website(tool_name="SQLI_scanner")
     if current_UX_tool_menu == 1:
         code = SQLI_vuln_scanner_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
         else:
-            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="SQLI_scanner")
             # the user must be happy with the current tool config, so menu code 1500 is returned
             return 1500
     else:
@@ -591,15 +448,12 @@ def SQLI_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
         exit()
 
 def XSS_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
-    # asks the user for the target and sets it
-    hs_config["target"] = hs_prompts.target_website(tool_name="XSS_scanner")
     if current_UX_tool_menu == 1:
         code = XSS_vuln_scanner_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
         else:
-            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="XSS_scanner")
             # the user must be happy with the current tool config, so menu code 1500 is returned
             return 1500
     else:
@@ -607,15 +461,12 @@ def XSS_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
         exit()
 
 def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
-    # asks the user for the target and sets it
-    hs_config["target"] = hs_prompts.target_website(tool_name="dir_trav_scanner")
     if current_UX_tool_menu == 1:
         code = dir_trav_vuln_scanner_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
         else:
-            hs_config["save_file"] = hs_prompts.save_to_file(tool_name="dir_trav_scanner")
             # the user must be happy with the current tool config, so menu code 1500 is returned
             return 1500
     else:
@@ -625,9 +476,10 @@ def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
 # LAN Tool UX Menu Packs
 
 def soupemapper_UX_menu_pack() -> int:
-    # asks the user for the target and sets it
+    # prompts the user for their target
     hs_config["target"] = hs_prompts.target_IPv4(tool_name="soupemapper")
-
+    # asks the user if they would like to save the tools output to a file
+    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="soupemapper")
     while True:
         # Step 1: Run soupemapper menu 1
         code = soupemapper_UX_menu_1()
@@ -645,7 +497,6 @@ def soupemapper_UX_menu_pack() -> int:
                     # Break to go back to outer loop (menu 1)
                     break
                 else:
-                    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="soupemapper")
                     # User is happy with configuration, ready to run tool
                     return 1500
 
@@ -655,7 +506,7 @@ def write_settings_JSON_to_file(settings: dict):
     with open("../Soup/Lib/Data/Input_Data/input.json", "w") as input_file:
         json.dump(settings, input_file, indent=4)
 
-
+# NOTE: this code can be cleaned up but it works as is, one area it can be cleaned up is the web tool menu section
 def menu_interface(start_point: int, code: int):
     if start_point == 1:
         main_menu_code = main_UX_menu()
@@ -678,7 +529,7 @@ def menu_interface(start_point: int, code: int):
                             pass
                 elif hs_config["tool_class"] == "WEB":
                     if hs_config["tool"] == "subdomain_finder":
-                        code = subdomain_finder_UX_menu_pack(1)
+                        code = saifandor_UX_menu_pack(1)
                         if code == 500:
                             menu_interface(start_point=2, code=100)
                         elif code == 1500:
