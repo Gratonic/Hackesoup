@@ -5,7 +5,7 @@
         "title_colors": ["red", "yellow", "green", "cyan", "blue", "magenta"]
     },
     "options": {
-        "1": "Subdomain Finder (Molokhia - Egyptian/Gazan)", "2": "SQLI Vulnerability Scanners (Zuppa di Cavolo Nero - Italiano)", 
+        "1": "Saifandor (Molokhia - Egyptian/Gazan)", "2": "SQLI Vulnerability Scanners (Zuppa di Cavolo Nero - Italiano)", 
         "3": "XSS Vulnerability Scanner (Chicken Noodle Soup - Chinese)", "4": "Directory Traversal Vulnerability Scanner (Kartoffelsuppe Soup - German)"
     },
     "descriptions": {

@@ -36,8 +36,8 @@ hs_UX_menus = importlib.import_module('hs_UX_menus')
 tools_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools')
 sys.path.append(tools_path)
 # saifandor module
-Saifandor_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools', 'Saifandor')
-sys.path.append(Saifandor_path)
+# Saifandor_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools', 'Saifandor')
+# sys.path.append(Saifandor_path)
 
 # patch_pirate_module - hspatchpirate scanner only works on Linux Mint 21.x (not even 22)
 # patch_pirate = importlib.import_module('patch_pirate')
@@ -68,30 +68,30 @@ settings = None
 output = None
 
 # clears the input JSON file
-def clear_input_file():
+def clear_input_file() -> None:
     # recreates the file
     with open("../Soup/Lib/Data/Input_Data/input.json", "w"):
         pass
 
-def clear_output_file():
+def clear_output_file() -> None:
     # recreates the file
     with open("../Soup/Lib/Data/Output_Data/output.json", "w"):
         pass
 
 # reads the input JSON
-def read_input_file():
+def read_input_file() -> None:
     global settings
     with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
         settings = json.load(settings_file)
 
 # read the output JSON
-def read_output_file():
+def read_output_file() -> None:
     global output
     with open("../Soup/Lib/Data/Output_Data/output.json", "r") as output_file:
         output = json.load(output_file)
 
 # saves the output file
-def save_output_to_file():
+def save_output_to_file() -> None:
     # grabs the output data
     read_output_file()
     # forms the file path to write the output data to for the save
@@ -113,15 +113,16 @@ if __name__ == "__main__":
     read_input_file()
     # checks the tool and determines which one to call
     if settings["tool"] == 'subdomain_finder':
-        importlib.import_module('Saifandor').cli_entry_point()
+        # importlib.import_module('Saifandor').cli_entry_point()
+        saifandor = importlib.import_module('saifandor')
+        saifandor.test()
+
     elif settings["tool"] == "patch_pirate":
         print(f"{yellow} [*] Notice: Patch Pirate is currently unavailable, sorry {blue}:({reset}")
         # runs patch pirate
         # patch_pirate.run()
     else:
         print(f"{red}Tool not implemented yet{reset}")
-
-
 
     # clears the input file and output file again in case their is any sensitive information, last step
     # NOTE: Will be uncommented when all tools have been added to the menu

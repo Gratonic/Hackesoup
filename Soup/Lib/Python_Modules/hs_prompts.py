@@ -36,10 +36,6 @@ def clear_terminal():
         # For Windows
         os.system('cls')
 
-# Example usage
-clear_terminal()
-
-
 # -- Exit Functions -- #
 
 # Says a simple "Goodbye!" to the user in German and exits the program

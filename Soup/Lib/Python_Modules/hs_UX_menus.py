@@ -20,6 +20,7 @@ portion of the UX menus.
 
 # :: Imports :: #
 
+from datetime import datetime
 import hs_menu_titles # for the main menu easter egg
 import hs_menus
 import hs_prompts
@@ -68,6 +69,14 @@ def clear_terminal():
         os.system("clear")
     else:
         os.system("cls") # For Windows
+
+# offers the user a chance to save the tools output
+def save_tool_output() -> None:
+    save_to_file = hs_prompts.save_to_file(tool_name=hs_config["tool"])
+    if save_to_file == True:
+        hs_config["save_file"] = f"./Hackesoup/Saves/{hs_config['tool']}{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    else:
+        hs_config["save_file"] = None
 
 # -- Exit Functions -- #
 
@@ -277,7 +286,7 @@ def patch_pirate_UX_menu() -> int | None:
     # promtps the user for their target
     hs_config["target"] = hs_prompts.target_username(tool_name="patch_pirate")
     # asks the user if they would like to save the tools output to a file
-    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="patch_pirate")
+    save_tool_output()
     # clears the terminal and calls the patch_pirate menu again
     clear_terminal()
     hs_menus.patch_pirate_menu()
@@ -301,6 +310,7 @@ def saifandor_UX_menu() -> int:
      # prompts the user for their target
     hs_config["target"] = hs_prompts.target_website(tool_name="subdomain_finder")
     # asks the user if they would like to save the tools output to a file
+    save_tool_output()
     clear_terminal()
     return 1500
 
@@ -308,7 +318,7 @@ def SQLI_vuln_scanner_UX_menu() -> int:
     # prompts the user for their target
     hs_config["target"] = hs_prompts.target_website(tool_name="SQLI_scanner")
     # asks the user if they would like to save the tools output to a file
-    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="SQLI_scanner")
+    save_tool_output()
     clear_terminal()
     return 1500
 
@@ -316,7 +326,7 @@ def XSS_vuln_scanner_UX_menu() -> int:
     # prompts the user for their target
     hs_config["target"] = hs_prompts.target_website(tool_name="XSS_scanner")
     # asks the user if they would like to save the tools output to a file
-    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="XSS_scanner")
+    save_tool_output()
     clear_terminal()
     return 1500
 
@@ -324,7 +334,7 @@ def dir_trav_vuln_scanner_UX_menu() -> int:
     # prompts the user for their target
     hs_config["target"] = hs_prompts.target_website(tool_name="dir_trav_scanner")
     # asks the user if they would like to save the tools output to a file
-    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="dir_trav_scanner")
+    save_tool_output()
     clear_terminal()
     return 1500
 
@@ -361,6 +371,8 @@ def soupemapper_UX_menu_2() -> int:
     config_choice = hs_prompts.menu_prompt(first=0, last=11, tool_name="soupemapper")
     # performs an exit check
     exit_check(user_choice=config_choice, tool_name="soupemapper")
+    # asks the user if they want to save the tool ouput to a JSON file
+    save_tool_output()
     # configures the tool settings based on the user's choice
     if config_choice == 1:
         hs_config["scan_type"] = "TCP_Connect"
@@ -478,8 +490,6 @@ def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
 def soupemapper_UX_menu_pack() -> int:
     # prompts the user for their target
     hs_config["target"] = hs_prompts.target_IPv4(tool_name="soupemapper")
-    # asks the user if they would like to save the tools output to a file
-    hs_config["save_file"] = hs_prompts.save_to_file(tool_name="soupemapper")
     while True:
         # Step 1: Run soupemapper menu 1
         code = soupemapper_UX_menu_1()
@@ -503,12 +513,14 @@ def soupemapper_UX_menu_pack() -> int:
 # :: UX Menu Interface Functions :: #
 
 def write_settings_JSON_to_file(settings: dict):
+    # writes the tool config to the input json file
     with open("../Soup/Lib/Data/Input_Data/input.json", "w") as input_file:
         json.dump(settings, input_file, indent=4)
 
 # NOTE: this code can be cleaned up but it works as is, one area it can be cleaned up is the web tool menu section
 def menu_interface(start_point: int, code: int):
     if start_point == 1:
+        clear_terminal()
         main_menu_code = main_UX_menu()
         menu_interface(start_point=2, code=main_menu_code)
     elif start_point == 2:
@@ -525,6 +537,7 @@ def menu_interface(start_point: int, code: int):
                             menu_interface(start_point=2, code=100)  # Go back to OSINT tool menu
                         elif code == 1500:
                             # ready to run the tool
+                            save_tool_output()
                             write_settings_JSON_to_file(settings=hs_config)
                             pass
                 elif hs_config["tool_class"] == "WEB":
