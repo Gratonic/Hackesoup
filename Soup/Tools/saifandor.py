@@ -1,6 +1,8 @@
 # [=== Imports ===] #
+from extraction import Extractor
 from colorama import Fore
 from halo import Halo
+import tldextract
 import requests
 import dns.resolver
 import colorama
@@ -153,17 +155,25 @@ class Saifandor():
         processed_records = self.process_records()
         print(processed_records)
 
+    def extract_subdomains(self, data: str) -> list:
+        domains = []
 
+        data = data.split()
+        data = data.split("\n")
+        
+        for chunk in data:
+            extracted = tldextract.extract(chunk)
+            if extracted.domain:
+                domains.append(f"{extracted.domain}.{extracted.suffix}")
+        
+        return list(set(domains))
 
-    def extract_subdomains(self, data: str) -> set:
-        domain_pattern = r'\b(?:\*?\.[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}\b'
-        domains = re.findall(domain_pattern, data)
-        return set(domains)
-
-    def extract_emails(self, data: str) -> set:
-        email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-        emails = re.findall(email_pattern, data)
-        return set(emails)
+    # Doesn't work. Cause of error
+    def extract_emails(self, data: str) -> list:
+        extractor = Extractor
+        extracted_data = Extractor.extract(data)
+        emails = extracted_data.get('emails', [])
+        return emails
     
     def extract_certificate_data(self, record_data: dict) -> dict:
         cert_info = {}
@@ -177,7 +187,7 @@ class Saifandor():
         if ca_name_match != None:
             cert_info['ca_name'] = ca_name_match.group(1).strip()
         else:
-            pass
+            cert_info = {"ca_name": None}
 
         # extracts the date from the not_before date (issue_date)
         not_before = not_before.strip()
@@ -220,7 +230,10 @@ class Saifandor():
             
             # NOTE: The CA_name and issue data will be the same for all subdomains/emails found for the current record
             certificate_info = self.extract_certificate_data(record_data=rel_record_date)
-            ca_name = certificate_info["ca_name"]
+            try:
+                ca_name = certificate_info["ca_name"]
+            except KeyError:
+                print(certificate_info)
             issue_date = certificate_info["issue_date"]
 
             cleaned_records.append({"discovered_subdomains": subdomains, "CA": ca_name, "issue_date": issue_date})
