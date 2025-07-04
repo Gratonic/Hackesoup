@@ -95,7 +95,7 @@ class SubdomainScanner:
         self.timeout = config.get("timeout", 5)
         self.payload_file = config.get("payload_file", None)
         self.resolver = DNSCacheResolver()
-        self.valid_domain_pattern = re.compile(r'^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$')
+        self.valid_domain_pattern = re.compile(r'^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$') # N/A
 
     def sanitize_domain(self, domain):
         """Sanitizes and validates the input domain name."""
