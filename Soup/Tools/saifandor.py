@@ -1,17 +1,38 @@
+# [=== Program Metadata ===] #
+
+"""
+# :: Author Information and Program Details :: #
+
+File Name: saifandor.py
+Author(s): ibrahim-sisar (https://github.com/ibrahim-sisar) and Gratonic (https://github.com/Gratonic)
+Written In: Python 3.13.5
+Dependencie(s): colorama, halo, asyncio, random, httpx, json, re, os
+Last Modified: 7/6/2025
+
+# :: Description :: #
+
+This is the subdomain finder. It has the ability to find subdomains and emails in a websites certificate using
+the crt.sh public internet library.
+
+NOTE: The collected emails are owned by the subdomain owner, not the Certificate Authority (CA).
+
+NOTE: The tool is still being worked on and if you would like to test some functionality, it will need to be
+run under the test() function. Asyncronus features are used in some functions, so async must be used in the
+test() function definition.
+"""
+
 # [=== Imports ===] #
-from extraction import Extractor
-from colorama import Fore
+from colorama import Fore, Back # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 from halo import Halo
-import colorama
-import random
 import asyncio
+import random
 import httpx
-import time
 import json
 import re
 import os
 
-# Tool Plan
+# [=== Tool Plan ===] #
+
 """
 Uses crt.sh to retrieve the following info:
 
@@ -20,10 +41,13 @@ Uses crt.sh to retrieve the following info:
 * email(s) found for each domain/subdomain dicovered in the crt.sh search
 """
 
-# What the settings dict for the tool looks like:
+# [=== Settings Example ===] #
+
 """
+NOTE: Only the target and save_file information is needed, the other settings are not used by the tool
+
 {
-'target': 'https://www.google.com', 
+'target': 'https://www.google.com',
 'tool': 'subdomain_finder', 
 'tool_class': 'WEB', 
 'API_token': None, 
@@ -33,7 +57,8 @@ Uses crt.sh to retrieve the following info:
 }
 """
 
-# Example of what the ouput will look like
+# [=== Final Output Example ===]
+
 """
 <ascii title>
 ___________________/
@@ -122,22 +147,6 @@ class Saifandor():
         else:
             print(f"{Fore.RED}[!] Error: Scan failed, the domain could not be scanned.{Fore.RESET}")
             exit_program()
-    
-    """
-    {
-        {
-            'issuer_ca_id': 4, 
-            'issuer_name': 'C=US, O=Google Inc, CN=Google Internet Authority',
-            'common_name': 'freezone.google.com', 
-            'name_value': 'accounts.freezone.google.com\nfreezone.google.com\ngaiastaging.freezone.google.com\nmail.freezone.google.com\nnews.freezone.google.com\nplus.freezone.google.com\nsearch.freezone.google.com\nwww.freezone.google.com', 
-            'id': 1708824, 'entry_timestamp': '2013-04-27T12:11:35.274', 
-            'not_before': '2013-04-24T15:07:26', 
-            'not_after': '2013-12-30T15:07:26', 
-            'serial_number': '1403460a000100008520', 
-            'result_count': 9
-        }
-    }
-    """
 
     async def fetch_records(self) -> None:
         working_indicator = Halo(text="fetching subdomain information", spinner="bouncingBar")
@@ -158,9 +167,6 @@ class Saifandor():
         
         self.process_records()
         await self.check_status_codes()
-
-        # for sd in self.records["subdomains"]:
-        #     print(f"\n{sd}")
 
         working_indicator.stop()
 
@@ -219,10 +225,10 @@ class Saifandor():
                         else:
                             continue
                     except httpx.ConnectError:
-                        # NOTE: may occur with some domains that can no longer be accessed or are for LAN/WLAN use only (ex: onex.wifi.google.com)
+                        # may occur with some domains that can no longer be accessed or are for LAN/WLAN use only (ex: onex.wifi.google.com)
                         continue
                     except httpx.RequestError as e:
-                        # NOTE: sometimes the server may disconnect without a response
+                        # sometimes the server may disconnect without a response
                         continue
                 
                 record["subdomains"] = subdomains
@@ -252,7 +258,4 @@ async def run():
     await saifandor.fetch_records()
 
 async def test():
-    try:
-        await run()
-    except KeyboardInterrupt:
-        exit_program()
+    await run()

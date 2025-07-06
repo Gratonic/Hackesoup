@@ -1,0 +1,10 @@
+{
+    "target": "https://www.google.com",
+    "tool": "subdomain_finder",
+    "tool_class": "WEB",
+    "API_token": null,
+    "port": null,
+    "port_range": null,
+    "scan_type": null,
+    "save_file": null
+}
