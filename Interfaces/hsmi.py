@@ -17,6 +17,7 @@ This python file is responsible for running the entire menu interface version of
 
 import sys
 import os
+import asyncio
 import importlib
 import colorama # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 import json
@@ -115,7 +116,7 @@ if __name__ == "__main__":
     if settings["tool"] == 'subdomain_finder':
         # importlib.import_module('Saifandor').cli_entry_point()
         saifandor = importlib.import_module('saifandor')
-        saifandor.test()
+        asyncio.run(saifandor.test())
 
     elif settings["tool"] == "patch_pirate":
         print(f"{yellow} [*] Notice: Patch Pirate is currently unavailable, sorry {blue}:({reset}")

@@ -2,16 +2,14 @@
 from extraction import Extractor
 from colorama import Fore
 from halo import Halo
-import tldextract
-import requests
-import dns.resolver
 import colorama
 import random
+import asyncio
+import httpx
 import time
 import json
 import re
 import os
-import sys
 
 # Tool Plan
 """
@@ -77,35 +75,24 @@ user_agents = [
 ]
 
 # [=== Special Functions ===] #
+
 def exit_program():
     print("\n")
     print(f"{Fore.MAGENTA}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{Fore.RESET}")
     exit()
+
+# Clears the users terminal
+def clear_terminal():
+    if os.name == "posix": # For Linux or MacOS
+        os.system("clear")
+    else:
+        os.system("cls") # For Windows 
 
 # [=== Functionality ===] #
 
 # fetches the settings
 with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
     settings = json.load(settings_file)
-
-class DNS():
-    def __init__(self):
-        self.resolver = dns.resolver.Resolver()
-        self.resolver.nameservers = [
-            "9.9.9.9",        "149.112.112.112", # Quad9
-            "1.1.1.1",        "1.0.0.1",         # Cloudflare DNS
-            "8.8.8.8",        "8.8.4.4",         # Google DNS
-            "208.67.222.222", "208.67.220.220"   # OpenDNS
-        ]
-
-    def resolve(self, domain: str):
-        try:
-            self.resolver.resolve(domain, 'CNAME')
-            return 200
-        except dns.resolver.AccessDenied:
-            return 403
-        except:
-            return None
 
 
 class Saifandor():
@@ -135,33 +122,7 @@ class Saifandor():
         else:
             print(f"{Fore.RED}[!] Error: Scan failed, the domain could not be scanned.{Fore.RESET}")
             exit_program()
-
-    def fetch_records(self) -> None:
-        working_indicator = Halo(text="fetching subdomain information", spinner="bouncingBar")
-        target_url = self.clean_url()
-
-        working_indicator.start()
-
-        api_url = f"https://crt.sh/?q=%25.{target_url}&output=json"
-        headers = {"User-Agent": random.choice(user_agents)}
-
-        response = requests.get(url=api_url, headers=headers, timeout=30)
-
-        if response.status_code == 200:
-            self.records = response.json()
-        else:
-            print(f"{Fore.RED}[!] Error: fetch failed with status code: {Fore.YELLOW}{response.status_code}{Fore.RESET}")
-            exit_program()
-        
-        self.process_records()
-
-        self.check_status_codes()
-
-        working_indicator.stop()
-
-
-
-
+    
     """
     {
         {
@@ -178,73 +139,93 @@ class Saifandor():
     }
     """
 
-    def process_records(self) -> list:
-        record_data = {"subdomains": None, "emails": None, "CA_names": None, "cert_issue_dates": None}
-        email_and_subdomain_data = []
-        CA_name_data = []
-        cert_issue_date_data = []
+    async def fetch_records(self) -> None:
+        working_indicator = Halo(text="fetching subdomain information", spinner="bouncingBar")
+        target_url = self.clean_url()
 
+        working_indicator.start()
+
+        api_url = f"https://crt.sh/?q=%25.{target_url}&output=json"
+        headers = {"User-Agent": random.choice(user_agents)}
+
+        async with httpx.AsyncClient() as client:
+            response = await client.get(api_url, headers=headers, timeout=30)
+            if response.status_code == 200:
+                self.records = response.json()
+            else:
+                print(f"\n{Fore.RED}[!] Error: fetch failed with status code: {Fore.YELLOW}{response.status_code}{Fore.RESET}")
+                exit_program()
+        
+        self.process_records()
+        await self.check_status_codes()
+
+        # for sd in self.records["subdomains"]:
+        #     print(f"\n{sd}")
+
+        working_indicator.stop()
+
+    def process_records(self) -> list:
         records = self.records
+        processed_records = []
+
         for record in records:
             common_name = record["common_name"]
             name_value = record["name_value"]
             issuer_name = record["issuer_name"]
             cert_issue_date = record["not_before"]
 
-            email_and_subdomain_data.append(common_name)
-            email_and_subdomain_data.append(name_value)
-            CA_name_data.append(issuer_name)
-            cert_issue_date_data.append(cert_issue_date)
-        
-        subdomains = []
-        emails = []
-        for entry in email_and_subdomain_data:
-            data = entry.split("\n")
-            for chunk in data:
-                if "@" in chunk:
-                    emails.append(chunk.strip())
-                else:
-                    subdomains.append(chunk.strip())
-        
-        CA_names = []
-        for entry in CA_name_data:
-            data = entry.split(",")
-            for chunk in data:
-                if chunk.startswith("CN="):
-                    chunk = chunk.strip("CN=")
+            subdomains = []
+            emails = []
+
+            for entry in [common_name, name_value]:
+                data = entry.split("\n")
+                for chunk in data:
                     chunk = chunk.strip()
-                    CA_names.append(chunk)
-                else:
-                    continue
-        
-        cert_issue_dates = []
-        for entry in cert_issue_date_data:
-            cert_issue_dates.append(entry.split("T")[0])
-        
-        record_data["subdomains"] = subdomains
-        record_data["emails"] = emails
-        record_data["CA_names"] = CA_names
-        record_data["cert_issue_dates"] = cert_issue_dates
+                    if "@" in chunk:
+                        emails.append(chunk)
+                    else:
+                        # this will remove any invalid subdomains (*.example.com)
+                        if "*" in chunk:
+                            continue
+                        else:
+                            subdomains.append(chunk)
+            
+            # [0] is the date, [1] is the time the certificate was issued
+            cert_issue_date = cert_issue_date.split("T")[0]
+            
+            # creates a new record containing the wanted data found in the current record
+            record = {
+                "subdomains": subdomains,
+                "emails": emails,
+                "CA_name": issuer_name,
+                "cert_issue_date": cert_issue_date
+            }
 
-        self.records = record_data
+            processed_records.append(record)
 
-    def check_status_codes(self):
-        dns = DNS()
+        self.records = processed_records
+
+    async def check_status_codes(self):
         records = self.records
-        status_codes = []
-
-        for index, subdomain in enumerate(records["subdomains"], start=0):
-            status_code = dns.resolve(domain=subdomain)
-            if status_code != None:
-                status_codes.append(status_code)
-            else:
-                print(f"\nBye Bye {subdomain}")
-                records["subdomains"].pop(index)
-                records["CA_names"].pop(index)
-                records["cert_issue_dates"].pop(index)
-
-
-
+        
+        async with httpx.AsyncClient() as client:
+            for record in records:
+                subdomains = []
+                for subdomain in record["subdomains"]:
+                    try:
+                        response = await client.get(f"https://{subdomain}")
+                        if response.status_code == 200 or response.status_code == 403:
+                            subdomains.append([subdomain, response.status_code])
+                        else:
+                            continue
+                    except httpx.ConnectError:
+                        # NOTE: may occur with some domains that can no longer be accessed or are for LAN/WLAN use only (ex: onex.wifi.google.com)
+                        continue
+                    except httpx.RequestError as e:
+                        # NOTE: sometimes the server may disconnect without a response
+                        continue
+                
+                record["subdomains"] = subdomains
 
 def display_header():
     ascii_banner = """
@@ -257,22 +238,21 @@ def display_header():
     title_colors = [Fore.RED, Fore.YELLOW, Fore.WHITE, Fore.GREEN]
     colorful_banner = ''.join(title_colors[char % len(title_colors)] + ascii_banner[char] for char in range(len(ascii_banner)))
     
-    title_bar = f"{Fore.YELLOW}_________________________________________________________________________/{Fore.RESET}"
+    title_bar = f"{Fore.YELLOW}________________________________________________________/{Fore.RESET}"
 
     header = f"{colorful_banner}\n{title_bar}\n{Fore.BLUE}Saifandor v1.0{Fore.RESET}"
     print(header)
 
-def test():
+async def run():
+    clear_terminal()
     working_indicator = Halo(text="fetching subdomain information", spinner="bouncingBar")
     saifandor = Saifandor()
     display_header()
     working_indicator.start()
-    saifandor.fetch_records()
+    await saifandor.fetch_records()
 
-# TODO:
-
-"""
-1) Find the domains, emails, CA Name, and the certificate issue date in data
-2) Check the status code of each domain (200, 403, 401, and 408 are good)
-3) Finish the output display
-"""
+async def test():
+    try:
+        await run()
+    except KeyboardInterrupt:
+        exit_program()
