@@ -76,7 +76,7 @@ def save_tool_output() -> None:
     if save_to_file == True:
         hs_config["save_file"] = f"./Hackesoup/Saves/{hs_config['tool']}{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     else:
-        hs_config["save_file"] = None
+        hs_config["save_file"] = False
 
 # -- Exit Functions -- #
 

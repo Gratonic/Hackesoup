@@ -58,14 +58,26 @@ output = None
 # [=== Special Functions ===] #
 
 def clear_input_file() -> None:
+    lines = ["{\n", "    \n", "}\n"]
     # recreates the file
-    with open("../Soup/Lib/Data/Input_Data/input.json", "w"):
-        pass
+    with open("../Soup/Lib/Data/Input_Data/input.json", "w") as input_file:
+        """
+        something must be written to the file with the correct syntax, otherwise the computer
+        will not acknowledge the files existence, despite it existing physically on the HDD/SSD
+        """
+        # something must be written to the file with the correct syntax, otherwise the computer ->
+        # not 
+        input_file.writelines(lines)
 
 def clear_output_file() -> None:
+    lines = ["{\n", "    \n", "}\n"]
     # recreates the input file in order to clear it
-    with open("../Soup/Lib/Data/Output_Data/output.json", "w"):
-        pass
+    with open("../Soup/Lib/Data/Output_Data/output.json", "w") as output_file:
+        """
+        something must be written to the file with the correct syntax, otherwise the computer
+        will not acknowledge the files existence, despite it existing physically on the HDD/SSD
+        """
+        output_file.writelines(lines)
 
 def read_input_file() -> None:
     global settings
@@ -88,7 +100,6 @@ def save_output_to_file() -> None:
     with open(save_file_path, "w") as save_file:
         json.dump(output, save_file, indent=4)
 
-
 if __name__ == "__main__":
     # clears the input file and output file in case their is any sensitive information, first step
     # NOTE: Will be uncommented when all tools have been added to the menu
@@ -106,6 +117,11 @@ if __name__ == "__main__":
         print(f"{Fore.RED} [!] Alert: Patch Pirate is currently unavailable. {Fore.BLUE}:({Fore.RESET}")
     else:
         print(f"{Fore.RED}[!] Alert: Tool not implemented yet.{Fore.RESET}")
+    
+    if settings["save_file"] == True:
+        save_output_to_file()
+    else:
+        pass
 
     # clears the input and output files for the next time the suite is run
     clear_input_file()
