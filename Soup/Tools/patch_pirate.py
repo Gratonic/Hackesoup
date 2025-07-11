@@ -17,7 +17,6 @@ stored in this python file.
 # :: Imports :: #
 
 from halo import Halo # Copywrite (c) 2016-2025, Singh
-import hspatchpiratescanner # Copywrite (c) 2025, Gratonic (https://github.com/Gratonic)
 import colorama # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 import json
 import os

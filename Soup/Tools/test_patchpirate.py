@@ -13,7 +13,6 @@ Version: 1.1.0
 
 from colorama import Fore, init # Copywrite (c) 2013-2025, Jonathan Hartley (https://github.com/tartley)
 from halo import Halo # Copywrite (c) 2016-2025, Singh
-import piratescanner # Copywrite (c) 2025, Gratonic (https://github.com/Gratonic)
 import json
 import os
 

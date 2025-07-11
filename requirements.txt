@@ -1,0 +1,4 @@
+colorama
+httpx
+python-nmap
+halo
