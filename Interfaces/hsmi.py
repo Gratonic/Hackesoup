@@ -111,9 +111,9 @@ if __name__ == "__main__":
     # grabs the settings
     read_input_file()
     # checks the tool and determines which one to call
-    if settings["tool"] == 'subdomain_finder':
+    if settings["tool"] == 'saifandor':
         asyncio.run(saifandor.test())
-    elif settings["tool"] == "patch_pirate":
+    elif settings["tool"] == "patchpirate":
         print(f"{Fore.RED} [!] Alert: Patch Pirate is currently unavailable. {Fore.BLUE}:({Fore.RESET}")
     else:
         print(f"{Fore.RED}[!] Alert: Tool not implemented yet.{Fore.RESET}")
