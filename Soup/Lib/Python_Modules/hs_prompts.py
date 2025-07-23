@@ -49,26 +49,26 @@ def exit_program_soupemapper() -> None:
     exit()
 
 # Says "Goodbye!" to the user in Arabic and exits the program
-def exit_program_subdomain_finder() -> None:
+def exit_program_saifandor() -> None:
     print(f"{magenta}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{reset}")
     exit()
 
 # Says "Goodbye!" to the user in Spanish and exits the program
-def exit_program_XSS_scanner() -> None:
+def exit_program_mudelatie() -> None:
     print(f"{magenta}\n\nRecuerda, cada final es un nuevo comienzo. ¡Adios por ahora!{reset}")
     exit()
 
 # Says "Goodbye!" to the user in German and exits the program
-def exit_program_dir_trav_scanner() -> None:
+def exit_program_baumspinne() -> None:
     print(f"{magenta}\n\nVielen Dank für Ihre Unterstützung und die Zusammenarbeit. Wünschend Ihnen alles Gute für die Zukunft. Auf Wiedersehen!{reset}")
     exit()
 
-def exit_program_SQLI_scanner() -> None:
+def exit_program_dabijar() -> None:
     print(f"{magenta}\n\nFino alla prossima volta! Arrivederci!{reset}")
     exit()
 
 # Says "Goodbye!" and best of luck in Croation
-def exit_program_patch_pirate() -> None:
+def exit_program_patchpirate() -> None:
     print(f"{magenta}\n\nSvako dobro i doviđenja!{reset}")
     exit()
 
@@ -76,16 +76,16 @@ def exit_program_patch_pirate() -> None:
 def exit_program(tool_name: str) -> None:
     if tool_name == "NA":
         exit_program_main()
-    elif tool_name == "patch_pirate":
-        exit_program_patch_pirate()
-    elif tool_name == "subdomain_finder":
-        exit_program_subdomain_finder()
-    elif tool_name == "SQLI_scanner":
-        exit_program_SQLI_scanner()
-    elif tool_name == "XSS_scanner":
-        exit_program_XSS_scanner()
-    elif tool_name == "dir_trav_scanner":
-        exit_program_dir_trav_scanner()
+    elif tool_name == "patchpirate":
+        exit_program_patchpirate()
+    elif tool_name == "saifandor":
+        exit_program_saifandor()
+    elif tool_name == "dabijar":
+        exit_program_dabijar()
+    elif tool_name == "mudelatie":
+        exit_program_mudelatie()
+    elif tool_name == "baumspinne":
+        exit_program_baumspinne()
     elif tool_name == "soupemapper":
         exit_program_soupemapper()
     else:
@@ -128,7 +128,7 @@ def target_IPv4(tool_name: str) -> str:
 def target_website(tool_name: str) -> str:
     while True:
         try:
-            url = str(input(f"{magenta}Please Enter A Target URL With The Protocal Included {green}[Ex: https://example.com or https://sub.example.com]: {reset}"))
+            url = str(input(f"{magenta}Please Enter A Target URL With The Protocal Included {green}[Ex: https://www.example.com or https://sub.example.com]: {reset}"))
             status_code = hs_validator.check_web_target(url)
             if status_code == 0:
                 return url

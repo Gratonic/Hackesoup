@@ -1,6 +1,6 @@
 {
     "header_info": {
-        "menu_title_func_name": "patch_pirate",
+        "menu_title_func_name": "patchpirate",
         "tool_version": "1.0",
         "title_colors": ["red", "white", "blue", "yellow"]
     },

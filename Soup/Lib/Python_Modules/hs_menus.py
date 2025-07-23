@@ -148,22 +148,22 @@ def LAN_tool_menu():
 
 # OSINT/Recon Tool Menus
 
-def patch_pirate_menu():
-    menu_builder(menu_directory_name="patch_pirate", menu_number=1)
+def patchpirate_menu():
+    menu_builder(menu_directory_name="patchpirate", menu_number=1)
 
 # Web Tool Menus
 
-def subdomain_finder_menu():
-    menu_builder(menu_directory_name="subdomain_finder", menu_number=1)
+def saifandor_menu():
+    menu_builder(menu_directory_name="saifandor", menu_number=1)
 
-def SQLI_vuln_scanner_menu():
-    menu_builder(menu_directory_name="SQLI_vuln_scanner", menu_number=1)
+def dabijar_menu():
+    menu_builder(menu_directory_name="dabijar", menu_number=1)
 
-def XSS_vuln_scanner_menu():
-    menu_builder(menu_directory_name="XSS_vuln_scanner", menu_number=1)
+def mudelatie_menu():
+    menu_builder(menu_directory_name="mudelatie", menu_number=1)
 
-def dir_trav_vuln_scanner_menu():
-    menu_builder(menu_directory_name="dir_trav_vuln_scanner", menu_number=1)
+def baumspinne_menu():
+    menu_builder(menu_directory_name="baumspinne", menu_number=1)
 
 # Network Tool Menus
 

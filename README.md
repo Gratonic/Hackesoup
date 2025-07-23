@@ -29,7 +29,7 @@ In today’s cybersecurity landscape, professionals face significant challenges,
 - PatchPirate   (GitHub OSINT tool)
 - Saifandor     (website OSINT and mapper tool)
 - Dabijar       (SQLI vulnerability scanner)
-- Timsacroc     (XSS vulnerability scanner)
+- Mudelatie     (XSS vulnerability scanner)
 - Baumspinne    (directory traversal vulnerability scanner)
 - Soupemapper   (network mapper)
 
@@ -140,7 +140,7 @@ Hackesoup # project root directory
 │       ├── patchpirate.py
 │       ├── saifandor.py
 │       ├── soupemapper.py
-│       └── timsacroc.py
+│       └── mudelatie.py
 ├── LICENSE
 ├── README.md
 └── requirements.txt
@@ -176,7 +176,7 @@ MIT License – free to use, modify, and share.
 
 ---
 
-## 👤 Made by
+## 👤 Hackesoup Team
 
 - [**Gratonic**](https://github.com/Gratonic) – Project Founder and Developer,
 - [**ibahim-sisar**](https://github.com/ibrahim-sisar) – Co-Founder and Developer,
