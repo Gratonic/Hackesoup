@@ -188,7 +188,7 @@ MIT License – free to use, modify, and share.
 
 ## 🌍 Let’s Revolutionize The Cybersecurity Landscape Together
 
-💥 Drop a “I'm ready to join the Revolution!” in the [Discussions](https://github.com/Gratonic/Hackesoup/discussions) on GitHub 
+💥 Drop a “I'm ready to join the Revolution!” in the [Discussions](https://github.com/Gratonic/Hackesoup/discussions) on GitHub <br>
 📬 Or drop it in the general chat in the [Hackesoup discord server](https://discord.gg/Nm47EBEqBp)
 
 > 🌱 Hackesoup is for everyone with an ethical mindset and a passion for computers
