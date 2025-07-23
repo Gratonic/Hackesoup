@@ -96,21 +96,21 @@ def exit_program_saifandor() -> None:
     exit()
 
 # Says "Goodbye!" to the user in Spanish and exits the program
-def exit_program_XSS_scanner() -> None:
+def exit_program_mudelatie() -> None:
     print(f"{magenta}\n\nRecuerda, cada final es un nuevo comienzo. ¡Adios por ahora!{reset}")
     exit()
 
 # Says "Goodbye!" to the user in German and exits the program
-def exit_program_dir_trav_scanner() -> None:
+def exit_program_baumspinne() -> None:
     print(f"{magenta}\n\nVielen Dank für Ihre Unterstützung und die Zusammenarbeit. Wünschend Ihnen alles Gute für die Zukunft. Auf Wiedersehen!{reset}")
     exit()
 
-def exit_program_SQLI_scanner() -> None:
+def exit_program_dabijar() -> None:
     print(f"{magenta}\n\nFino alla prossima volta! Arrivederci!{reset}")
     exit()
 
 # Says "Goodbye!" and best of luck in Croation
-def exit_program_patch_pirate() -> None:
+def exit_program_patchpirate() -> None:
     print(f"{magenta}\n\nSvako dobro i doviđenja!{reset}")
     exit()
 
@@ -118,16 +118,16 @@ def exit_program_patch_pirate() -> None:
 def exit_check(user_choice: int, tool_name: str) -> None:
     if user_choice == 0 and tool_name == "main_menu":
         exit_program()
-    elif user_choice == 0 and tool_name == "patch_pirate":
-        exit_program_patch_pirate()
-    elif user_choice == 0 and tool_name == "subdomain_finder":
+    elif user_choice == 0 and tool_name == "patchpirate":
+        exit_program_patchpirate()
+    elif user_choice == 0 and tool_name == "saifandor":
         exit_program_saifandor()
-    elif user_choice == 0 and tool_name == "SQLI_scanner":
-        exit_program_SQLI_scanner()
-    elif user_choice == 0 and tool_name == "XSS_scanner":
-        exit_program_XSS_scanner()
-    elif user_choice == 0 and tool_name == "dir_trav_scanner":
-        exit_program_dir_trav_scanner()
+    elif user_choice == 0 and tool_name == "dabijar":
+        exit_program_dabijar()
+    elif user_choice == 0 and tool_name == "mudelatie":
+        exit_program_mudelatie()
+    elif user_choice == 0 and tool_name == "baumspinne":
+        exit_program_baumspinne()
     elif user_choice == 0 and tool_name == "soupemapper":
         exit_program_soupemapper()
     else:
@@ -147,7 +147,7 @@ def total_settings_reset():
 
 # OSINT Tool Settings Reset Functions #
 
-def patch_pirate_menu_settings_reset():
+def patchpirate_menu_settings_reset():
     hs_config["target"] = None
     hs_config["API_token"] = None
     hs_config["save_file"] = None
@@ -224,7 +224,7 @@ def OSINT_tools_UX_menu() -> int:
     exit_check(user_choice=tool_choice, tool_name="main_menu")
     # configures the settings based on the users tool choice
     if tool_choice == 1:
-        hs_config["tool"] = "patch_pirate"
+        hs_config["tool"] = "patchpirate"
     elif tool_choice == 2:
         # returns to the main menu
         return 1000
@@ -244,13 +244,13 @@ def web_tool_UX_menu() -> int:
     exit_check(user_choice=tool_choice, tool_name="main_menu")
     # configures the settings based on the users tool choice
     if tool_choice == 1:
-        hs_config["tool"] = "subdomain_finder"
+        hs_config["tool"] = "saifandor"
     elif tool_choice == 2:
-        hs_config["tool"] = "SQLI_scanner"
+        hs_config["tool"] = "dabijar"
     elif tool_choice == 3:
-        hs_config["tool"] = "XSS_scanner"
+        hs_config["tool"] = "mudelatie"
     elif tool_choice == 4:
-        hs_config["tool"] = "dir_trav_scanner"
+        hs_config["tool"] = "baumspinne"
     elif tool_choice == 5:
         # returns to the main menu
         return 1000
@@ -282,21 +282,21 @@ def LAN_tool_UX_menu() -> int:
 
 # OSINT Tool UX Menus
 
-def patch_pirate_UX_menu() -> int | None:
+def patchpirate_UX_menu() -> int | None:
     # promtps the user for their target
-    hs_config["target"] = hs_prompts.target_username(tool_name="patch_pirate")
+    hs_config["target"] = hs_prompts.target_username(tool_name="patchpirate")
     # asks the user if they would like to save the tools output to a file
     save_tool_output()
-    # clears the terminal and calls the patch_pirate menu again
+    # clears the terminal and calls the patchpirate menu again
     clear_terminal()
-    hs_menus.patch_pirate_menu()
+    hs_menus.patchpirate_menu()
     # prompts the user to choose an option from the menu
-    config_choice = hs_prompts.menu_prompt(first=0, last=3, tool_name="patch_pirate")
+    config_choice = hs_prompts.menu_prompt(first=0, last=3, tool_name="patchpirate")
     # preforms an exit check
-    exit_check(user_choice=config_choice, tool_name="patch_pirate")
+    exit_check(user_choice=config_choice, tool_name="patchpirate")
     # configures the tool settings based on the users choice
     if config_choice == 1:
-        api_token = hs_prompts.api_token(tool_name="patch_pirate")
+        api_token = hs_prompts.api_token(tool_name="patchpirate")
         hs_config["API_token"] = api_token
     elif config_choice == 2:
         hs_config["API_token"] = None
@@ -308,31 +308,31 @@ def patch_pirate_UX_menu() -> int | None:
 
 def saifandor_UX_menu() -> int:
      # prompts the user for their target
-    hs_config["target"] = hs_prompts.target_website(tool_name="subdomain_finder")
+    hs_config["target"] = hs_prompts.target_website(tool_name="saifandor")
     # asks the user if they would like to save the tools output to a file
     save_tool_output()
     clear_terminal()
     return 1500
 
-def SQLI_vuln_scanner_UX_menu() -> int:
+def dabijar_UX_menu() -> int:
     # prompts the user for their target
-    hs_config["target"] = hs_prompts.target_website(tool_name="SQLI_scanner")
+    hs_config["target"] = hs_prompts.target_website(tool_name="dabijar")
     # asks the user if they would like to save the tools output to a file
     save_tool_output()
     clear_terminal()
     return 1500
 
-def XSS_vuln_scanner_UX_menu() -> int:
+def mudelatie_UX_menu() -> int:
     # prompts the user for their target
-    hs_config["target"] = hs_prompts.target_website(tool_name="XSS_scanner")
+    hs_config["target"] = hs_prompts.target_website(tool_name="mudelatie")
     # asks the user if they would like to save the tools output to a file
     save_tool_output()
     clear_terminal()
     return 1500
 
-def dir_trav_vuln_scanner_UX_menu() -> int:
+def baumspinne_UX_menu() -> int:
     # prompts the user for their target
-    hs_config["target"] = hs_prompts.target_website(tool_name="dir_trav_scanner")
+    hs_config["target"] = hs_prompts.target_website(tool_name="baumspinne")
     # asks the user if they would like to save the tools output to a file
     save_tool_output()
     clear_terminal()
@@ -418,11 +418,11 @@ def tool_class_menu_pack():
 
 # OSINT Tool UX Menu Packs
 
-def patch_pirate_UX_menu_pack(current_UX_tool_menu: int) -> int:
+def patchpirate_UX_menu_pack(current_UX_tool_menu: int) -> int:
     if current_UX_tool_menu == 1:
-        code = patch_pirate_UX_menu()
+        code = patchpirate_UX_menu()
         if code == 500:
-            patch_pirate_menu_settings_reset()
+            patchpirate_menu_settings_reset()
             return code
         else:
             # the user must be happy with the current tool config, so menu code 1500 is returned
@@ -446,9 +446,9 @@ def saifandor_UX_menu_pack(current_UX_tool_menu: int):
         print(f"{red}[!] Error: Invalid UX Menu Number For Subdomain Finder{reset}")
         exit()
 
-def SQLI_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+def dabijar_UX_menu_pack(current_UX_tool_menu: int):
     if current_UX_tool_menu == 1:
-        code = SQLI_vuln_scanner_UX_menu()
+        code = dabijar_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
@@ -459,9 +459,9 @@ def SQLI_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
         print(f"{red}[!] Error: Invalid UX Menu Number For SQLI Vuln Scanner{reset}")
         exit()
 
-def XSS_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+def mudelatie_UX_menu_pack(current_UX_tool_menu: int):
     if current_UX_tool_menu == 1:
-        code = XSS_vuln_scanner_UX_menu()
+        code = mudelatie_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
@@ -472,9 +472,9 @@ def XSS_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
         print(f"{red}[!] Error: Invalid UX Menu Number For XSS Vuln Scanner{reset}")
         exit()
 
-def dir_trav_vuln_scanner_UX_menu_pack(current_UX_tool_menu: int):
+def baumspinne_UX_menu_pack(current_UX_tool_menu: int):
     if current_UX_tool_menu == 1:
-        code = dir_trav_vuln_scanner_UX_menu()
+        code = baumspinne_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
@@ -531,8 +531,8 @@ def menu_interface(start_point: int, code: int):
                 menu_interface(start_point=1, code=0)
             elif code == 100:
                 if hs_config["tool_class"] == "OSINT":
-                    if hs_config["tool"] == "patch_pirate":
-                        code = patch_pirate_UX_menu_pack(1)
+                    if hs_config["tool"] == "patchpirate":
+                        code = patchpirate_UX_menu_pack(1)
                         if code == 500:
                             menu_interface(start_point=2, code=100)  # Go back to OSINT tool menu
                         elif code == 1500:
@@ -541,7 +541,7 @@ def menu_interface(start_point: int, code: int):
                             write_settings_JSON_to_file(settings=hs_config)
                             pass
                 elif hs_config["tool_class"] == "WEB":
-                    if hs_config["tool"] == "subdomain_finder":
+                    if hs_config["tool"] == "saifandor":
                         code = saifandor_UX_menu_pack(1)
                         if code == 500:
                             menu_interface(start_point=2, code=100)
@@ -549,24 +549,24 @@ def menu_interface(start_point: int, code: int):
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
                             pass
-                    elif hs_config["tool"] == "SQLI_scanner":
-                        code = SQLI_vuln_scanner_UX_menu_pack(1)
+                    elif hs_config["tool"] == "dabijar":
+                        code = dabijar_UX_menu_pack(1)
                         if code == 500:
                             menu_interface(start_point=2, code=100)
                         elif code == 1500:
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
                             pass
-                    elif hs_config["tool"] == "XSS_scanner":
-                        code = XSS_vuln_scanner_UX_menu_pack(1)
+                    elif hs_config["tool"] == "mudelatie":
+                        code = mudelatie_UX_menu_pack(1)
                         if code == 500:
                             menu_interface(start_point=2, code=100)
                         elif code == 1500:
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
                             pass
-                    elif hs_config["tool"] == "dir_trav_scanner":
-                        code = dir_trav_vuln_scanner_UX_menu_pack(1)
+                    elif hs_config["tool"] == "baumspinne":
+                        code = baumspinne_UX_menu_pack(1)
                         if code == 500:
                             menu_interface(start_point=2, code=100)
                         elif code == 1500:

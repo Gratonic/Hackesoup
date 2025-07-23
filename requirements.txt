@@ -1,4 +1,4 @@
-colorama
-httpx
-python-nmap
-halo
+colorama==0.4.6
+halo==0.0.31
+httpx==0.28.1
+requests==2.32.4

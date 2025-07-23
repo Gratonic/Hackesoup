@@ -1,8 +1,8 @@
 {
     "header_info": {
-        "menu_title_func_name": "sqli_scanner",
+        "menu_title_func_name": "baumspinne",
         "tool_version": "1.0",
-        "title_colors": ["green", "white", "red"]
+        "title_colors": ["red", "grey", "yellow"]
     },
     "options": {
         "1": null
