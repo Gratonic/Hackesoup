@@ -60,7 +60,7 @@ We welcome **everyone** – beginner or expert!
 | 🐞 Bug Testers                  | Find and report issues               |
 | 🐞 Bug Fixers                   | Fix bugs                             |
 
-💬 [Chat with us on Discord](https://discord.gg/Nm47EBEqBp)
+💬 [Chat with us on Discord](https://discord.gg/kqWJ95MMhS)
 
 ---
 
@@ -161,7 +161,7 @@ Hackesoup # project root directory
 
 ## 🤝 How to Contribute
 
-1. Join the [discord server](https://discord.gg/Nm47EBEqBp)
+1. Join the [discord server](https://discord.gg/kqWJ95MMhS)
 2. Create a fork
 3. Clone the repository to your machine and request an [issue](https://github.com/Gratonic/Hackesoup/issues)
 4. Push your changes to your fork
@@ -189,6 +189,6 @@ MIT License – free to use, modify, and share.
 ## 🌍 Let’s Revolutionize The Cybersecurity Landscape Together
 
 💥 Drop a “I'm ready to join the Revolution!” in the [Discussions](https://github.com/Gratonic/Hackesoup/discussions) on GitHub <br>
-📬 Or drop it in the general chat in the [Hackesoup discord server](https://discord.gg/Nm47EBEqBp)
+📬 Or drop it in the general chat in the [Hackesoup discord server](https://discord.gg/kqWJ95MMhS)
 
 > 🌱 Hackesoup is for everyone with an ethical mindset and a passion for computers
