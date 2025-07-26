@@ -17,32 +17,35 @@ This python file is responsible for running the entire menu interface and tools 
 
 # [=== Imports ===] #
 
-from colorama import Fore, Back # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
-from datetime import datetime
-import importlib
 import asyncio
+import importlib
 import json
-import sys
 import os
+import sys
+from datetime import datetime
+
+from colorama import (
+    Fore,  # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
+)
 
 # :: Python Module Imports :: #
 
-python_modules_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Lib', 'Python_Modules')
+python_modules_path = os.path.join(
+    os.path.dirname(__file__), "..", "Soup", "Lib", "Python_Modules"
+)
 
 sys.path.append(python_modules_path)
 
 # menu interface module
-hs_UX_menus = importlib.import_module('hs_UX_menus')
+hs_UX_menus = importlib.import_module("hs_UX_menus")
 
 # :: Tool Imports :: #
-
-tools_path = os.path.join(os.path.dirname(__file__), '..', 'Soup', 'Tools')
+tools_path = os.path.join(os.path.dirname(__file__), "..", "Soup", "Tools")
 sys.path.append(tools_path)
 
 # :: Saifandor :: #
-
-saifandor = importlib.import_module('saifandor')
-
+saifandor = importlib.import_module("saifandor")
+Saifandor = getattr(saifandor, "Saifandor")
 # :: Patch Pirate :: #
 
 # NOTE: This tool must be rewritten because it only works on Linux Mint 21 (not even Linux Mint 22)
@@ -57,6 +60,7 @@ output = None
 
 # [=== Special Functions ===] #
 
+
 def clear_input_file() -> None:
     lines = ["{\n", "    \n", "}\n"]
     # recreates the file
@@ -66,8 +70,9 @@ def clear_input_file() -> None:
         will not acknowledge the files existence, despite it existing physically on the HDD/SSD
         """
         # something must be written to the file with the correct syntax, otherwise the computer ->
-        # not 
+        # not
         input_file.writelines(lines)
+
 
 def clear_output_file() -> None:
     lines = ["{\n", "    \n", "}\n"]
@@ -79,15 +84,18 @@ def clear_output_file() -> None:
         """
         output_file.writelines(lines)
 
+
 def read_input_file() -> None:
     global settings
     with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
         settings = json.load(settings_file)
 
+
 def read_output_file() -> None:
     global output
     with open("../Soup/Lib/Data/Output_Data/output.json", "r") as output_file:
         output = json.load(output_file)
+
 
 # saves the output file
 def save_output_to_file() -> None:
@@ -95,29 +103,35 @@ def save_output_to_file() -> None:
     read_output_file()
     # forms the file path to write the output data to for the save
     now = datetime.now()
-    formatted_time = now.strftime('%Y-%m-%d_%H-%M-%S')
+    formatted_time = now.strftime("%Y-%m-%d_%H-%M-%S")
     save_file_path = f"../Saves/save_{formatted_time}.json"
     with open(save_file_path, "w") as save_file:
         json.dump(output, save_file, indent=4)
+
 
 if __name__ == "__main__":
     # clears the input file and output file in case their is any sensitive information, first step
     # NOTE: Will be uncommented when all tools have been added to the menu
     clear_input_file()
     clear_output_file()
-    
+
     # calls the menu interface, first step
     hs_UX_menus.menu_interface(start_point=1, code=0)
+
     # grabs the settings
     read_input_file()
+
     # checks the tool and determines which one to call
-    if settings["tool"] == 'saifandor':
-        asyncio.run(saifandor.test())
+    if settings["tool"] == "saifandor":
+        saifandor = Saifandor(settings)
+        asyncio.run(saifandor.run())
     elif settings["tool"] == "patchpirate":
-        print(f"{Fore.RED} [!] Alert: Patch Pirate is currently unavailable. {Fore.BLUE}:({Fore.RESET}")
+        print(
+            f"{Fore.RED} [!] Alert: Patch Pirate is currently unavailable. {Fore.BLUE}:({Fore.RESET}"
+        )
     else:
         print(f"{Fore.RED}[!] Alert: Tool not implemented yet.{Fore.RESET}")
-    
+
     if settings["save_file"] == True:
         save_output_to_file()
     else:
