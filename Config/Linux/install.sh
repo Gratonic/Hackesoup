@@ -1,16 +1,24 @@
 #!/bin/sh
 
 # ==============================================================================
-# Hackesoup - Installation Script for Linux (POSIX Compliant)
+# Hackesoup - Robust Installation Script for Linux
 # ==============================================================================
-# This script is written to be compliant with POSIX sh, making it highly
-# compatible across different Linux systems (like those using dash as /bin/sh).
+#
+# USAGE:
+# This script MUST be run from the project's root directory.
+# Example:
+#   cd /path/to/Hackesoup
+#   sh Config/Linux/install.sh
+#
 # ==============================================================================
 
 # --- Script Settings ---
-set -eu
+# Exit immediately if a command exits with a non-zero status.
+set -e
+# Treat unset variables as an error.
+set -u
 
-# --- Color Definitions ---
+# --- Color Definitions (for readable output) ---
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
@@ -18,99 +26,109 @@ NC='\033[0m' # No Color
 
 # --- Helper Functions ---
 log_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
+    # Using printf for better portability than echo -e
+    printf "${GREEN}[INFO]${NC} %s\n" "$1"
 }
 
 log_warn() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
+    printf "${YELLOW}[WARN]${NC} %s\n" "$1"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
-    exit 1
+    printf "${RED}[ERROR]${NC} %s\n" "$1" >&2
 }
 
-# --- Script Main Body ---
+# ==============================================================================
+#                              MAIN SCRIPT BODY
+# ==============================================================================
 
-# 1. Determine Project Root Directory
-# Using a POSIX-compliant way to get the script's directory.
-SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" &> /dev/null && pwd)
-PROJECT_ROOT=$(cd -- "$SCRIPT_DIR/../../" &> /dev/null && pwd)
+# STEP 1: VERIFY SCRIPT LOCATION 
+# ------------------------------------------------------------------------------
+# We ensure the script is being run from the project's root directory by
+# checking for the existence of key files and directories.
+# This prevents all path-related errors.
+#
+log_info "Verifying execution location..."
+if [ ! -f "requirements.txt" ] || [ ! -d "Interfaces" ] || [ ! -d "Soup" ] || [ ! -d "LICENSE"]; then
+    log_error "This script must be run from the project root directory (the 'Hackesoup' folder)."
+    printf "Please change your directory to the project root and try again.\n"
+    printf "Example:\n"
+    printf "  cd /path/to/your/Hackesoup\n"
+    printf "  sh Config/Linux/install.sh\n"
+    exit 1
+fi
+log_info "Execution location is correct. Proceeding with installation."
+echo
 
-log_info "Project root directory found: $PROJECT_ROOT"
-cd "$PROJECT_ROOT"
-
-# 2. Welcome Message
-echo "=========================================="
-log_info "Starting Hackesoup installation..."
-echo "=========================================="
-sleep 1
-
-# 3. Check System Dependencies
-log_info "Checking system dependencies..."
-DEPS="python3 pip git"
-for dep in $DEPS; do
+# STEP 2: CHECK FOR SYSTEM DEPENDENCIES
+# ------------------------------------------------------------------------------
+log_info "Checking for required system dependencies (python3, pip, git)..."
+for dep in python3 pip git; do
     if ! command -v "$dep" > /dev/null 2>&1; then
-        log_error "Dependency '$dep' not found. Please install it first."
-        echo "On Debian/Ubuntu, you can try running: sudo apt-get install python3 python3-pip git"
-        echo "On RHEL/CentOS/Fedora, you can try running: sudo dnf install python3 python3-pip git"
+        log_error "Dependency '$dep' not found. Please install it using your system's package manager."
         exit 1
     fi
 done
-# Check for venv module
+
+# Specifically check for the 'venv' module, which is sometimes a separate package.
 if ! python3 -c "import venv" > /dev/null 2>&1; then
-    log_error "Python3 'venv' module not found."
-    echo "On Debian/Ubuntu, you can try running: sudo apt-get install python3-venv"
+    log_error "Python3 'venv' module is not installed. It is required to create a virtual environment."
+    printf "On Debian/Ubuntu, you can install it with: sudo apt-get install python3-venv\n"
     exit 1
 fi
 log_info "All system dependencies are met."
-sleep 1
+echo
 
-# 4. Create Python Virtual Environment
+# STEP 3: CREATE AND ACTIVATE PYTHON VIRTUAL ENVIRONMENT
+# ------------------------------------------------------------------------------
 VENV_DIR=".venv"
+log_info "Setting up Python virtual environment..."
+
 if [ -d "$VENV_DIR" ]; then
-    log_warn "Virtual environment directory '$VENV_DIR' already exists. Skipping creation."
+    log_warn "Virtual environment '$VENV_DIR' already exists. Skipping creation."
 else
-    log_info "Creating Python virtual environment in '$VENV_DIR'..."
+    log_info "Creating virtual environment in './$VENV_DIR'..."
     python3 -m venv "$VENV_DIR"
 fi
-log_info "Activating the virtual environment (for this script's session)..."
-# MODIFICATION: Changed 'source' to '.' for POSIX compatibility.
-# This is the fix for the "source: not found" error.
-. "$VENV_DIR/bin/activate"
-log_info "Current Python version: $(python --version)"
-sleep 1
 
-# 5. Install Python Dependencies
-REQUIREMENTS_FILE="requirements.txt"
-if [ -f "$REQUIREMENTS_FILE" ]; then
-    log_info "Installing Python dependencies from '$REQUIREMENTS_FILE'..."
-    pip install -r "$REQUIREMENTS_FILE"
-    log_info "All Python dependencies have been installed successfully."
-else
-    log_warn "'$REQUIREMENTS_FILE' not found. Skipping Python dependency installation."
-fi
-sleep 1
+# Activate the virtual environment for the rest of this script's execution.
+# The '.' command is the POSIX-compliant equivalent of 'source'.
+. "./$VENV_DIR/bin/activate"
+log_info "Virtual environment activated. Python is now: $(python --version)"
+echo
 
-# 6. Set File Permissions
-log_info "Setting executable permissions for main scripts..."
-find "Interfaces" -name "*.py" -exec chmod +x {} \;
-find "Soup/Tools" -name "*.py" -exec chmod +x {} \;
-log_info "File permissions set."
-sleep 1
+# STEP 4: INSTALL PYTHON DEPENDENCIES
+# ------------------------------------------------------------------------------
+# This step is now guaranteed to work because STEP 1 verified that
+# 'requirements.txt' exists in the current directory.
+#
+log_info "Installing Python dependencies from 'requirements.txt'..."
+pip install -q -r requirements.txt
+log_info "All Python dependencies installed successfully."
+echo
 
-# 7. Installation Complete
+# STEP 5: SET FILE PERMISSIONS
+# ------------------------------------------------------------------------------
+# This is also guaranteed to work because STEP 1 verified that the
+# 'Interfaces' and 'Soup' directories exist.
+#
+log_info "Setting executable permissions for tool scripts..."
+find Interfaces Soup/Tools -type f -name "*.py" -exec chmod +x {} \;
+log_info "File permissions have been set."
 echo
-echo "=========================================="
-log_info "Hackesoup has been installed successfully!"
-echo "=========================================="
-echo
-echo "How to Run:"
-echo "1. First, activate the virtual environment:"
-echo -e "   ${YELLOW}. ${PROJECT_ROOT}/${VENV_DIR}/bin/activate${NC}" # Also changed here for consistency
-echo
-echo "2. Then, run the main application from the project root (e.g., the CLI):"
-echo -e "   ${YELLOW}python3 Interfaces/hscli.py${NC}"
-echo
-echo "When you are done, you can exit the virtual environment by typing 'deactivate'."
-echo
+
+# STEP 6: INSTALLATION COMPLETE
+# ------------------------------------------------------------------------------
+printf "${GREEN}==========================================\n"
+log_info "Hackesoup installation is complete!"
+printf "${GREEN}==========================================\n\n"
+
+printf "INSTRUCTIONS TO RUN THE APPLICATION:\n"
+printf "1. Activate the virtual environment in your terminal:\n"
+printf "   ${YELLOW}. .venv/bin/activate${NC}\n\n"
+printf "2. Run the main interface script:\n"
+# This now points to the correct file as requested by the owner.
+printf "   ${YELLOW}cd Interfaces\n"
+printf "   ${YELLOW}python3 hsmi.py${NC}\n\n"
+printf "3. When you are finished, deactivate the environment:\n"
+printf "   ${YELLOW}deactivate${NC}\n"
