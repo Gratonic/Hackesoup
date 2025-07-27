@@ -22,14 +22,15 @@ test() function definition.
 """
 
 # [=== Imports ===] #
-from colorama import Fore, Back # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
-from halo import Halo
-import asyncio
-import random
-import httpx
-import json
-import re
 import os
+import random
+import re
+
+import httpx
+from colorama import (
+    Fore,
+)  # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
+from halo import Halo
 
 # [=== Tool Plan ===] #
 
@@ -83,69 +84,66 @@ ___________________/
 
 """
 
-# [=== Global Variables ===] #
-
-settings = None
 
 # user-agent pool for HTTP(S) requests
 user_agents = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/537.36",
     "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/89.0",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15"
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15",
 ]
 
-# [=== Special Functions ===] #
 
+# [=== Special Functions ===] #
 def exit_program():
     print("\n")
     print(f"{Fore.MAGENTA}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{Fore.RESET}")
     exit()
 
+
 # Clears the users terminal
 def clear_terminal():
-    if os.name == "posix": # For Linux or MacOS
+    if os.name == "posix":  # For Linux or MacOS
         os.system("clear")
     else:
-        os.system("cls") # For Windows 
-
-# [=== Functionality ===] #
-
-# fetches the settings
-with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
-    settings = json.load(settings_file)
+        os.system("cls")  # For Windows
 
 
-class Saifandor():
-    def __init__(self):
+# [=== Main class ===] #
+class Saifandor:
+    def __init__(self, settings):
         # NOTE: save_file will be None or a string of a file path
         self.target = settings["target"]
         self.save_file = settings["save_file"]
         # placeholder for records
         self.records = {}
-    
+
     def clean_url(self) -> str | None:
         # Regex pattern to match the domain
-        pattern = r'https?://(?:www\.)?([^/]+)'
+        pattern = r"https?://(?:www\.)?([^/]+)"
         match = re.search(pattern, self.target)
 
         if match:
             # extracts the domain
             full_domain = match.group(1)
             # split the domain to get the main part (last two segments)
-            domain_parts = full_domain.split('.')
+            domain_parts = full_domain.split(".")
             if len(domain_parts) > 2:
                 # returns the last two segments for subdomains
-                return '.'.join(domain_parts[-2:])
+                return ".".join(domain_parts[-2:])
             else:
                 # returns the domain if it's already in the correct format
                 return full_domain
         else:
-            print(f"{Fore.RED}[!] Error: Scan failed, the domain could not be scanned.{Fore.RESET}")
+            print(
+                f"{Fore.RED}[!] Error: Scan failed, the domain could not be scanned.{Fore.RESET}"
+            )
             exit_program()
 
     async def fetch_records(self) -> None:
-        working_indicator = Halo(text="fetching subdomain information", spinner="bouncingBar")
+        working_indicator = Halo(
+            text="fetching subdomain information", spinner="bouncingBar"
+        )
         target_url = self.clean_url()
 
         working_indicator.start()
@@ -158,9 +156,11 @@ class Saifandor():
             if response.status_code == 200:
                 self.records = response.json()
             else:
-                print(f"\n{Fore.RED}[!] Error: fetch failed with status code: {Fore.YELLOW}{response.status_code}{Fore.RESET}")
+                print(
+                    f"\n{Fore.RED}[!] Error: fetch failed with status code: {Fore.YELLOW}{response.status_code}{Fore.RESET}"
+                )
                 exit_program()
-        
+
         self.process_records()
         await self.check_status_codes()
 
@@ -191,16 +191,16 @@ class Saifandor():
                             continue
                         else:
                             subdomains.append(chunk)
-            
+
             # [0] is the date, [1] is the time the certificate was issued
             cert_issue_date = cert_issue_date.split("T")[0]
-            
+
             # creates a new record containing the wanted data found in the current record
             record = {
                 "subdomains": subdomains,
                 "emails": emails,
                 "CA_name": issuer_name,
-                "cert_issue_date": cert_issue_date
+                "cert_issue_date": cert_issue_date,
             }
 
             processed_records.append(record)
@@ -209,7 +209,7 @@ class Saifandor():
 
     async def check_status_codes(self):
         records = self.records
-        
+
         async with httpx.AsyncClient() as client:
             for record in records:
                 subdomains = []
@@ -223,11 +223,21 @@ class Saifandor():
                     except httpx.ConnectError:
                         # may occur with some domains that can no longer be accessed or are for LAN/WLAN use only (ex: onex.wifi.google.com)
                         continue
-                    except httpx.RequestError as e:
+                    except httpx.RequestError:
                         # sometimes the server may disconnect without a response
                         continue
-                
+
                 record["subdomains"] = subdomains
+
+    async def run(self):
+        clear_terminal()
+        working_indicator = Halo(
+            text="fetching subdomain information", spinner="bouncingBar"
+        )
+        display_header()
+        working_indicator.start()
+        await self.fetch_records()
+
 
 def display_header():
     ascii_banner = """
@@ -238,20 +248,12 @@ def display_header():
     /\\__/ / (_| | | || (_| | | | | (_| | (_) | |   
     \\____/ \\__,_|_|_| \\__,_|_| |_|\\__,_|\\___/|_|   """
     title_colors = [Fore.RED, Fore.YELLOW, Fore.WHITE, Fore.GREEN]
-    colorful_banner = ''.join(title_colors[char % len(title_colors)] + ascii_banner[char] for char in range(len(ascii_banner)))
-    
+    colorful_banner = "".join(
+        title_colors[char % len(title_colors)] + ascii_banner[char]
+        for char in range(len(ascii_banner))
+    )
+
     title_bar = f"{Fore.YELLOW}________________________________________________________/{Fore.RESET}"
 
     header = f"{colorful_banner}\n{title_bar}\n{Fore.BLUE}Saifandor v1.0{Fore.RESET}"
     print(header)
-
-async def run():
-    clear_terminal()
-    working_indicator = Halo(text="fetching subdomain information", spinner="bouncingBar")
-    saifandor = Saifandor()
-    display_header()
-    working_indicator.start()
-    await saifandor.fetch_records()
-
-async def test():
-    await run()
