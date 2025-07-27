@@ -176,13 +176,11 @@ MIT License – free to use, modify, and share.
 
 ---
 
-## 👤 Hackesoup Team
+## 👤 Hackesoup Leaders
 
 - [**Gratonic**](https://github.com/Gratonic) – Project Founder and Developer,
-- [**ibahim-sisar**](https://github.com/ibrahim-sisar) – Co-Founder and Developer,
 - [**FailurePoint**](https://github.com/FailurePoint) – Co-Founder and Developer,
-- [**Erarnitox**](https://github.com/Erarnitox) – Bug Fixer,
-> with ❤️ from *The United States*, *Germany*, *Palestine*, and the global open-source community.
+> with ❤️ from the open-source community.
 
 ---
 
