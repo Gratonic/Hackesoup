@@ -91,7 +91,7 @@ def exit_program_soupemapper() -> None:
     exit()
 
 # Says "Goodbye!" to the user in Arabic and exits the program
-def exit_program_saifandor() -> None:
+def exit_program_serikandor() -> None:
     print(f"{magenta}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{reset}")
     exit()
 
@@ -120,8 +120,8 @@ def exit_check(user_choice: int, tool_name: str) -> None:
         exit_program()
     elif user_choice == 0 and tool_name == "patchpirate":
         exit_program_patchpirate()
-    elif user_choice == 0 and tool_name == "saifandor":
-        exit_program_saifandor()
+    elif user_choice == 0 and tool_name == "serikandor":
+        exit_program_serikandor()
     elif user_choice == 0 and tool_name == "dabijar":
         exit_program_dabijar()
     elif user_choice == 0 and tool_name == "mudelatie":
@@ -244,7 +244,7 @@ def web_tool_UX_menu() -> int:
     exit_check(user_choice=tool_choice, tool_name="main_menu")
     # configures the settings based on the users tool choice
     if tool_choice == 1:
-        hs_config["tool"] = "saifandor"
+        hs_config["tool"] = "serikandor"
     elif tool_choice == 2:
         hs_config["tool"] = "dabijar"
     elif tool_choice == 3:
@@ -306,9 +306,9 @@ def patchpirate_UX_menu() -> int | None:
     
 # Web Tool UX Menus
 
-def saifandor_UX_menu() -> int:
+def serikandor_UX_menu() -> int:
      # prompts the user for their target
-    hs_config["target"] = hs_prompts.target_website(tool_name="saifandor")
+    hs_config["target"] = hs_prompts.target_website(tool_name="serikandor")
     # asks the user if they would like to save the tools output to a file
     save_tool_output()
     clear_terminal()
@@ -433,9 +433,9 @@ def patchpirate_UX_menu_pack(current_UX_tool_menu: int) -> int:
 
 # Web Tool UX Menu Packs
 
-def saifandor_UX_menu_pack(current_UX_tool_menu: int):
+def serikandor_UX_menu_pack(current_UX_tool_menu: int):
     if current_UX_tool_menu == 1:
-        code = saifandor_UX_menu()
+        code = serikandor_UX_menu()
         if code == 500:
             web_tool_menu_settings_reset()
             return code
@@ -541,8 +541,8 @@ def menu_interface(start_point: int, code: int):
                             write_settings_JSON_to_file(settings=hs_config)
                             pass
                 elif hs_config["tool_class"] == "WEB":
-                    if hs_config["tool"] == "saifandor":
-                        code = saifandor_UX_menu_pack(1)
+                    if hs_config["tool"] == "serikandor":
+                        code = serikandor_UX_menu_pack(1)
                         if code == 500:
                             menu_interface(start_point=2, code=100)
                         elif code == 1500:

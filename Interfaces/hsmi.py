@@ -24,9 +24,7 @@ import os
 import sys
 from datetime import datetime
 
-from colorama import (
-    Fore,  # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
-)
+from colorama import Fore # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 
 # :: Python Module Imports :: #
 
@@ -40,13 +38,16 @@ sys.path.append(python_modules_path)
 hs_UX_menus = importlib.import_module("hs_UX_menus")
 
 # :: Tool Imports :: #
+
 tools_path = os.path.join(os.path.dirname(__file__), "..", "Soup", "Tools")
 sys.path.append(tools_path)
 
-# :: Saifandor :: #
-saifandor = importlib.import_module("saifandor")
-Saifandor = getattr(saifandor, "Saifandor")
-# :: Patch Pirate :: #
+# :: Serikandor :: #
+
+serikandor = importlib.import_module("serikandor")
+serikandor = getattr(serikandor, "Serikandor")
+
+# :: PatchPirate :: #
 
 # NOTE: This tool must be rewritten because it only works on Linux Mint 21 (not even Linux Mint 22)
 
@@ -96,7 +97,6 @@ def read_output_file() -> None:
     with open("../Soup/Lib/Data/Output_Data/output.json", "r") as output_file:
         output = json.load(output_file)
 
-
 # saves the output file
 def save_output_to_file() -> None:
     # grabs the output data
@@ -122,9 +122,9 @@ if __name__ == "__main__":
     read_input_file()
 
     # checks the tool and determines which one to call
-    if settings["tool"] == "saifandor":
-        saifandor = Saifandor(settings)
-        asyncio.run(saifandor.run())
+    if settings["tool"] == "serikandor":
+        serikandor = serikandor(settings)
+        asyncio.run(serikandor.run())
     elif settings["tool"] == "patchpirate":
         print(
             f"{Fore.RED} [!] Alert: Patch Pirate is currently unavailable. {Fore.BLUE}:({Fore.RESET}"

@@ -27,7 +27,7 @@ In today’s cybersecurity landscape, professionals face significant challenges,
 ## 🛠️ Tools (Planned)
 
 - PatchPirate   (GitHub OSINT tool)
-- Saifandor     (website OSINT and mapper tool)
+- Serikandor    (website OSINT and mapper tool)
 - Dabijar       (SQLI vulnerability scanner)
 - Mudelatie     (XSS vulnerability scanner)
 - Baumspinne    (directory traversal vulnerability scanner)
@@ -90,7 +90,7 @@ Hackesoup # project root directory
 │   │   │   ├── Input_Data # user input file (populated by menu interface)
 │   │   │   │   └── input.json
 │   │   │   ├── Menu_Information # menu interface JSON data files
-│   │   │   │   ├── dir_trav_vuln_scanner
+│   │   │   │   ├── baumspinne
 │   │   │   │   │   └── menu_1.json
 │   │   │   │   ├── LAN_tool_menu
 │   │   │   │   │   └── menu_1.json
@@ -98,18 +98,18 @@ Hackesoup # project root directory
 │   │   │   │   │   └── menu_1.json
 │   │   │   │   ├── OSINT_tool_menu
 │   │   │   │   │   └── menu_1.json
-│   │   │   │   ├── patch_pirate
+│   │   │   │   ├── patchpirate
 │   │   │   │   │   └── menu_1.json
 │   │   │   │   ├── soupemapper
 │   │   │   │   │   ├── menu_1.json
 │   │   │   │   │   └── menu_2.json
-│   │   │   │   ├── SQLI_vuln_scanner
+│   │   │   │   ├── dabijar
 │   │   │   │   │   └── menu_1.json
-│   │   │   │   ├── subdomain_finder
+│   │   │   │   ├── serikandor
 │   │   │   │   │   └── menu_1.json
 │   │   │   │   ├── web_tool_menu
 │   │   │   │   │   └── menu_1.json
-│   │   │   │   └── XSS_vuln_scanner
+│   │   │   │   └── mudelatie
 │   │   │   │       └── menu_1.json
 │   │   │   ├── Output_Data # tool output file (populated by tool)
 │   │   │   │   └── output.json
@@ -138,7 +138,7 @@ Hackesoup # project root directory
 │       ├── baumspinne.py
 │       ├── dabijar.py
 │       ├── patchpirate.py
-│       ├── saifandor.py
+│       ├── serikandor.py
 │       ├── soupemapper.py
 │       └── mudelatie.py
 ├── LICENSE

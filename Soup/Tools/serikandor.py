@@ -3,7 +3,7 @@
 """
 # :: Author Information and Program Details :: #
 
-File Name: saifandor.py
+File Name: serikandor.py
 Author(s): ibrahim-sisar (https://github.com/ibrahim-sisar) and Gratonic (https://github.com/Gratonic)
 Written In: Python 3.13.5
 Dependencie(s): colorama, halo, asyncio, random, httpx, json, re, os
@@ -22,14 +22,13 @@ test() function definition.
 """
 
 # [=== Imports ===] #
+
 import os
 import random
 import re
 
 import httpx
-from colorama import (
-    Fore,
-)  # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
+from colorama import Fore  # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 from halo import Halo
 
 # [=== Tool Plan ===] #
@@ -110,7 +109,7 @@ def clear_terminal():
 
 
 # [=== Main class ===] #
-class Saifandor:
+class Serikandor:
     def __init__(self, settings):
         # NOTE: save_file will be None or a string of a file path
         self.target = settings["target"]
@@ -240,20 +239,17 @@ class Saifandor:
 
 
 def display_header():
-    ascii_banner = """
-     _____       _  __                _            
-    /  ___|     (_)/ _|              | |           
-    \\ `--.  __ _ _| |_ __ _ _ __   __| | ___  _ __ 
-     `--. \\/ _` | |  _/ _` | '_ \\ / _` |/ _ \\| '__|
-    /\\__/ / (_| | | || (_| | | | | (_| | (_) | |   
-    \\____/ \\__,_|_|_| \\__,_|_| |_|\\__,_|\\___/|_|   """
+    ascii_banner = r"""
+     _____           _ _                   _            
+    /  ___|         (_) |                 | |           
+    \ `--.  ___ _ __ _| | ____ _ _ __   __| | ___  _ __ 
+     `--. \/ _ \ '__| | |/ / _` | '_ \ / _` |/ _ \| '__|
+    /\__/ /  __/ |  | |   < (_| | | | | (_| | (_) | |   
+    \____/ \___|_|  |_|_|\_\__,_|_| |_|\__,_|\___/|_|   """
     title_colors = [Fore.RED, Fore.YELLOW, Fore.WHITE, Fore.GREEN]
-    colorful_banner = "".join(
-        title_colors[char % len(title_colors)] + ascii_banner[char]
-        for char in range(len(ascii_banner))
-    )
+    colorful_banner = "".join(title_colors[char % len(title_colors)] + ascii_banner[char] for char in range(len(ascii_banner)))
 
     title_bar = f"{Fore.YELLOW}________________________________________________________/{Fore.RESET}"
 
-    header = f"{colorful_banner}\n{title_bar}\n{Fore.BLUE}Saifandor v1.0{Fore.RESET}"
+    header = f"{colorful_banner}\n{title_bar}\n{Fore.BLUE}Serikandor v1.0{Fore.RESET}"
     print(header)

@@ -5,7 +5,7 @@
         "title_colors": ["red", "yellow", "green", "cyan", "blue", "magenta"]
     },
     "options": {
-        "1": "Patch Pirate (Juha sa štruklima Soup - Croation)"
+        "1": "PatchPirate (Juha sa štruklima Soup - Croation)"
     },
     "descriptions": {
         "1": "scans github for PII and other information on a targeted github user"

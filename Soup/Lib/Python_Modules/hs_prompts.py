@@ -49,7 +49,7 @@ def exit_program_soupemapper() -> None:
     exit()
 
 # Says "Goodbye!" to the user in Arabic and exits the program
-def exit_program_saifandor() -> None:
+def exit_program_serikandor() -> None:
     print(f"{magenta}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{reset}")
     exit()
 
@@ -78,8 +78,8 @@ def exit_program(tool_name: str) -> None:
         exit_program_main()
     elif tool_name == "patchpirate":
         exit_program_patchpirate()
-    elif tool_name == "saifandor":
-        exit_program_saifandor()
+    elif tool_name == "serikandor":
+        exit_program_serikandor()
     elif tool_name == "dabijar":
         exit_program_dabijar()
     elif tool_name == "mudelatie":

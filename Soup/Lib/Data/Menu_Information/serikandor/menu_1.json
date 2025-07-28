@@ -1,12 +1,10 @@
 {
     "header_info": {
-        "menu_title_func_name": "saifandor",
+        "menu_title_func_name": "serikandor",
         "tool_version": "1.0",
         "title_colors": [
-            "red",
-            "yellow",
-            "white",
-            "green"
+            "blue",
+            "white"
         ]
     },
     "options": {

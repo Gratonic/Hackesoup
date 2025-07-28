@@ -48,19 +48,21 @@ def soupemapper():
     \____/ \___/ \__,_| .__/ \___|_| |_| |_|\__,_| .__/| .__/ \___|_|   
                       | |                        | |   | |              
                       |_|                        |_|   |_|              """
-    tool_name = f"Port Scanner"
+    tool_name = f"soupemapper"
     menu_title_bar = f"_________________________________________________________________________/"
     return [ascii_tool_title_art, menu_title_bar, tool_name]
 
-def saifandor():
+def serikandor():
     ascii_tool_title_art = r"""
-     _____       _  __                _            
-    /  ___|     (_)/ _|              | |           
-    \ `--.  __ _ _| |_ __ _ _ __   __| | ___  _ __ 
-     `--. \/ _` | |  _/ _` | '_ \ / _` |/ _ \| '__|
-    /\__/ / (_| | | || (_| | | | | (_| | (_) | |   
-    \____/ \__,_|_|_| \__,_|_| |_|\__,_|\___/|_|   """
-    tool_title = f"Sub Domain Finder"
+    
+    
+     _____           _ _                   _            
+    /  ___|         (_) |                 | |           
+    \ `--.  ___ _ __ _| | ____ _ _ __   __| | ___  _ __ 
+     `--. \/ _ \ '__| | |/ / _` | '_ \ / _` |/ _ \| '__|
+    /\__/ /  __/ |  | |   < (_| | | | | (_| | (_) | |   
+    \____/ \___|_|  |_|_|\_\__,_|_| |_|\__,_|\___/|_|   """
+    tool_title = f"serikandor"
     menu_title_bar = f"______________________________________________________________________________________________/"
     return [ascii_tool_title_art, menu_title_bar, tool_title]
 
@@ -72,7 +74,7 @@ def mudelatie():
     | |\/| | | | |/ _` |/ _ \ |/ _` | __| |/ _ \
     | |  | | |_| | (_| |  __/ | (_| | |_| |  __/
     \_|  |_/\__,_|\__,_|\___|_|\__,_|\__|_|\___|"""
-    tool_title = f"XSS Scanner"
+    tool_title = f"mudelatie"
     menu_title_bar = f"_______________________________________________________________/"
     return [ascii_tool_title_art, menu_title_bar, tool_title]
 
@@ -86,10 +88,9 @@ def baumspinne():
     \____/ \__,_|\__,_|_| |_| |_|___/ .__/|_|_| |_|_| |_|\___|
                                     | |                       
                                     |_|                       """
-    tool_title = f"Directory Traversal Scanner"
+    tool_title = f"baumspinne"
     menu_title_bar = f"________________________________________________________________________________________________________/"
     return [ascii_tool_title_art, menu_title_bar, tool_title]
-
 
 def dabijar():
     ascii_tool_title_art = r"""
@@ -101,7 +102,7 @@ def dabijar():
     |___/ \__,_|_.__/|_| |\__,_|_|   
                       _/ |           
                      |__/            """
-    tool_title = f"SQLI Scanner"
+    tool_title = f"dabijar"
     menu_title_bar = f"____________________________________________________________________/"
     return [ascii_tool_title_art, menu_title_bar, tool_title]
 

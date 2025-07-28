@@ -2,7 +2,7 @@
     "header_info": {
         "menu_title_func_name": "mudelatie",
         "tool_version": "1.0",
-        "title_colors": ["green", "red", "yellow", "light_blue"]
+        "title_colors": ["red", "white", "blue", "green"]
     },
     "options": {
         "1": null

@@ -153,8 +153,8 @@ def patchpirate_menu():
 
 # Web Tool Menus
 
-def saifandor_menu():
-    menu_builder(menu_directory_name="saifandor", menu_number=1)
+def serikandor_menu():
+    menu_builder(menu_directory_name="serikandor", menu_number=1)
 
 def dabijar_menu():
     menu_builder(menu_directory_name="dabijar", menu_number=1)
