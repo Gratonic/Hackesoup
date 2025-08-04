@@ -27,9 +27,10 @@ import os
 import random
 import re
 
-import httpx
 from colorama import Fore  # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 from halo import Halo
+import dns.resolver
+import requests
 
 # [=== Tool Plan ===] #
 
@@ -62,6 +63,9 @@ NOTE: Only the target and save_file information is needed, the other settings ar
 """
 <ascii title>
 ___________________/
+Serikandor v1.0
+
+[*] WARNING: These results may not be entirely accurate, it is up to you verify them. This is simply a tool.
 
 [=== Discovered Domains ===]
 
@@ -83,6 +87,7 @@ ___________________/
 
 """
 
+# [=== Global Variables ===] #
 
 # user-agent pool for HTTP(S) requests
 user_agents = [
@@ -92,13 +97,20 @@ user_agents = [
     "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15",
 ]
 
+# used to check for status codes that indicate the domain in no longer valid
+blacklisted_status_codes = [
+    404,  # Not Found
+    410,  # Gone
+    451,  # Unavailable For Legal Reasons
+    521,  # Web Server Is Down
+]
 
 # [=== Special Functions ===] #
+
 def exit_program():
     print("\n")
-    print(f"{Fore.MAGENTA}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{Fore.RESET}")
+    print(f"{Fore.MAGENTA}\n\nשיהיה לך יום שקט ולהתראות לעת עתה!{Fore.RESET}")
     exit()
-
 
 # Clears the users terminal
 def clear_terminal():
@@ -107,149 +119,33 @@ def clear_terminal():
     else:
         os.system("cls")  # For Windows
 
+# [=== Functionality ===]
 
-# [=== Main class ===] #
-class Serikandor:
-    def __init__(self, settings):
-        # NOTE: save_file will be None or a string of a file path
-        self.target = settings["target"]
-        self.save_file = settings["save_file"]
-        # placeholder for records
-        self.records = {}
+def resolve_domains(records: dict):
+    dirty_records = records
+    cleaned_records = {}
+    # used to cache known IP's with their status codes
+    cache = {}
+    resolver = dns.resolver.Resolver()
 
-    def clean_url(self) -> str | None:
-        # Regex pattern to match the domain
-        pattern = r"https?://(?:www\.)?([^/]+)"
-        match = re.search(pattern, self.target)
+class Resolver():
+    def __init__(self, records: dict):
+        self.records = records
+        self.cache = {}
 
-        if match:
-            # extracts the domain
-            full_domain = match.group(1)
-            # split the domain to get the main part (last two segments)
-            domain_parts = full_domain.split(".")
-            if len(domain_parts) > 2:
-                # returns the last two segments for subdomains
-                return ".".join(domain_parts[-2:])
-            else:
-                # returns the domain if it's already in the correct format
-                return full_domain
-        else:
-            print(
-                f"{Fore.RED}[!] Error: Scan failed, the domain could not be scanned.{Fore.RESET}"
-            )
-            exit_program()
-
-    async def fetch_records(self) -> None:
-        working_indicator = Halo(
-            text="fetching subdomain information", spinner="bouncingBar"
-        )
-        target_url = self.clean_url()
-
-        working_indicator.start()
-
-        api_url = f"https://crt.sh/?q=%25.{target_url}&output=json"
-        headers = {"User-Agent": random.choice(user_agents)}
-
-        async with httpx.AsyncClient() as client:
-            response = await client.get(api_url, headers=headers, timeout=30)
-            if response.status_code == 200:
-                self.records = response.json()
-            else:
-                print(
-                    f"\n{Fore.RED}[!] Error: fetch failed with status code: {Fore.YELLOW}{response.status_code}{Fore.RESET}"
-                )
-                exit_program()
-
-        self.process_records()
-        await self.check_status_codes()
-
-        working_indicator.stop()
-
-    def process_records(self) -> list:
-        records = self.records
-        processed_records = []
-
-        for record in records:
-            common_name = record["common_name"]
-            name_value = record["name_value"]
-            issuer_name = record["issuer_name"]
-            cert_issue_date = record["not_before"]
-
-            subdomains = []
-            emails = []
-
-            for entry in [common_name, name_value]:
-                data = entry.split("\n")
-                for chunk in data:
-                    chunk = chunk.strip()
-                    if "@" in chunk:
-                        emails.append(chunk)
-                    else:
-                        # this will remove any invalid subdomains (*.example.com)
-                        if "*" in chunk:
-                            continue
-                        else:
-                            subdomains.append(chunk)
-
-            # [0] is the date, [1] is the time the certificate was issued
-            cert_issue_date = cert_issue_date.split("T")[0]
-
-            # creates a new record containing the wanted data found in the current record
-            record = {
-                "subdomains": subdomains,
-                "emails": emails,
-                "CA_name": issuer_name,
-                "cert_issue_date": cert_issue_date,
-            }
-
-            processed_records.append(record)
-
-        self.records = processed_records
-
-    async def check_status_codes(self):
+    def resolve_domains(self) -> dict:
         records = self.records
 
-        async with httpx.AsyncClient() as client:
-            for record in records:
-                subdomains = []
-                for subdomain in record["subdomains"]:
-                    try:
-                        response = await client.get(f"https://{subdomain}")
-                        if response.status_code == 200 or response.status_code == 403:
-                            subdomains.append([subdomain, response.status_code])
-                        else:
-                            continue
-                    except httpx.ConnectError:
-                        # may occur with some domains that can no longer be accessed or are for LAN/WLAN use only (ex: onex.wifi.google.com)
-                        continue
-                    except httpx.RequestError:
-                        # sometimes the server may disconnect without a response
-                        continue
-
-                record["subdomains"] = subdomains
-
-    async def run(self):
-        clear_terminal()
-        working_indicator = Halo(
-            text="fetching subdomain information", spinner="bouncingBar"
-        )
-        display_header()
-        working_indicator.start()
-        await self.fetch_records()
+        resolver = dns.resolver.Resolver()
+        resolver.nameservers = [
+            "8.8.8.8", "8.8.4.4",         # Google
+            "1.1.1.1", "1.0.0.1",         # Cloudflare
+            "9.9.9.9", "149.112.112.112"  # Quad9
+        ]
 
 
-def display_header():
-    ascii_banner = r"""
-     _____           _ _                   _            
-    /  ___|         (_) |                 | |           
-    \ `--.  ___ _ __ _| | ____ _ _ __   __| | ___  _ __ 
-     `--. \/ _ \ '__| | |/ / _` | '_ \ / _` |/ _ \| '__|
-    /\__/ /  __/ |  | |   < (_| | | | | (_| | (_) | |   
-    \____/ \___|_|  |_|_|\_\__,_|_| |_|\__,_|\___/|_|   """
-    title_colors = [Fore.RED, Fore.YELLOW, Fore.WHITE, Fore.GREEN]
-    colorful_banner = "".join(title_colors[char % len(title_colors)] + ascii_banner[char] for char in range(len(ascii_banner)))
 
-    title_bar = f"{Fore.YELLOW}________________________________________________________/{Fore.RESET}"
 
-    header = f"{colorful_banner}\n{title_bar}\n{Fore.BLUE}Serikandor v1.0{Fore.RESET}"
-    print(header)
+    # dumps the current cache of ip addresses 
+    def dump_cache(self) -> dict:
+        return self.cache

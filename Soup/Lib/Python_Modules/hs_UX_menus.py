@@ -92,7 +92,7 @@ def exit_program_soupemapper() -> None:
 
 # Says "Goodbye!" to the user in Arabic and exits the program
 def exit_program_serikandor() -> None:
-    print(f"{magenta}\n\nغزة تنهي هذا اللقاء، لكنها لا تنتهي!{reset}")
+    print(f"{magenta}\n\nשיהיה לך יום שקט ולהתראות לעת עתה!{reset}")
     exit()
 
 # Says "Goodbye!" to the user in Spanish and exits the program
