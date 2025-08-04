@@ -97,14 +97,6 @@ user_agents = [
     "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15",
 ]
 
-# used to check for status codes that indicate the domain in no longer valid
-blacklisted_status_codes = [
-    404,  # Not Found
-    410,  # Gone
-    451,  # Unavailable For Legal Reasons
-    521,  # Web Server Is Down
-]
-
 # [=== Special Functions ===] #
 
 def exit_program():
@@ -121,12 +113,33 @@ def clear_terminal():
 
 # [=== Functionality ===]
 
-def resolve_domains(records: dict):
+def resolve_domains(records: dict) -> dict:
     dirty_records = records
     cleaned_records = {}
-    # used to cache known IP's with their status codes
     cache = {}
+
     resolver = dns.resolver.Resolver()
+    resolver.nameservers = [
+        "8.8.8.8", "8.8.4.4",         # Google
+        "1.1.1.1", "1.0.0.1",         # Cloudflare
+        "9.9.9.9", "149.112.112.112"  # Quad9
+    ]
+
+    """
+    Validates the domains for each record, makes a new record for each domains with the status code if the status code is not 
+    in the blacklist, then adds each new record to the cleaned_records (if there are any).
+    """
+    for index, record in enumerate(dirty_records, start=0):
+        subdomains = dirty_records[index]["subdomains"]
+        for subdomain in subdomains:
+            try:
+                ip = resolver.resolve(subdomain, "A")
+                
+            except KeyboardInterrupt:
+                exit_program()
+            except Exception as e:
+                print(e)
+    
 
 class Resolver():
     def __init__(self, records: dict):
@@ -142,6 +155,8 @@ class Resolver():
             "1.1.1.1", "1.0.0.1",         # Cloudflare
             "9.9.9.9", "149.112.112.112"  # Quad9
         ]
+
+
 
 
 
