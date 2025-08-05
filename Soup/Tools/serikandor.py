@@ -1,13 +1,13 @@
-# [=== Program Metadata ===] #
+# [=== Boilerplate ===] #
 
 """
 # :: Author Information and Program Details :: #
 
 File Name: serikandor.py
-Author(s): ibrahim-sisar (https://github.com/ibrahim-sisar) and Gratonic (https://github.com/Gratonic)
+Author(s): Gratonic (https://github.com/Gratonic)
 Written In: Python 3.13.5
 Dependencie(s): colorama, halo, asyncio, random, httpx, json, re, os
-Last Modified: 7/6/2025
+Last Modified: 8/4/2025
 
 # :: Description :: #
 
@@ -78,13 +78,11 @@ Serikandor v1.0
 
 [=== Discovered Emails ===]
 
-    Domain              Domain IPv4        Email
------------------------------------------------------------------------------
-[+] example0.com        <domain-ip>     admin@example.com
-[+] example1.com        <domain-ip>     devteam@example.com
-[+] example2.com        <domain-ip>     support@example.com
------------------------------------------------------------------------------
-
+------------------------------------------------------------------------------
+[+] admin@example.com
+[+] dev@example.com
+[+] support@example.com
+------------------------------------------------------------------------------
 """
 
 # [=== Global Variables ===] #
@@ -113,54 +111,129 @@ def clear_terminal():
 
 # [=== Functionality ===]
 
-def resolve_domains(records: dict) -> dict:
+"""
+validates the subdomains for each record, makes a new record for each subdomain with the IPv4 address and status code if the status code is not 
+in the blacklist, then adds each new record to the cleaned_records (if there are any)
+"""
+def validate_and_clean_records(records: dict) -> dict:
     dirty_records = records
-    cleaned_records = {}
+    blacklisted_status_codes = [
+        404,  # Not Found
+        410,  # Gone
+        451,  # Unavailable For Legal Reasons
+        503,  # Service Unavailable
+    ]
+    cleaned_records = []
     cache = {}
 
     resolver = dns.resolver.Resolver()
     resolver.nameservers = [
         "8.8.8.8", "8.8.4.4",         # Google
         "1.1.1.1", "1.0.0.1",         # Cloudflare
-        "9.9.9.9", "149.112.112.112"  # Quad9
+        "9.9.9.9", "149.112.112.112", # Quad9
     ]
 
-    """
-    Validates the domains for each record, makes a new record for each domains with the status code if the status code is not 
-    in the blacklist, then adds each new record to the cleaned_records (if there are any).
-    """
     for index, record in enumerate(dirty_records, start=0):
         subdomains = dirty_records[index]["subdomains"]
+        resolved_subdomains = []
+
         for subdomain in subdomains:
             try:
-                ip = resolver.resolve(subdomain, "A")
+                answers = resolver.resolve(subdomain, "A")
+                # this is a list of all the IPv4 address used for that domain
+                ips = [answer.to_text() for answer in answers]
+                # selects one IPv4 address from the list of ips to use to check for the domain status code
+                """
+                NOTE:
+                    * The IPv4 address belongs to the reverse proxy or web server
+                    * This is the most time efficient way to check the status code of each domain but it also means the status code may not be accurate
+                """
+                ip = ips[0]
+                if ip in cache:
+                    status_code = cache[ip]
+                else:
+                    # NOTE: user_agents is global
+                    headers = {
+                        'User-Agent': random.choice(user_agents),
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                        'Accept-Language': 'en-US,en;q=0.5',
+                        'Host': subdomain
+                    }
+                    response = requests.get(f"http://{ip}", headers=headers, timeout=7)
+                    status_code = response.status_code
+                    if status_code not in blacklisted_status_codes:
+                        # add the ip and status code to the cache
+                        cache[ip] = status_code
+                    else:
+                        # moves to the next subdomain
+                        continue
+                
+                # creates a new record using the status code, ip, subdomain, record CA name, and record issue data
+                new_record = {
+                    "subdomain": subdomain,
+                    "status_code": status_code,
+                    "emails": record["emails"],
+                    "CA_name": record["CA_name"],
+                    "cert_issue_date": record["cert_issue_date"],
+                }
+                # adds the new record to the cleaned_records list 
+                cleaned_records.append(new_record)
                 
             except KeyboardInterrupt:
                 exit_program()
+            except requests.exceptions.Timeout:
+                continue
+            except requests.exceptions.RequestException:
+                continue
             except Exception as e:
                 print(e)
+        
+        return cleaned_records
+
+class Serikandor:
+    def __init__(self, settings):
+        # NOTE: save_file will be None or a string of a file path
+        self.target = settings["target"]
+        self.save_file = settings["save_file"]
+        # placeholder for records
+        self.records = {}
+
+    def clean_url(self) -> str:
+        # cleans the domain name (target) using a regex pattern
+        pattern = r"https?://(?:www\.)?([^/]+)"
+        match = re.search(pattern, self.target)
+        
+        if match:
+            # extracts the domain
+            full_domain = match.group(1)
+            # split the domain to get the main part (last two segments)
+            domain_parts = full_domain.split(".")
+            if len(domain_parts) > 2:
+                # returns the last two segments for subdomains
+                return ".".join(domain_parts[-2:])
+            else:
+                # returns the domain if it's already in the correct format
+                return full_domain
+        else:
+            print(f"{Fore.RED}[!] Error: Unknown.{Fore.RESET}")
+            exit_program()
     
+    def fetch_records(self) -> None:
+        working_indicator = Halo(text="fetching subdomain information", spinner="bouncingBar")
+        target_url = self.clean_url()
 
-class Resolver():
-    def __init__(self, records: dict):
-        self.records = records
-        self.cache = {}
+        working_indicator.start()
 
-    def resolve_domains(self) -> dict:
-        records = self.records
+        api_url = f"https://crt.sh/?q=%25.{target_url}&output=json"
+        headers = {'User-Agent': random.choice(user_agents)}
 
-        resolver = dns.resolver.Resolver()
-        resolver.nameservers = [
-            "8.8.8.8", "8.8.4.4",         # Google
-            "1.1.1.1", "1.0.0.1",         # Cloudflare
-            "9.9.9.9", "149.112.112.112"  # Quad9
-        ]
-
-
-
-
-
-
-    # dumps the current cache of ip addresses 
-    def dump_cache(self) -> dict:
-        return self.cache
+        try:
+            response = requests.get(api_url, headers=headers, timeout=15)
+        except KeyboardInterrupt:
+            exit_program()
+        except requests.Timeout:
+            print(f"{Fore.RED}[!] Error: The initial request timed out, please check your internet connection and try again.{Fore.RESET}")
+        except Exception as e:
+            print(f"{Fore.RED}[!] Error: Unknown{Fore.RESET}\n")
+            print(e)
+            exit_program()
