@@ -2,3 +2,4 @@ colorama==0.4.6
 halo==0.0.31
 dnspython==2.7.0
 requests==2.32.4
+iteration_utilities==0.13.0
