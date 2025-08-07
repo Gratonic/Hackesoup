@@ -27,61 +27,21 @@ from halo import Halo
 import requests
 from iteration_utilities import unique_everseen
 
-# [=== Tool Plan ===] #
-
-"""
-Uses crt.sh to retrieve the following info:
-
-* all domains/subdomains of a specified domain
-* CA information for each discovered domain/subdomain
-* email(s) found for each domain/subdomain dicovered in the crt.sh search
-"""
-
-# [=== Settings Example ===] #
-
-"""
-NOTE: Only the target and save_file information is needed, the other settings are not used by the tool
-
-{
-'target': 'https://www.google.com',
-'tool': 'subdomain_finder', 
-'tool_class': 'WEB', 
-'API_token': None, 
-'port': None, 'port_range': None, 
-'scan_type': None, 
-'save_file': None
-}
-"""
-
-# [=== Final Output Example ===]
-
-"""
-<ascii title>
-___________________/
-Serikandor v1.0
-
-[*] WARNING: These results may not be entirely accurate, it is up to you verify them. This is simply a tool.
-
-[=== Discovered Domains ===]
-
-
-    Domain Name            CA       Cert Issued
-------------------------------------------------------------------------------
-[+] example0.com        <CA Name>    9/15/1995
-[+] example1.com        <CA Name>    9/15/1995
-[+] example2.com        <CA Name>    9/15/1995
-------------------------------------------------------------------------------
-
-[=== Discovered Emails ===]
-
-------------------------------------------------------------------------------
-[+] admin@example.com
-[+] dev@example.com
-[+] support@example.com
-------------------------------------------------------------------------------
-"""
-
 # [=== Global Variables ===] #
+
+# creates the header for the tool output (also used when the loading bar starts)
+title = r"""
+ _____           _ _                   _            
+/  ___|         (_) |                 | |           
+\ `--.  ___ _ __ _| | ____ _ _ __   __| | ___  _ __ 
+ `--. \/ _ \ '__| | |/ / _` | '_ \ / _` |/ _ \| '__|
+/\__/ /  __/ |  | |   < (_| | | | | (_| | (_) | |   
+\____/ \___|_|  |_|_|\_\__,_|_| |_|\__,_|\___/|_|   """
+title_colors = [Fore.BLUE, Fore.WHITE]
+colorful_title = ''.join(title_colors[char % len(title_colors)] + title[char] for char in range(len(title)))
+title_bar = f"{Fore.YELLOW}__________________________________________________________/"
+tool_version_info = f"{Fore.CYAN}Serikandor v1.0{Fore.RESET}"
+header = f"{colorful_title}\n{title_bar}\n{tool_version_info}\n"
 
 # user-agent pool for HTTP(S) requests
 user_agents = [
@@ -109,8 +69,8 @@ def clear_terminal():
 
 class Serikandor:
     def __init__(self, settings: dict):
-        # NOTE: save_file will be None or a string of a file path
         self.target = settings["target"]
+        # False if the user chose not to save the tool output, else it is a file path
         self.save_file = settings["save_file"]
         # placeholder for records
         self.records = {}
@@ -140,6 +100,7 @@ class Serikandor:
         working_indicator = Halo(text="fetching subdomains and emails", spinner="bouncingBar")
         target_url = self.clean_url()
 
+        print(header)
         working_indicator.start()
 
         api_url = f"https://crt.sh/?q=%25.{target_url}&output=json"
@@ -164,11 +125,8 @@ class Serikandor:
         self.process_records()
         self.clean_records()
 
-        if self.save_file != None:
-            with open(self.save_file, "w") as save_file:
-                json.dump(self.records, save_file)
-
         working_indicator.stop()
+        clear_terminal()
 
         return self.records
 
@@ -248,6 +206,8 @@ class Serikandor:
 
         self.records = final_records
 
+# Longest known domain in the entire world is 63 characters
+
 def run():
     # fetches the tool settings from the input file
     with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
@@ -257,59 +217,47 @@ def run():
     # list of dictionaries which contain the data you must work with
     records = serikandor.fetch_records()
 
-    """
-    # output goal
-    print(\"""
-    <ascii title>
-    ___________________/
-    Serikandor v1.0
-    
-    [*] WARNING: These results may not be entirely accurate, it is up to you verify them. This is simply a tool.
+    warning_message = f"{Fore.RED}[*] WARNING: These results may not be entirely accurate, it is up to you verify them. This is simply a tool.\n{Fore.RESET}"
 
-    [=== Discovered Domains ===]
-    \""")
+    # used to keep things organized
+    divider_line = f"{Fore.LIGHTBLACK_EX}--------------------------------------------------------------------------------------------------------{Fore.RESET}"
 
-    # Define fixed widths for the columns
-    domain_width = 30  # Adjusted width for domain names
-    ca_width = 50      # Width for CA names
-    date_width = 15    # Width for certificate issue dates
+    # determines the len of each item (except the emails) in each record and how many spaces should be added for neat output
+    # NOTE: certain entries will be removed if the length of one of their items exceeds the following limits, this keeps the output neat
+    max_domain_name_len = 50
+    max_CA_name_len = 34
 
-    # Define the header
-    header = f"{'Domain Name':<{domain_width}} {'CA':<{ca_width}} {'Cert Issued':<{date_width}}"
-    separator_length = max(len(header), 80)  # Ensure separator is at least 80 characters
-    separator = '-' * separator_length
+    # used to collect all of the emails from the records
+    emails = set()
 
-    # Print the header and separator
-    print(header)
-    print(separator)
+    for index, record in enumerate(records, start=0):
+        # gets the length of the necessary items in the record
+        domain_len = len(record["subdomain"])
+        CA_name_len = len(record["CA_name"])
 
-    # Set to collect unique emails
-    unique_emails = set()
-
-    # Print each record
-    for record in records:
-        domain = record.get('subdomain', '<Domain Not Found>')
-        ca = record.get('CA_name', '<CA Name>')
-        cert_issued = record.get('cert_issue_date', '<Date Not Found>')
+        # determines and adds the spaces that need to be added to each item in the record
+        records[index]["subdomain"] = f"{record["subdomain"]}{" " * ((max_domain_name_len - domain_len) + 3)}"
+        records[index]["CA_name"] = f"{record["CA_name"]}{" " * ((max_CA_name_len - CA_name_len) + 3)}"
+        # just adding the color to this item in the list
+        records[index]["cert_issue_date"] = f"{record["cert_issue_date"]}"
         
-        # Extract emails and add to the set
-        emails = record.get('emails', [])
-        unique_emails.update(emails)
-
-        # Print the domain record
-        print(f"[+] {domain:<{domain_width}} {ca:<{ca_width}} {cert_issued:<{date_width}}")
-
-    # Print the final separator
-    print(separator)
-
-    # Print discovered emails
-    print(\"""
-    [=== Discovered Emails ===]
-    ------------------------------------------------------------------------------
-    \""")
-    for email in unique_emails:
-        print(f"[+] {email}")
-
-    # Print the final separator for emails
-    print("------------------------------------------------------------------------------")
-    """
+        # collects all the emails from the current record (if any) and adds them to the emails list
+        for email in record["emails"]:
+            emails.add(email)
+    
+    # the actual displaying
+    print(header)
+    print(warning_message)
+    print(f"{Fore.BLUE}[=== Discovered Domains ===]\n{Fore.RESET}")
+    print(f"{Fore.WHITE}Domain Name{" " * 46}CA Name{" " * 30}Issue Date{Fore.RESET}")
+    print(divider_line)
+    for record in records:
+        print(f"{Fore.GREEN}[+] {Fore.MAGENTA}{record["subdomain"]}{Fore.CYAN}{record["CA_name"]}{Fore.YELLOW}{record["cert_issue_date"]}{Fore.RESET}")
+    print(divider_line)
+    print("\n")
+    print(f"{Fore.BLUE}[=== Discovered Emails ===]{Fore.RESET}")
+    print("\n")
+    print(divider_line)
+    for email in emails:
+        print(f"{Fore.GREEN}[+] {Fore.CYAN}{email}{Fore.RESET}")
+    print(divider_line)

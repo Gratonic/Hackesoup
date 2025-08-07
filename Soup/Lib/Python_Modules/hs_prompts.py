@@ -234,7 +234,8 @@ def save_to_file(tool_name: str) -> bool:
             save = str(input(f"{magenta}Would You Like To Save The Tools Output To A JSON File? {green}[y/n]{magenta}: {reset}"))
             if save == "y" or save == "Y" or save == "yes" or save == "YES":
                 # lets the user know where the file will be saved
-                print(f"{yellow}[*] The Tool Output Will Be Saved Here{magenta}:{blue} ./Hackesoup/Saves/{reset}")
+                # print(f"{yellow}[*] The Tool Output Will Be Saved Here{magenta}:{blue} ./Hackesoup/Saves/{reset}")
+                print(f"{red}[*] The feature is currently unavailable, sorry.{reset}")
                 try:
                     # waits a few seconds
                     time.sleep(3)

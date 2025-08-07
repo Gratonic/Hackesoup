@@ -54,8 +54,6 @@ def soupemapper():
 
 def serikandor():
     ascii_tool_title_art = r"""
-    
-    
      _____           _ _                   _            
     /  ___|         (_) |                 | |           
     \ `--.  ___ _ __ _| | ____ _ _ __   __| | ___  _ __ 

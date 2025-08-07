@@ -74,7 +74,7 @@ def clear_terminal():
 def save_tool_output() -> None:
     save_to_file = hs_prompts.save_to_file(tool_name=hs_config["tool"])
     if save_to_file == True:
-        hs_config["save_file"] = f"./Hackesoup/Saves/{hs_config['tool']}{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        hs_config["save_file"] = f"../Saves/{hs_config['tool']}{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     else:
         hs_config["save_file"] = False
 
@@ -143,21 +143,21 @@ def total_settings_reset():
     hs_config["port"] = None
     hs_config["port_range"] = None
     hs_config["scan_type"] = None
-    hs_config["save_file"] = None
+    hs_config["save_file"] = False
 
 # OSINT Tool Settings Reset Functions #
 
 def patchpirate_menu_settings_reset():
     hs_config["target"] = None
     hs_config["API_token"] = None
-    hs_config["save_file"] = None
+    hs_config["save_file"] = False
 
 # Web Tool Settings Reset Functions #
 
 # *Since all of the web tools have the same exact settings*
 def web_tool_menu_settings_reset():
     hs_config["target"] = None
-    hs_config["save_file"] = None
+    hs_config["save_file"] = False
 
 # Network Tools Settings Reset Functions #
 
@@ -168,7 +168,7 @@ def soupemapper_UX_menu_1_settings_reset():
 
 def soupemapper_UX_menu_2_settings_reset():
     hs_config["scan_type"] = None
-    hs_config["save_file"] = None
+    hs_config["save_file"] = False
 
 # -- Individual UX Menu Functions-- #
 

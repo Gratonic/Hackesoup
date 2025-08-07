@@ -20,6 +20,7 @@ This python file is responsible for running the entire menu interface and tools 
 import asyncio
 import importlib
 import json
+import time
 import os
 import sys
 from datetime import datetime
@@ -96,18 +97,6 @@ def read_output_file() -> None:
     with open("../Soup/Lib/Data/Output_Data/output.json", "r") as output_file:
         output = json.load(output_file)
 
-# saves the output file
-def save_output_to_file() -> None:
-    # grabs the output data
-    read_output_file()
-    # forms the file path to write the output data to for the save
-    now = datetime.now()
-    formatted_time = now.strftime("%Y-%m-%d_%H-%M-%S")
-    save_file_path = f"../Saves/save_{formatted_time}.json"
-    with open(save_file_path, "w") as save_file:
-        json.dump(output, save_file, indent=4)
-
-
 if __name__ == "__main__":
     # clears the input file and output file in case their is any sensitive information, first step
     # NOTE: Will be uncommented when all tools have been added to the menu
@@ -130,8 +119,9 @@ if __name__ == "__main__":
     else:
         print(f"{Fore.RED}[!] Alert: Tool not implemented yet.{Fore.RESET}")
 
-    if settings["save_file"] == True:
-        save_output_to_file()
+    if settings["save_file"] != False:
+        print(f"{Fore.RED}[*] The feature is currently unavailable, sorry.{Fore.RESET}")
+        time.sleep(3)
     else:
         pass
 
