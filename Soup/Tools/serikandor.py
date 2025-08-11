@@ -206,9 +206,7 @@ class Serikandor:
 
         self.records = final_records
 
-# Longest known domain in the entire world is 63 characters
-
-def run():
+def run() -> list:
     # fetches the tool settings from the input file
     with open("../Soup/Lib/Data/Input_Data/input.json", "r") as settings_file:
         settings = json.load(settings_file)
@@ -220,15 +218,24 @@ def run():
     warning_message = f"{Fore.RED}[*] WARNING: These results may not be entirely accurate, it is up to you verify them. This is simply a tool.\n{Fore.RESET}"
 
     # used to keep things organized
-    divider_line = f"{Fore.LIGHTBLACK_EX}--------------------------------------------------------------------------------------------------------{Fore.RESET}"
+    divider_line = f"{Fore.LIGHTBLACK_EX}-------------------------------------------------------------------------------------------------------------------------{Fore.RESET}"
 
     # determines the len of each item (except the emails) in each record and how many spaces should be added for neat output
     # NOTE: certain entries will be removed if the length of one of their items exceeds the following limits, this keeps the output neat
     max_domain_name_len = 50
-    max_CA_name_len = 34
+    max_CA_name_len = 50
 
     # used to collect all of the emails from the records
     emails = set()
+
+    # removes duplicate entries
+    unique_records = []
+
+    for index, record in enumerate(records, start=0):
+        if record not in unique_records:
+            unique_records.append(records)
+        else:
+            records.pop(index)
 
     for index, record in enumerate(records, start=0):
         # gets the length of the necessary items in the record
@@ -244,20 +251,34 @@ def run():
         # collects all the emails from the current record (if any) and adds them to the emails list
         for email in record["emails"]:
             emails.add(email)
-    
+
     # the actual displaying
     print(header)
     print(warning_message)
-    print(f"{Fore.BLUE}[=== Discovered Domains ===]\n{Fore.RESET}")
+    print(f"{Fore.BLUE}[=== Discovered Subdomains ===]\n{Fore.RESET}")
     print(f"{Fore.WHITE}Domain Name{" " * 46}CA Name{" " * 30}Issue Date{Fore.RESET}")
     print(divider_line)
-    for record in records:
-        print(f"{Fore.GREEN}[+] {Fore.MAGENTA}{record["subdomain"]}{Fore.CYAN}{record["CA_name"]}{Fore.YELLOW}{record["cert_issue_date"]}{Fore.RESET}")
+    # very rarely no subdomains are found
+    if records != list():
+        for record in records:
+            print(f"{Fore.GREEN}[+] {Fore.MAGENTA}{record["subdomain"]}{Fore.CYAN}{record["CA_name"]}{Fore.YELLOW}{record["cert_issue_date"]}{Fore.RESET}")
+    else:
+        print(f"{Fore.RED}[-] {Fore.MAGENTA}no subdomains were found{Fore.RESET}")
     print(divider_line)
     print("\n")
     print(f"{Fore.BLUE}[=== Discovered Emails ===]{Fore.RESET}")
     print("\n")
     print(divider_line)
-    for email in emails:
-        print(f"{Fore.GREEN}[+] {Fore.CYAN}{email}{Fore.RESET}")
+    # sometimes the emails list is empty
+    if emails != set():
+        for email in emails:
+            print(f"{Fore.GREEN}[+] {Fore.CYAN}{email}{Fore.RESET}")
+    else:
+        print(f"{Fore.RED}[-] {Fore.CYAN}no emails were found{Fore.RESET}")
     print(divider_line)
+
+    # returns the tool output without whitespace (will be saved in a file using code in hsmi.py if the user chose to save the tool output)
+    records_without_whitespace = [
+        {key: value.strip() if isinstance(value, str) else value for key, value in record.items()} for record in records
+    ]
+    return records_without_whitespace

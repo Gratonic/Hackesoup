@@ -18,20 +18,33 @@ In today’s cybersecurity landscape, professionals face significant challenges,
 
 ---
 
+## 🔧 How To Install Hackesoup
+
+1) cd path/to/Hackesoup                  (project root directory)
+2) chmod 700 ./Config/Linux/install.sh   (gives you permission to read, write, and execute the install file - might need sudo)
+3) ./Config/Linux/install.sh             (runs the install file, which creates a virtual environment and installs the requirements)
+4) source ./hackesoup_venv/bin/activate  (starts the virtual environment created by the install script)
+5) cd Interfaces                         (moves to the Interfaces/ directory)
+6) python3 hsmi.py                       (runs the program - the other interfaces are unavailable)
+
+NOTE:
+    * You'll have to complete step 4 every time you run Hackesoup (the venv is located in Hackesoup [the project root directory])
+    * To deactivate the virtual environment (venv), run the command "deactivate"
+
 ## 🚀 Features (Planned)
 
 - Clean and organized UI
 - Fast and user-friendly toolset
 - Support for multiple languages
 
-## 🛠️ Tools (Planned)
+## 🛠️ Tools (Complete: ✅, Planned: -)
 
-- PatchPirate   (GitHub OSINT tool)
-- Serikandor    (website OSINT and mapper tool)
-- Dabijar       (SQLI vulnerability scanner)
-- Mudelatie     (XSS vulnerability scanner)
-- Baumspinne    (directory traversal vulnerability scanner)
-- Soupemapper   (network mapper)
+-  PatchPirate   (GitHub OSINT tool)
+✅ Serikandor    (website OSINT and mapper tool)
+-  Dabijar       (SQLI vulnerability scanner)
+-  Mudelatie     (XSS vulnerability scanner)
+-  Baumspinne    (directory traversal vulnerability scanner)
+-  Soupemapper   (network mapper)
 
 ---
 

@@ -20,7 +20,6 @@ portion of the UX menus.
 
 # :: Imports :: #
 
-from datetime import datetime
 import hs_menu_titles # for the main menu easter egg
 import hs_menus
 import hs_prompts
@@ -72,9 +71,10 @@ def clear_terminal():
 
 # offers the user a chance to save the tools output
 def save_tool_output() -> None:
+    # [0] = bool, [1] is "NA" or "file/path"
     save_to_file = hs_prompts.save_to_file(tool_name=hs_config["tool"])
-    if save_to_file == True:
-        hs_config["save_file"] = f"../Saves/{hs_config['tool']}{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    if save_to_file[0] == True:
+        hs_config["save_file"] = save_to_file[1]
     else:
         hs_config["save_file"] = False
 
@@ -539,7 +539,7 @@ def menu_interface(start_point: int, code: int):
                             # ready to run the tool
                             save_tool_output()
                             write_settings_JSON_to_file(settings=hs_config)
-                            pass
+                            clear_terminal()
                 elif hs_config["tool_class"] == "WEB":
                     if hs_config["tool"] == "serikandor":
                         code = serikandor_UX_menu_pack(1)
@@ -548,7 +548,7 @@ def menu_interface(start_point: int, code: int):
                         elif code == 1500:
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
-                            pass
+                            clear_terminal()
                     elif hs_config["tool"] == "dabijar":
                         code = dabijar_UX_menu_pack(1)
                         if code == 500:
@@ -556,7 +556,7 @@ def menu_interface(start_point: int, code: int):
                         elif code == 1500:
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
-                            pass
+                            clear_terminal()
                     elif hs_config["tool"] == "mudelatie":
                         code = mudelatie_UX_menu_pack(1)
                         if code == 500:
@@ -564,7 +564,7 @@ def menu_interface(start_point: int, code: int):
                         elif code == 1500:
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
-                            pass
+                            clear_terminal()
                     elif hs_config["tool"] == "baumspinne":
                         code = baumspinne_UX_menu_pack(1)
                         if code == 500:
@@ -572,7 +572,7 @@ def menu_interface(start_point: int, code: int):
                         elif code == 1500:
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
-                            pass
+                            clear_terminal()
                 elif hs_config["tool_class"] == "LAN":
                     if hs_config["tool"] == "soupemapper":
                         code = soupemapper_UX_menu_pack()
@@ -581,7 +581,7 @@ def menu_interface(start_point: int, code: int):
                         elif code == 1500:
                             # ready to run the tool
                             write_settings_JSON_to_file(settings=hs_config)
-                            pass
+                            clear_terminal()
                 else:
                     print(f"{red}[!] Error: Tool Class Does Not Exist{reset}")
         else:

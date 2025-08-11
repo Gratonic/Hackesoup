@@ -1,4 +1,6 @@
 # :: Imports :: #
+
+from datetime import datetime
 import colorama
 import hs_validator
 import time
@@ -228,43 +230,30 @@ def requests_per_minute(tool_name: str) -> int:
 
 # Save To File and Payload File Prompts
 
-def save_to_file(tool_name: str) -> bool:
+def save_to_file(tool_name: str) -> list:
     while True:
         try:
-            save = str(input(f"{magenta}Would You Like To Save The Tools Output To A JSON File? {green}[y/n]{magenta}: {reset}"))
+            save = input(f"{magenta}Would You Like To Save The Tools Output To A JSON File? {green}[y/n]{magenta}: {reset}")
             if save == "y" or save == "Y" or save == "yes" or save == "YES":
-                # lets the user know where the file will be saved
-                # print(f"{yellow}[*] The Tool Output Will Be Saved Here{magenta}:{blue} ./Hackesoup/Saves/{reset}")
-                print(f"{red}[*] The feature is currently unavailable, sorry.{reset}")
-                try:
-                    # waits a few seconds
-                    time.sleep(3)
-                    # clear terminal
-                    clear_terminal()
-                    # lets the program know the user wants to save the output to a file
-                    return True
-                except:
-                    # a message is still printed saying goodbye but doing it here will cause the message to be printed twice
-                    exit()
+                current_time = str(datetime.now())
+                current_time = current_time.split(" ")
+                date = current_time[0]
+                time_now =  current_time[1].split(".")[0]
+                
+                # this path is used by the tool files, so the current location will be Interfaces (location of the interface files [aka the ones used to run the program])
+                save_file_path = f"../Saves/{tool_name}_{date}_{time_now}.json"
+
+                print(f"{magenta}[*] The tool output will be saved at {cyan}{save_file_path}{reset}")
+                time.sleep(3)
+                return [True, save_file_path]
             elif save == "n" or save == "N" or save == "no" or save == "NO":
-                return False
+                return [False, "NA"]
             else:
-                print(f"{red}[!] Error: Invalid Option{reset}")
+                print(f"{red}[!] Error: Invalid Input{reset}")
         except KeyboardInterrupt:
             exit_program(tool_name=tool_name)
-        except:
-            if save != "y" or save != "Y" or save != "yes" or save != "YES":
-                print(f"{red}[!] Error: Unknown{reset}")
-                exit_program(tool_name=tool_name)
-
-def payload_file_path(tool_name: str) -> str | None:
-    try:
-        path = str(input(f"{magenta}Please Enter A Payload File Path or File {green}[Ex: ./payload_file_example.txt]{magenta}: {reset}"))
-        validator = hs_validator.check_file_path(path)
-        # returns the file path
-        return validator[1]
-    except KeyboardInterrupt:
-        exit_program(tool_name=tool_name)
-    except:
-        print(f"{red}[!] Error: Unknown{reset}")
-        exit_program(tool_name=tool_name)
+        except Exception as e:
+            print(f"{red}[!] Error: An unknown error has occured while asking the user if they want to save the tool output.{reset}")
+            print("\n")
+            print(e)
+            exit_program(tool_name=tool_name)

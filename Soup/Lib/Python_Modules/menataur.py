@@ -190,7 +190,7 @@ class Menataur():
     def __init__(self):
         # Format Strings
         self._placeholder = ""
-        self._header = "{ascii_art_title}\n{title_bar}\n{program_version_color}{small_title} v{program_version_num}\n{os_support_message}{reset}"
+        self._header = "{ascii_art_title}\n{title_bar}\n{program_version_color}{small_title} v{program_version_num}\n{os_support_message}\n{reset}"
         self._body = "{accent_color}{menu_option_number}) {menu_option_color}{menu_option}{reset}"
         self._paragraph = "{text_color}{text}{reset}"
         self._footer = "{text_color}{text}{reset}"

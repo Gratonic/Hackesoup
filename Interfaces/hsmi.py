@@ -111,17 +111,19 @@ if __name__ == "__main__":
 
     # checks the tool and determines which one to call
     if settings["tool"] == "serikandor":
-        serikandor.run()
+        tool_output = serikandor.run()
     elif settings["tool"] == "patchpirate":
         print(
             f"{Fore.RED} [!] Alert: Patch Pirate is currently unavailable. {Fore.BLUE}:({Fore.RESET}"
         )
     else:
-        print(f"{Fore.RED}[!] Alert: Tool not implemented yet.{Fore.RESET}")
+        print(f"{Fore.RED}[!] Alert: This tool has not implemented yet.{Fore.RESET}")
 
-    if settings["save_file"] != False:
-        print(f"{Fore.RED}[*] The feature is currently unavailable, sorry.{Fore.RESET}")
-        time.sleep(3)
+    # checks if the user chose to save the tool output, saves it if they did
+    save_file_path = settings["save_file"]
+    if save_file_path != False:
+        with open(save_file_path, "w") as save_file:
+            json.dump(obj=tool_output, fp=save_file, indent=4)
     else:
         pass
 

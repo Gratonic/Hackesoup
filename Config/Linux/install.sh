@@ -8,7 +8,7 @@
 # This script MUST be run from the project's root directory.
 # Example:
 #   cd /path/to/Hackesoup
-#   sh Config/Linux/install.sh
+#   ./Config/Linux/install.sh
 #
 # ==============================================================================
 
@@ -50,8 +50,8 @@ log_error() {
 #
 log_info "Verifying execution location..."
 if [ ! -f "requirements.txt" ] || [ ! -d "Interfaces" ] || [ ! -d "Soup" ] || [ ! -d "LICENSE"]; then
-    log_error "This script must be run from the project root directory (the 'Hackesoup' folder)."
-    printf "Please change your directory to the project root and try again.\n"
+    log_error "This script must be run from the project's root directory (the 'Hackesoup' folder)."
+    printf "Please change your directory to the project's root and try again.\n"
     printf "Example:\n"
     printf "  cd /path/to/your/Hackesoup\n"
     printf "  sh Config/Linux/install.sh\n"
@@ -81,7 +81,7 @@ echo
 
 # STEP 3: CREATE AND ACTIVATE PYTHON VIRTUAL ENVIRONMENT
 # ------------------------------------------------------------------------------
-VENV_DIR=".venv"
+VENV_DIR="hackesoup_venv"
 log_info "Setting up Python virtual environment..."
 
 if [ -d "$VENV_DIR" ]; then
@@ -125,8 +125,8 @@ printf "${GREEN}==========================================\n\n"
 
 printf "INSTRUCTIONS TO RUN THE APPLICATION:\n"
 printf "1. Activate the virtual environment in your terminal:\n"
-printf "   ${YELLOW}. .venv/bin/activate${NC}\n\n"
-printf "2. Run the main interface script:\n"
+printf "   ${YELLOW}./hackesoup_venv/bin/activate${NC}\n\n"
+printf "2. Run the menu interface:\n"
 # This now points to the correct file as requested by the owner.
 printf "   ${YELLOW}cd Interfaces\n"
 printf "   ${YELLOW}python3 hsmi.py${NC}\n\n"
