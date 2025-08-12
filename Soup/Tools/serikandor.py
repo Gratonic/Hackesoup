@@ -256,7 +256,7 @@ def run() -> list:
     print(header)
     print(warning_message)
     print(f"{Fore.BLUE}[=== Discovered Subdomains ===]\n{Fore.RESET}")
-    print(f"{Fore.WHITE}Domain Name{" " * 46}CA Name{" " * 30}Issue Date{Fore.RESET}")
+    print(f"{Fore.WHITE}Domain Name{" " * 46}CA Name{" " * 46}Issue Date{Fore.RESET}")
     print(divider_line)
     # very rarely no subdomains are found
     if records != list():

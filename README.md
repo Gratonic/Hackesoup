@@ -25,7 +25,7 @@ In today’s cybersecurity landscape, professionals face significant challenges,
 3) ./Config/Linux/install.sh             (runs the install file, which creates a virtual environment and installs the requirements)
 4) source ./hackesoup_venv/bin/activate  (starts the virtual environment created by the install script)
 5) cd Interfaces                         (moves to the Interfaces/ directory)
-6) python3 hsmi.py                       (runs the program - the other interfaces are unavailable)
+6) python3 hsmi.py                       (runs the programs menu interface - the other interfaces are unavailable)
 
 NOTE:
     * You'll have to complete step 4 every time you run Hackesoup (the venv is located in Hackesoup [the project root directory])
