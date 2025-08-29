@@ -20,7 +20,8 @@ is imported and used in the hs_prompts.py file.
 
 # :: Imports :: #
 
-import colorama
+import tldextract # # Copyright (c) 2025, John Kurkowski, All Rights Reserved
+import colorama # Copyright (c) 2013-2025, Anthony Sottile, All Rights Reserved
 import requests
 import time
 import os
@@ -113,19 +114,31 @@ def check_IPv4_target(IPv4_addr: str) -> int:
     else:
         return 1
 
-# NOTE: URL must be in this format: https://example.com or http://example.com
 def check_web_target(url: str) -> int:
+    # extracts the components of the domain name
+    extracted = tldextract.extract(url=url)
+
+    # checks if the domain name is valid
+    if not extracted.domain or not extracted.suffix:
+        return [1, "N/A"]
+    
+    # constructs the root domain with the extracted components
+    root_domain = f"{extracted.domain}.{extracted.suffix}"
+
+    # checks if the root domain is valid
     try:
-        response = requests.head(url, allow_redirects=True)
-        # Checks if the response status code is in the range of 200-399
-        if response.status_code >= 200 and response.status_code < 400:
-            return 0
-        else:
-            print(f"{red}[!] Error: Invalid Website{reset}")
-            return 1
-    except:
-        print(f"{red}[!] Error: Invalid Website{reset}")
-        return 1
+        response = requests.get(url=f"https://{root_domain}", timeout=30)
+        if response.status_code == 200:
+            return [0, root_domain]
+    except requests.ConnectionError:
+        print(f"{red}[!] Error: The connection attempt for the initial request to validate the domain name failed.{reset}")
+        exit_program()
+    except requests.Timeout:
+        print(f"{red}[!] Error: The initial request made to validate the domain name timed out.{reset}")
+        exit_program()
+    except Exception as e:
+        print(f"{red}[!] Error: Unknown.{reset}\n{e}")
+        exit_program()
 
 def combo_target(target: "str") -> int:
     # Gets the target type

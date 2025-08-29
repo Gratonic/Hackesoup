@@ -111,7 +111,8 @@ if __name__ == "__main__":
 
     # checks the tool and determines which one to call
     if settings["tool"] == "serikandor":
-        tool_output = serikandor.run()
+        # tool_output = serikandor.run()
+        print(settings["target"])
     elif settings["tool"] == "patchpirate":
         print(
             f"{Fore.RED} [!] Alert: Patch Pirate is currently unavailable. {Fore.BLUE}:({Fore.RESET}"

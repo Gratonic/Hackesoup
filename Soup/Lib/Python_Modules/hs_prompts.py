@@ -130,10 +130,13 @@ def target_IPv4(tool_name: str) -> str:
 def target_website(tool_name: str) -> str:
     while True:
         try:
-            url = str(input(f"{magenta}Please Enter A Target URL With The Protocal Included {green}[Ex: https://www.example.com or https://sub.example.com]: {reset}"))
-            status_code = hs_validator.check_web_target(url)
-            if status_code == 0:
-                return url
+            url = str(input(f"{magenta}Please Enter A Target URL {green}[Ex: https://example.com or sub.example.com]{magenta}: {reset}"))
+            # [0] is 0 or 1, [1] is the domain name
+            domain_name = hs_validator.check_web_target(url)
+            if domain_name[0] == 0:
+                return domain_name
+            else:
+                print(f"{red}[!] Error: Invalid URL{reset}")
         except KeyboardInterrupt:
             exit_program(tool_name=tool_name)
         except:
