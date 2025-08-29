@@ -37,6 +37,8 @@ title = r"""
  `--. \/ _ \ '__| | |/ / _` | '_ \ / _` |/ _ \| '__|
 /\__/ /  __/ |  | |   < (_| | | | | (_| | (_) | |   
 \____/ \___|_|  |_|_|\_\__,_|_| |_|\__,_|\___/|_|   """
+
+
 title_colors = [Fore.BLUE, Fore.WHITE]
 colorful_title = ''.join(title_colors[char % len(title_colors)] + title[char] for char in range(len(title)))
 title_bar = f"{Fore.YELLOW}__________________________________________________________/"
@@ -60,6 +62,7 @@ def exit_program():
 
 # Clears the users terminal
 def clear_terminal():
+    
     if os.name == "posix":  # For Linux or MacOS
         os.system("clear")
     else:
@@ -68,6 +71,7 @@ def clear_terminal():
 # [=== Functionality ===]
 
 class Serikandor:
+    """Fetches subdomains and emails from crt.sh for a given domain."""
     def __init__(self, settings: dict):
         self.target = settings["target"]
         # False if the user chose not to save the tool output, else it is a file path
@@ -76,8 +80,13 @@ class Serikandor:
         self.records = {}
 
     def clean_url(self) -> str:
-        # cleans the domain name (target) using a regex pattern
+        # Regex ensures we only extract the root domain (example.com, not www.example.com)
         pattern = r"https?://(?:www\.)?([^/]+)"
+        if isinstance(self.target, list) and len(self.target) > 1:
+            self.target = self.target[1]
+        elif not isinstance(self.target, str):
+            print(f"{Fore.RED}[!] Invalid target format: {self.target}{Fore.RESET}")
+            exit_program()
         match = re.search(pattern, self.target)
         
         if match:
@@ -135,27 +144,23 @@ class Serikandor:
         processed_records = []
 
         for record in records:
-            common_name = record["common_name"]
-            name_value = record["name_value"]
-            dirty_issuer_name = record["issuer_name"]
-            cert_issue_date = record["not_before"]
+            common_name = record.get("common_name", "")
+            name_value = record.get("name_value", "")
+            dirty_issuer_name = record.get("issuer_name", "")
+            cert_issue_date = record.get("not_before", "")
 
-            subdomains = []
-            emails = []
+            subdomains = set()
+            emails = set()
 
-            for entry in [common_name, name_value]:
-                data = entry.split("\n")
-                for chunk in data:
+            for field in (record.get("common_name", ""), record.get("name_value", "")):
+                for chunk in field.split("\n"):
                     chunk = chunk.strip()
+                    if not chunk or "*" in chunk:   # ignore wildcards & empty
+                        continue
                     if "@" in chunk:
-                        emails.append(chunk)
+                        emails.add(chunk)       # O(1) insert
                     else:
-                        # this will remove any invalid subdomains (*.example.com)
-                        if "*" in chunk:
-                            continue
-                        else:
-                            subdomains.append(chunk)
-
+                        subdomains.add(chunk)   # O(1) insert
             # [0] is the date, [1] is the time the certificate was issued
             cert_issue_date = cert_issue_date.split("T")[0]
 
@@ -202,7 +207,10 @@ class Serikandor:
                     exit_program()
 
         # removes duplicate record entries without changing the order of each records contents
-        final_records = list(unique_everseen(cleaned_records))
+        final_records = list({
+            json.dumps(r, sort_keys=True): r
+            for r in cleaned_records
+        }.values()) 
 
         self.records = final_records
 
@@ -230,21 +238,18 @@ def run() -> list:
 
     # removes duplicate entries
     unique_records = []
-
-    for index, record in enumerate(records, start=0):
+    for record in records:
         if record not in unique_records:
-            unique_records.append(records)
-        else:
-            records.pop(index)
-
+            unique_records.append(record)
+    records = unique_records
     for index, record in enumerate(records, start=0):
         # gets the length of the necessary items in the record
         domain_len = len(record["subdomain"])
         CA_name_len = len(record["CA_name"])
 
         # determines and adds the spaces that need to be added to each item in the record
-        records[index]["subdomain"] = f"{record["subdomain"]}{" " * ((max_domain_name_len - domain_len) + 3)}"
-        records[index]["CA_name"] = f"{record["CA_name"]}{" " * ((max_CA_name_len - CA_name_len) + 3)}"
+        records[index]["subdomain"] = f"{record["subdomain"]}{' ' * ((max_domain_name_len - domain_len) + 3)}"
+        records[index]["CA_name"] = f"{record["CA_name"]}{' ' * ((max_CA_name_len - CA_name_len) + 3)}"
         # just adding the color to this item in the list
         records[index]["cert_issue_date"] = f"{record["cert_issue_date"]}"
         

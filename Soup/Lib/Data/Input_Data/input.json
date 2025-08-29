@@ -1,3 +1,13 @@
 {
-    
+    "target": [
+        0,
+        "example.com"
+    ],
+    "tool": "serikandor",
+    "tool_class": "WEB",
+    "API_token": null,
+    "port": null,
+    "port_range": null,
+    "scan_type": null,
+    "save_file": "../Saves/serikandor_2025-08-29_15:14:46.json"
 }
