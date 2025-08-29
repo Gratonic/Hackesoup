@@ -123,13 +123,16 @@ def check_web_target(url: str) -> int:
         return [1, "N/A"]
     
     # constructs the root domain with the extracted components
-    root_domain = f"{extracted.domain}.{extracted.suffix}"
+    if extracted.subdomain:
+        domain_name = f"{extracted.subdomain}.{extracted.domain}.{extracted.suffix}"
+    else:
+        domain_name =  f"{extracted.domain}.{extracted.suffix}"
 
     # checks if the root domain is valid
     try:
-        response = requests.get(url=f"https://{root_domain}", timeout=30)
+        response = requests.get(url=f"https://{domain_name}", timeout=30)
         if response.status_code == 200:
-            return [0, root_domain]
+            return [0, domain_name]
     except requests.ConnectionError:
         print(f"{red}[!] Error: The connection attempt for the initial request to validate the domain name failed.{reset}")
         exit_program()

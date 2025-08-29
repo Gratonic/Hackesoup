@@ -101,7 +101,7 @@ def exit_program(tool_name: str) -> None:
 def menu_prompt(first: int, last: int, tool_name: str) -> int:
     while True:
         try:
-            user_choice = int(input(f"{magenta}Please Choose An Option From The Menu {green}[Ex: 1]{magenta}:{reset} "))
+            user_choice = int(input(f"{magenta}Please Choose An Option From The Menu {green}[Ex: 1]{magenta}: {reset} "))
             status_code = hs_validator.check_user_choice(user_choice, first=first, last=last)
             if status_code == 0:
                 return user_choice
