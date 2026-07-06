@@ -1,0 +1,4 @@
+*venv
+*hackesoup_venv
+*__pycache__*
+.vscode

